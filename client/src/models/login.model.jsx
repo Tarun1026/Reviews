@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/RegisterModel.css"; 
 import "../css/LoginPage.css"
+import googleIcon from '../assets/google.svg'; // Import as a regular image
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -43,6 +44,10 @@ function LoginModel({ onSwitchToRegister }) {
         </div>
         <div>
           <button className="btnRegister" onClick={handleLogin}>Login</button>
+        </div>
+        <div className="registerWith">or Login with</div>
+        <div className="googleButton">
+          <img src={googleIcon} alt="Google" className="googleIcon" />
         </div>
         <div className="member">
           Don't have an account? <Link onClick={onSwitchToRegister}>Register</Link>
