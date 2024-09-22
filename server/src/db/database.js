@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 dotenv.config()
 const dbConnect=async()=>{
     try {
+        // db.users.dropIndex("userName_1")
         const connectInstance=await mongoose.connect(
             `${process.env.MONGODB_URL}/${dbName}`
         )
