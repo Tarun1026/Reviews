@@ -1,0 +1,160 @@
+.reviewPageContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.topSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.titleDateContainer {
+  flex: 1;
+}
+
+.titleDateContainer h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.titleDateContainer h2 {
+  margin: 10px 0;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+/* Ratings Row */
+.ratingsRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  flex: 0.6; /* Adjust width to align properly */
+}
+
+.ratingContainer,
+.userRatingContainer,
+.popularityContainer {
+  margin: 0 10px;
+}
+
+.ratingContainer h2,
+.userRatingContainer h2,
+.popularityContainer h2 {
+  font-size: 1.2rem; /* Reduce font size */
+}
+
+.ratingDetails {
+  display: flex;
+  align-items: center;
+}
+
+.ratingDetails h3 {
+  margin: 0 5px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.ratingDetails span {
+  font-size: 1rem;
+  color: #555;
+}
+
+.userRatingContainer {
+  text-align: center; /* Center the content horizontally */
+}
+
+.userRatingContainer h2 {
+  margin-bottom: 10px; /* Add some space between the heading and the icon */
+}
+
+.userStarIcon {
+  display: flex;
+  justify-content: center; /* Horizontally center the icon */
+  margin-top: 10px;
+}
+
+.popularityValue h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Bottom Section (Images and Overview) */
+.bottomSection {
+  margin-top: 30px;
+}
+
+.imagesContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.moviePosters{
+  width: 18%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.movieBackdrops {
+  /* width: 200px; */
+  height: auto;
+  border-radius: 10px;
+}
+
+.movieOverview {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Other styles remain the same */
+
+.reviewSection {
+  margin-top: 30px;
+}
+
+.reviewButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reviewButton:hover {
+  background-color: #0056b3;
+}
+
+/* Style for the review input box */
+.reviewInputContainer {
+  margin-top: 20px;
+  background-color: white; /* White background for the review section */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewInput {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.submitReviewButton {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submitReviewButton:hover {
+  background-color: #218838;
+}

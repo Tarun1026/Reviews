@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import "../css/HomePage.css";
-import Modal from '../models/model';
-import RegisterModel from '../models/register.model';
-import LoginModel from '../models/login.model';
+import Modal from "../models/model";
+import RegisterModel from "../models/register.model";
+import LoginModel from "../models/login.model";
+import useMovieLink from "../hooks/useMovieLink";
+import Navbar from "../component/Navbar"; // Import the new Navbar component
 
 function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const { movies } = useMovieLink();
+  
+  const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
 
   const handleRegisterClick = () => {
     setIsLogin(false);
@@ -25,24 +30,49 @@ function HomePage() {
     setModalOpen(false);
   };
 
+  const goToNextMovie = () => {
+    setCurrentMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
+  };
+
+  const goToPreviousMovie = () => {
+    setCurrentMovieIndex(
+      (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
+    );
+  };
+
   return (
     <div className="homePageContainer">
-      <div className='navDiv'>
-        <div className="navItem">Movie Review</div>
-        <div className="navItem">Movies</div>
-        <div className="navItem">Web Series</div>
-        <div className="navItem">TV Shows</div>
-        <input type='text' className="searchInput" />
-        <button className="registerButton" onClick={handleRegisterClick}>Register</button>
-      </div>
-      <div className="content">
-        {/* Add your content here */}
+      {/* Navbar Section */}
+      <Navbar onRegisterClick={handleRegisterClick} />
+
+      {/* Movie Slider Section */}
+      <div className="movieSlider">
+        <button className="prevButton" onClick={goToPreviousMovie}>
+          ❮
+        </button>
+
+        <div className="movieContainer">
+          {movies.length > 0 && (
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movies[currentMovieIndex].poster_path}`}
+              alt={movies[currentMovieIndex].title}
+              className="moviePoster"
+            />
+          )}
+        </div>
+
+        <button className="nextButton" onClick={goToNextMovie}>
+          ❯
+        </button>
       </div>
 
+      {/* Modal Section */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        {isLogin 
-          ? <LoginModel onSwitchToRegister={handleSwitchToRegister} /> 
-          : <RegisterModel onSwitchToLogin={handleLoginClick} />}
+        {isLogin ? (
+          <LoginModel onSwitchToRegister={handleSwitchToRegister} />
+        ) : (
+          <RegisterModel onSwitchToLogin={handleLoginClick} />
+        )}
       </Modal>
     </div>
   );

@@ -1,0 +1,26 @@
+/* Navbar.css */
+.navDiv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: black;
+  }
+  
+  .navItem {
+    color: white;
+    margin-right: 15px;
+  }
+  
+  .searchInput {
+    padding: 5px;
+  }
+  
+  .registerButton {
+    background-color: #ff6347;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+    cursor: pointer;
+  }
+  
