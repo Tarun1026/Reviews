@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken"
+import { Review } from '../models/Review.model.js';
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
     if(!user){
@@ -165,8 +166,76 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
         throw new ApiError(400,error?.message||"Invalid Token access")
     }
 })
+const userReview = asyncHanlder(async (req, res) => {
+    const { reviewText, movieId, movieTitle } = req.body;
+
+    if (reviewText === "") {
+        throw new ApiError("Review should not be empty");
+    }
+    if (movieId === "") {
+        throw new ApiError("movieId missing");
+    }
+    if (movieTitle === "") {
+        throw new ApiError("movie Title missing");
+    }
+
+    // Find the existing review document for the given movieId
+    let movieReview = await Review.findOne({ movieId });
+
+    if (!movieReview) {
+        // If it doesn't exist, create a new document
+        movieReview = await Review.create({
+            movieId,
+            movieTitle,
+            reviews: [{
+                reviewText,
+                username: req.user?.username // Get username from request
+            }]
+        });
+    } else {
+        // If it exists, push the new review into the reviews array
+        movieReview.reviews.push({
+            reviewText,
+            username: req.user?.username // Get username from request
+        });
+        await movieReview.save(); // Save the updated document
+    }
+
+    const userFind = await User.findById(req.user._id);
+if (!userFind) {
+    throw new ApiError(404, "User not found");
+}
+
+// Create the new review object
+    const newReview = {
+        movieId,
+        movieTitle,
+        reviewText,
+    };
+
+    // Check if userReviews exists, if not, initialize it as an array
+    if (userFind.userReviews && Array.isArray(userFind.userReviews)) {
+        userFind.userReviews.push(newReview);
+    } else {
+        // Initialize userReviews as an array with the new review
+        userFind.userReviews = [newReview];
+    }
+
+    // Save the updated user document
+    await userFind.save();
+
+    // Log the updated user data
+    console.log("user data", userFind);
+
+    return res.status(200).json(
+        new ApiResponse(200, {movieReview,userFind}, "Review Sent Successfully")
+    );
+});
+
+
 export {userRegister,
         loginUser,
         logOutUser,
         generateAccessAndRefreshToken,
-        refreshAccessToken}
+        refreshAccessToken,
+        userReview}

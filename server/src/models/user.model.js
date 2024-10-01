@@ -23,6 +23,17 @@ const userSchema=new Schema({
         type:String,
         
     },
+    userReviews:[{
+        movieId:{
+            type:Number
+        },
+        movieTitle:{
+            type:String
+        },
+        reviewText: {
+            type: String,
+        },
+    }]
 },{timestamps:true})
 
 userSchema.pre('save',async function(next){

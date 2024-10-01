@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'; // Import useLocation
 import Navbar from '../component/Navbar';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import '../css/ReviewPage.css'; // Import the new CSS file
-
+import axios from 'axios';
 const ReviewPage = () => {
   const location = useLocation();
   const { movie } = location.state; // Access the passed movie details
@@ -15,7 +15,25 @@ const ReviewPage = () => {
   const handleReviewClick = () => {
     setReviewVisible(!isReviewVisible);
   };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Construct the data object with both review and movie details
+    // const reviewData = {
+    //   reviewText,
+    //   movieId: movie.id, // Pass movie ID or other necessary fields
+    //   movieTitle: movie.title, // Optional: Pass movie title if needed
+    //   // rating: movie.vote_average // Optional: Pass the movie rating if needed
+    // };
+  
+    try {
+      const result = await axios.post('/api/users/user-review',
+        {reviewText,movieId:movie.id,movieTitle: movie.title});
+      console.log('result', result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <div>
       <Navbar />
@@ -84,7 +102,7 @@ const ReviewPage = () => {
                 onChange={(e) => setReviewText(e.target.value)}
                 placeholder="Write your review here..."
               />
-              <button className="submitReviewButton">Submit Review</button>
+              <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button>
             </div>
           )}
         </div>
