@@ -1,26 +1,78 @@
-/* Navbar.css */
 .navDiv {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: black;
-  }
-  
-  .navItem {
-    color: white;
-    margin-right: 15px;
-  }
-  
-  .searchInput {
-    padding: 5px;
-  }
-  
-  .registerButton {
-    background-color: #ff6347;
-    border: none;
-    padding: 5px 10px;
-    color: white;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: black;
+}
+
+.navItem {
+  color: white;
+  margin-right: 15px;
+}
+
+.navItemLink {
+  color: white;
+  text-decoration: none;
+}
+
+.navItemLink:hover {
+  color: black;
+}
+
+.searchInput {
+  padding: 5px;
+}
+
+.registerButton {
+  background-color: #ff6347;
+  border: none;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Style for the user section */
+.userSection {
+  display: flex;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  position: relative; /* Needed for the dropdown positioning */
+}
+
+.userIcon {
+  font-size: 24px;
+  margin-right: 8px;
+}
+
+.username {
+  font-size: 16px;
+}
+
+/* Style for the dropdown menu */
+.dropdownMenu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  text-align: left;
+}
+
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f0f0;
+}

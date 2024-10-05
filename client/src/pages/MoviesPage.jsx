@@ -2,26 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../component/Navbar';
 import useMovieLink from '../hooks/useMovieLink';
+import useIMDBLink from '../hooks/useIMDBLink';
 import '../css/MoviesPage.css'; // Changed CSS file
 
 const MoviesPage = () => {
   const { movies, upcomingMovies } = useMovieLink();
+  const { popularMovies } = useIMDBLink();
+  
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [moviesPerView, setMoviesPerView] = useState(1); // Dynamically set movies per view based on screen width
+  const [upcomingIndex, setUpcomingIndex] = useState(0);
+  const [popularIndex, setPopularIndex] = useState(0); // New state for popular movies
+  const [moviesPerView, setMoviesPerView] = useState(1); 
+
   const navigate = useNavigate(); 
+
   useEffect(() => {
     const updateMoviesPerView = () => {
-      const containerWidth = window.innerWidth; // Use innerWidth for accurate screen width
-      const movieWidth = 220; // Reduce the movie width to fit more cards in the row
-      const maxMoviesPerRow = Math.floor(containerWidth / movieWidth); // Calculate how many fit per row
-      setMoviesPerView(maxMoviesPerRow > 0 ? maxMoviesPerRow : 1); // Ensure at least 1 movie
+      const containerWidth = window.innerWidth; 
+      const movieWidth = 220; 
+      const maxMoviesPerRow = Math.floor(containerWidth / movieWidth); 
+      setMoviesPerView(maxMoviesPerRow > 0 ? maxMoviesPerRow : 1); 
     };
   
-    updateMoviesPerView(); // Set initial movies per view
-    window.addEventListener('resize', updateMoviesPerView); // Update on window resize
+    updateMoviesPerView(); 
+    window.addEventListener('resize', updateMoviesPerView);
   
     return () => {
-      window.removeEventListener('resize', updateMoviesPerView); // Cleanup on unmount
+      window.removeEventListener('resize', updateMoviesPerView);
     };
   }, []);
 
@@ -39,8 +46,6 @@ const MoviesPage = () => {
   };
 
   // Handlers for slider navigation (Upcoming Movies)
-  const [upcomingIndex, setUpcomingIndex] = useState(0);
-
   const goToNextUpcomingMovie = () => {
     setUpcomingIndex((prevIndex) =>
       (prevIndex + moviesPerView) % upcomingMovies.length
@@ -53,9 +58,23 @@ const MoviesPage = () => {
     );
   };
 
-  const handleMovieClick = (movie) => {
-    navigate('/review', { state: { movie } }); // Pass movie details via state
+  // Handlers for slider navigation (Popular Movies)
+  const goToNextPopularMovie = () => {
+    setPopularIndex((prevIndex) =>
+      (prevIndex + moviesPerView) % popularMovies.length
+    );
   };
+
+  const goToPreviousPopularMovie = () => {
+    setPopularIndex((prevIndex) =>
+      (prevIndex - moviesPerView + popularMovies.length) % popularMovies.length
+    );
+  };
+
+  const handleMovieClick = (movie) => {
+    navigate('/review', { state: { movie } });
+  };
+
   return (
     <div className="newMoviesPageContainer">
       <Navbar />
@@ -68,9 +87,9 @@ const MoviesPage = () => {
           <div className="newMovieSliderContainer">
             {movies.slice(currentIndex, currentIndex + moviesPerView).map((movie) => (
               <div 
-              className="newMovieCard" 
-              key={movie.id}
-              onClick={() => handleMovieClick(movie)}
+                className="newMovieCard" 
+                key={movie.id}
+                onClick={() => handleMovieClick(movie)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -92,9 +111,9 @@ const MoviesPage = () => {
           <div className="newMovieSliderContainer">
             {upcomingMovies.slice(upcomingIndex, upcomingIndex + moviesPerView).map((movie) => (
               <div 
-              className="newMovieCard" 
-              key={movie.id}
-              onClick={() => handleMovieClick(movie)}
+                className="newMovieCard" 
+                key={movie.id}
+                onClick={() => handleMovieClick(movie)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -105,6 +124,30 @@ const MoviesPage = () => {
             ))}
           </div>
           <button className="newNextButton" onClick={goToNextUpcomingMovie}>❯</button>
+        </div>
+      </div>
+      
+      {/* Popular Movies Slider */}
+      <div className="newMovieSection">
+        <h2>Popular Movies</h2>
+        <div className="newMovieSlider">
+          <button className="newPrevButton" onClick={goToPreviousPopularMovie}>❮</button>
+          <div className="newMovieSliderContainer">
+            {popularMovies.slice(popularIndex, popularIndex + moviesPerView).map((movie) => (
+              <div 
+                className="newMovieCard" 
+                key={movie.id}
+                onClick={() => handleMovieClick(movie)}
+              >
+                <img
+                  src={movie.title.primaryImage.imageUrl}
+                  alt={movie.title}
+                  className="newMoviePoster"
+                />
+              </div>
+            ))}
+          </div>
+          <button className="newNextButton" onClick={goToNextPopularMovie}>❯</button>
         </div>
       </div>
     </div>

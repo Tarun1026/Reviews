@@ -158,3 +158,20 @@
 .submitReviewButton:hover {
   background-color: #218838;
 }
+
+.existingReviews {
+  margin-top: 20px;
+  /* background-color: #f8f9fa; */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.singleReview {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.singleReview:last-child {
+  border-bottom: none; /* Remove border from the last review */
+}
+

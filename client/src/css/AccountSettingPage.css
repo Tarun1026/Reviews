@@ -1,0 +1,172 @@
+/* Account Settings Container */
+body{
+  background-color: #d7d8da;
+ 
+}
+.account-settings {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: left; /* Left-align the text for better readability */
+  position: relative;
+  color: #333; /* Ensure visible text color */
+  align-items: center;
+}
+
+/* Profile Section with Avatar */
+.profile-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+
+/* Account Field Labels */
+.account-field label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* Visible label color */
+  margin-right: 10px;
+}
+
+/* Account Fields */
+.account-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.account-field input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #e8f0fe;
+  font-size: 16px;
+  color: #333; /* Ensure input text color is visible */
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.account-field input::placeholder {
+  color: #666; /* Placeholder color */
+}
+
+.account-field input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+}
+
+/* Button Styling */
+.account-field button {
+  padding: 10px 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.account-field button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* Password Edit Section */
+.password-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.password-edit input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #e8f0fe;
+  font-size: 16px;
+}
+
+.password-edit input:focus {
+  border-color: #007bff;
+  background-color: #fff;
+}
+
+/* Account Settings Title */
+.account-settings-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333; /* Visible title color */
+}
+
+/* Center the Account Settings Title */
+.account-settings-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center; /* Center the title */
+}
+
+/* Section Title Styling */
+.account-section h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: left; /* Align section headings to the left */
+}
+
+/* Account Field Styling */
+.account-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Style individual sections with some spacing */
+.account-section {
+  margin-bottom: 30px;
+}
+
+/* Update button styling */
+.account-field button {
+  padding: 10px 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.account-field button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}

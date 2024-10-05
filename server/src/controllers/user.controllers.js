@@ -94,6 +94,7 @@ const loginUser=asyncHanlder(async(req,res)=>{
 })
 
 const logOutUser=asyncHanlder(async(req,res)=>{
+    console.log("helo")
     await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -112,8 +113,8 @@ const logOutUser=asyncHanlder(async(req,res)=>{
 
     return res.
     status(200)
-    .clearcookie("accessToken",options)
-    .clearcookie("refreshToken",options)
+    .clearCookie("accessToken",options)
+    .clearCookie("refreshToken",options)
     .json(
         new ApiResponse(200,{},"User Logout Successfully")
     )
@@ -168,7 +169,7 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
 })
 const userReview = asyncHanlder(async (req, res) => {
     const { reviewText, movieId, movieTitle } = req.body;
-
+    
     if (reviewText === "") {
         throw new ApiError("Review should not be empty");
     }
@@ -200,7 +201,7 @@ const userReview = asyncHanlder(async (req, res) => {
         });
         await movieReview.save(); // Save the updated document
     }
-
+    //  console.log("req user",req.user)
     const userFind = await User.findById(req.user._id);
 if (!userFind) {
     throw new ApiError(404, "User not found");
@@ -232,10 +233,122 @@ if (!userFind) {
     );
 });
 
+const getUserDetails=asyncHanlder(async(req,res)=>{
+    // console.log("req",req.user)
+    // console.log("call")
+    if (!req.user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+    res.status(200)
+    .json(
+      new ApiResponse(
+        200,req.user,"Current User Fetched"
+      )
+    )
+  })
 
+const getMovieReviews=asyncHanlder(async(req,res)=>{
+    const{movieId}=req.body
+    // console.log("movieId",movieId)
+    const movie=await Review.findOne({movieId})
+    // console.log("mo",movie)
+    if (movie){
+        res
+        .status(200)
+        .json(
+            new ApiResponse(200,movie.reviews,"Reviews Fetched")
+        )
+    }
+    else{
+        res
+        .status(200)
+        .json(
+            new ApiResponse(200,{},"Reviews Fetched")
+        )
+    }
+})
+
+const updateUserName=asyncHanlder(async(req,res)=>{
+    console.log("rew",req.body)
+    const {payload}=req.body
+    console.log("paylo",payload.username)
+    const findUser=payload.username
+    const user=await User.findOne({findUser})
+    // console.log("us",user)
+    if(user){
+       throw new ApiError(401,"This UserName already exist")
+    }
+    const setUser=await User.findById(req.user._id)
+    setUser.username=payload.username
+    await setUser.save({validateBeforeSave:false})
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            setUser,
+            "data  update successfully"
+        )
+    )
+
+})
+
+const updateEmail=asyncHanlder(async(req,res)=>{
+    const {payload}=req.body
+    const email=payload.email
+    const user=await User.findOne({email})
+    if(user){
+        throw new ApiError("This Email already exist")
+    }
+    const setEmail=await User.findById(req.user._id)
+    setEmail.email=payload.email
+    await setEmail.save({validateBeforeSave:false})
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            setEmail,
+            "Email  update successfully"
+        )
+    )
+
+})
+
+const updatePassword=asyncHanlder(async(req,res)=>{
+    const{payload}=req.body
+    const oldPassword=payload.oldPassword
+    const newPassword=payload.newPassword
+    const user=await User.findById(req.user._id)
+    if(!user){
+        throw new ApiError(404,"User not found")
+    }
+    const matchPassword= await user.isPasswordCorrect(oldPassword)
+    if(!matchPassword){
+        throw new ApiError(401,"old password not correct")
+    
+      }
+    user.password=newPassword
+    await user.save({validateBeforeSave:true})
+  
+    return res
+    .status(200)
+    .json(
+      new ApiResponse(200
+        ,{},"Password Change Successfully"
+      )
+    )
+    
+ 
+})
 export {userRegister,
         loginUser,
         logOutUser,
         generateAccessAndRefreshToken,
         refreshAccessToken,
-        userReview}
+        userReview,
+        getUserDetails,
+    getMovieReviews,
+     updateUserName,
+     updateEmail,
+    updatePassword}

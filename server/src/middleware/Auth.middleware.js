@@ -22,8 +22,9 @@ const verifyJWT=asyncHanlder(async(req,res,next)=>{
         if(!user){
             throw new ApiError(401,"Invalid User Access")
         }
-    
+        // console.log("User found:", user);
         req.user=user
+        // console.log("VALIDATE",req.user)
         next()
     } catch (error) {
         throw new ApiError(400,error?.message||"Token not find")

@@ -1,39 +1,55 @@
-import React, { useState } from 'react'; // Import useState
+import React, { useState, useEffect } from 'react'; // Import useState
 import { useLocation } from 'react-router-dom'; // Import useLocation
 import Navbar from '../component/Navbar';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import '../css/ReviewPage.css'; // Import the new CSS file
 import axios from 'axios';
+
 const ReviewPage = () => {
   const location = useLocation();
   const { movie } = location.state; // Access the passed movie details
-
+  const [movieReviews, setMovieReviews] = useState([]);
   const [isReviewVisible, setReviewVisible] = useState(false); // State to toggle review section
   const [reviewText, setReviewText] = useState(''); // State to store review text
 
+  useEffect(() => {
+    const fetchMovieReviews = async () => {
+      try {
+        const result = await axios.post('/api/users/movie-reviews', { movieId: movie.id });
+        console.log("Fetched reviews:", result.data);
+       setMovieReviews(result.data.data);
+       
+      } catch (err) {
+        console.log("Error fetching reviews:", err);
+      }
+    };
+
+    fetchMovieReviews();
+  }, [movie.id]);
+
+  useEffect(() => {
+    console.log("Updated movieReviews:", movieReviews);
+  }, [movieReviews]);
   // Handle showing/hiding the review section
   const handleReviewClick = () => {
     setReviewVisible(!isReviewVisible);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Construct the data object with both review and movie details
-    // const reviewData = {
-    //   reviewText,
-    //   movieId: movie.id, // Pass movie ID or other necessary fields
-    //   movieTitle: movie.title, // Optional: Pass movie title if needed
-    //   // rating: movie.vote_average // Optional: Pass the movie rating if needed
-    // };
-  
+
     try {
-      const result = await axios.post('/api/users/user-review',
-        {reviewText,movieId:movie.id,movieTitle: movie.title});
+      const result = await axios.post('/api/users/user-review', {
+        reviewText,
+        movieId: movie.id,
+        movieTitle: movie.title,
+      });
       console.log('result', result);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
   return (
     <div>
       <Navbar />
@@ -93,7 +109,7 @@ const ReviewPage = () => {
           <button onClick={handleReviewClick} className="reviewButton">
             {isReviewVisible ? 'Hide Review' : '+ Write a Review'}
           </button>
-          
+
           {isReviewVisible && (
             <div className="reviewInputContainer">
               <textarea
@@ -105,6 +121,20 @@ const ReviewPage = () => {
               <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button>
             </div>
           )}
+
+          {/* Display existing reviews */}
+          <div className="existingReviews">
+            <h2>Reviews</h2>
+            {movieReviews.length > 0 ? (
+              movieReviews.map((review, index) => (
+                <div key={review._id} className="singleReview">
+                  <p><strong>{review.username}:</strong> {review.reviewText}</p>
+                </div>
+              ))
+            ) : (
+              <p>No reviews available</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

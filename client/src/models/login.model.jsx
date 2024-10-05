@@ -5,17 +5,22 @@ import googleIcon from '../assets/google.svg'; // Import as a regular image
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-function LoginModel({ onSwitchToRegister }) {
+
+function LoginModel({ onSwitchToRegister, onLoginSuccess  }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
+   
   const handleLogin = async (e) => {
     e.preventDefault();
     await axios.post("/api/users/login", { email, password })
-      .then((result) => console.log(result))
-      .catch(err => console.log(err));
+    .then((result) => {
+      console.log(result);
+      if (onLoginSuccess) { 
+        onLoginSuccess(); // Ensure this is only called if defined
+      }
+    })
+    .catch(err => console.log(err));
   };
-
   return (
     <div className="loginMainContainer">
       <div className="registerFormContainer">

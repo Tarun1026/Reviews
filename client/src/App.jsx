@@ -5,6 +5,10 @@ import HomePage from './pages/HomePage'
 import RegisterModel from './models/register.model';
 import MoviesPage from './pages/MoviesPage';
 import ReviewPage from './pages/ReviewPage';
+import Profile from './pages/Profile';
+import MovieList from './hooks/useIMDBLink';
+import AccountSettings from './pages/AccountSettingPage';
+// import getUserDetails from './pages/GetUserDetails';
 function App() {
   
   return (
@@ -15,6 +19,8 @@ function App() {
         <Route path="/register" element={<RegisterModel />} />
         <Route path="/movies" element={<MoviesPage />} />
         <Route path="/review" element={<ReviewPage />} />
+       <Route path='/profile' element={<Profile />}/>
+       <Route path="/user-account-setting" element={<AccountSettings/>} />      
         
       </Routes>
     </Router>

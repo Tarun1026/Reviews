@@ -34,7 +34,7 @@ const RegisterModel=({ onSwitchToLogin })=> {
             // name="username"
             onChange={(e)=>setusername(e.target.value)}
           />
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username" className="labels">Username</label>
         </div>
         <div className="registerInputContainer">
           <input
@@ -44,7 +44,7 @@ const RegisterModel=({ onSwitchToLogin })=> {
             // name="email"
             onChange={(e)=>setEmail(e.target.value)}
           />
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="labels">Email</label>
         </div>
         <div className="registerInputContainer">
           <input
@@ -54,7 +54,7 @@ const RegisterModel=({ onSwitchToLogin })=> {
             // name="createPassword"
             onChange={(e)=>setPassword(e.target.value)}
           />
-          <label htmlFor="createPassword">Create Password</label>
+          <label htmlFor="createPassword" className="labels">Create Password</label>
         </div>
         <div className="registerInputContainer">
           <input
@@ -64,7 +64,7 @@ const RegisterModel=({ onSwitchToLogin })=> {
             // name="confirmPassword"
             onChange={(e)=>setConfirmPassword(e.target.value)}
           />
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="confirmPassword" className="labels">Confirm Password</label>
         </div>
         <div>
           <button className="btnRegister" onClick={handleSubmit}>Register</button>
