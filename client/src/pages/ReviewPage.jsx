@@ -1,24 +1,45 @@
-import React, { useState, useEffect } from 'react'; // Import useState
-import { useLocation } from 'react-router-dom'; // Import useLocation
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../component/Navbar';
-import { FaStar, FaRegStar } from 'react-icons/fa';
-import '../css/ReviewPage.css'; // Import the new CSS file
+import { FaStar, FaRegStar, FaThumbsUp } from 'react-icons/fa'; // Import thumbs up icon
+import '../css/ReviewPage.css';
 import axios from 'axios';
 
 const ReviewPage = () => {
   const location = useLocation();
-  const { movie } = location.state; // Access the passed movie details
+  const { movie } = location.state; 
   const [movieReviews, setMovieReviews] = useState([]);
-  const [isReviewVisible, setReviewVisible] = useState(false); // State to toggle review section
-  const [reviewText, setReviewText] = useState(''); // State to store review text
+  const [isReviewVisible, setReviewVisible] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [likeCount, setLikeCount] = useState(0); 
+  const [hasLiked, setHasLiked] = useState(false); 
+
+  useEffect(() => {
+    const fetchMovieLikes = async () => {
+      try {
+        const res = await axios.post('/api/users/movie-likes-count', { movieId: movie.id });
+        console.log("Result", res.data);
+      if (res.data.data.likedCount){
+        setLikeCount(res.data.data.likedCount)
+      }
+      else{
+        setLikeCount(0)
+        }
+       
+      } catch (err) {
+        console.log("Error fetching Movie Likes Count:", err);
+      }
+    };
+
+    fetchMovieLikes();
+}, [movie.id]);
 
   useEffect(() => {
     const fetchMovieReviews = async () => {
       try {
         const result = await axios.post('/api/users/movie-reviews', { movieId: movie.id });
         console.log("Fetched reviews:", result.data);
-       setMovieReviews(result.data.data);
-       
+        setMovieReviews(result.data.data);
       } catch (err) {
         console.log("Error fetching reviews:", err);
       }
@@ -30,14 +51,47 @@ const ReviewPage = () => {
   useEffect(() => {
     console.log("Updated movieReviews:", movieReviews);
   }, [movieReviews]);
-  // Handle showing/hiding the review section
+
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const result = await axios.get(`/api/users/movie-is-liked/${movie.id}`);
+        setHasLiked(result.data.liked); // Update hasLiked based on backend response
+      } catch (err) {
+        console.log("Error fetching like status:", err);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [movie.id]);
+
   const handleReviewClick = () => {
     setReviewVisible(!isReviewVisible);
   };
 
+  const handleLikeClick = async () => {
+    try {
+      const result = await axios.post('/api/users/movie-like', {
+        movieId: movie.id,
+        movieTitle: movie.title
+      });
+  
+      // Toggle hasLiked based on the result from the backend
+      if (result.data.message === "Video likes successfully") {
+        setHasLiked(true);  // User liked the movie
+      } else if (result.data.message === "Video like Removed") {
+        setHasLiked(false);  // User unliked the movie
+      }
+      
+      console.log("Result:", result);
+    } catch (err) {
+      console.log("Error sending like:", err);
+    }
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const result = await axios.post('/api/users/user-review', {
         reviewText,
@@ -54,14 +108,12 @@ const ReviewPage = () => {
     <div>
       <Navbar />
       <div className="reviewPageContainer">
-        {/* Top Section (Title, Release Date, Rating Row) */}
         <div className="topSection">
           <div className="titleDateContainer">
             <h1>{movie.title}</h1>
             <h2>{movie.release_date} | {movie.original_language.toUpperCase()}</h2>
           </div>
 
-          {/* Ratings Section */}
           <div className="ratingsRow">
             <div className="ratingContainer">
               <h2>Movie Rating</h2>
@@ -87,7 +139,19 @@ const ReviewPage = () => {
           </div>
         </div>
 
-        {/* Bottom Section (Images and Overview) */}
+        {/* Like Button and Like Count */}
+        <div className="likeSection">
+          <button
+            className="likeButton"
+            onClick={handleLikeClick}
+            style={{ color: hasLiked ? 'blue' : 'grey' }} // Color changes based on hasLiked state
+          >
+            <FaThumbsUp size={30} />
+          </button>
+          <p>{likeCount} Likes</p>
+        </div>
+
+
         <div className="bottomSection">
           <div className="imagesContainer">
             <img
@@ -104,7 +168,6 @@ const ReviewPage = () => {
           <p className="movieOverview">{movie.overview}</p>
         </div>
 
-        {/* Review Section */}
         <div className="reviewSection">
           <button onClick={handleReviewClick} className="reviewButton">
             {isReviewVisible ? 'Hide Review' : '+ Write a Review'}
@@ -122,7 +185,6 @@ const ReviewPage = () => {
             </div>
           )}
 
-          {/* Display existing reviews */}
           <div className="existingReviews">
             <h2>Reviews</h2>
             {movieReviews.length > 0 ? (

@@ -175,3 +175,36 @@
   border-bottom: none; /* Remove border from the last review */
 }
 
+/* Like Section */
+.likeSection {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.likeButton {
+  padding: 10px 20px;
+  background-color: rgb(238, 235, 235);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.likeButton:hover {
+  background-color: #0056b3;
+}
+
+.likeButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.likeSection p {
+  font-size: 1.2rem;
+  margin: 0;
+}

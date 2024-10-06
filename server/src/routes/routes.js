@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { getMovieReviews, getUserDetails, loginUser, 
     logOutUser, 
+    movieIsLiked, 
+    movieLike, 
+    movieLikeCount, 
     refreshAccessToken, 
     updateEmail, 
     updatePassword, 
@@ -24,4 +27,7 @@ router.route('/movie-reviews').post(getMovieReviews)
 router.route('/update-username').post(verifyJWT,updateUserName)
 router.route('/update-email').post(verifyJWT,updateEmail)
 router.route('/update-password').post(verifyJWT,updatePassword)
+router.route('/movie-like').post(verifyJWT,movieLike)
+router.route('/movie-is-liked/:movieId').get(verifyJWT,movieIsLiked)
+router.route("/movie-likes-count").post(verifyJWT,movieLikeCount)
 export default router

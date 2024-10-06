@@ -54,7 +54,11 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
               <div className="dropdownMenu">
                 <div className="dropdownItem">Your Activity</div>
                 <div className="dropdownItem">Your Watchlist</div>
-                <div className="dropdownItem">Account Settings</div>
+                <div className="dropdownItem">
+                  <Link to="/user-account-setting">
+                  Account Settings
+                  </Link>
+                  </div>
                 <div className="dropdownItem" onClick={openLogoutModal}>Logout</div> {/* Open modal on logout */}
               </div>
             )}

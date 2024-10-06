@@ -2,6 +2,7 @@ import {asyncHanlder} from '../utils/asynchandler.js'
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
+import { Liked } from '../models/Liked.model.js';
 import jwt from "jsonwebtoken"
 import { Review } from '../models/Review.model.js';
 const generateAccessAndRefreshToken=async(userId)=>{
@@ -341,6 +342,137 @@ const updatePassword=asyncHanlder(async(req,res)=>{
     
  
 })
+
+const movieLike=asyncHanlder(async(req,res)=>{
+    const {movieId,movieTitle}=req.body
+    const name=req.user.username
+    // console.log("req.body",req.body)
+    const user=await Liked.findOne({movieId:movieId,user_Name:name})
+    if (!user){
+    //    console.log("if here")
+        const likedData=await Liked.create({
+            user_Name:name.toLowerCase(),
+            movieId,
+            movieTitle
+        })
+
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                likedData,
+                "Video likes successfully"
+            )
+        )
+    }
+    else{
+        // console.log("else")
+        const likedRemove=await Liked.deleteOne({movieId:movieId,user_Name:name})
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                likedRemove,
+                "Video like Removed"
+            )
+        )
+    }
+})
+// Fetch if the movie is liked by the user
+const movieIsLiked = asyncHanlder(async (req, res) => {
+    const { movieId } = req.params;
+    const name = req.user.username;
+// console.log("lok")
+    const liked = await Liked.findOne({ movieId, user_Name:name});
+    if (liked) {
+        return res.status(200).json({ liked: true });
+    } else {
+        return res.status(200).json({ liked: false });
+    }
+});
+
+const movieLikeCount=asyncHanlder(async(req,res)=>{
+    const { movieId } = req.body;
+    const movie=await Liked.findOne({movieId:movieId})
+    let movieDetails = null; 
+    // if (movie){
+    //     console.log("helo")
+    // }
+    if(movie){
+        movieDetails=await Liked.aggregate([
+            {
+                $match:{
+                    movieId:movieId
+                }
+            },
+            {
+                $lookup:{
+                    from:"likes",
+                    localField:"movieId",
+                    foreignField:"movieId",
+                    as:"likedBy"
+                }
+            },
+            {
+                $lookup:{
+                    from:"likes",
+                    localField:"user_Name",
+                    foreignField:"user_Name",
+                    as:"likedByMeTo"
+                }
+            },
+            {
+                $addFields:{
+                    likedCount:{
+                        $size:"$likedBy"
+                    },
+                    userLikesCount:{
+                        $size:"$likedByMeTo"
+                    }
+                },
+                
+            },
+            {
+            $project:{
+                user_Name:1,
+                movieId:1,
+                movieTitle:1,
+                likedBy:1,
+                likedByMeTo:1,
+                likedCount:1,
+                userLikesCount:1
+
+            }
+        }
+        ])
+        if(!movieDetails?.length){
+            throw new ApiError("Movie Details not fetched")
+        }
+        console.log("lo",movieDetails)
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            movieDetails[0],
+            "Movie Likes Details Fetched Sucessfully"
+        )
+    )
+    }
+    else{
+        res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "Movies with zero likes"
+            )
+        )
+    }
+})
 export {userRegister,
         loginUser,
         logOutUser,
@@ -351,4 +483,7 @@ export {userRegister,
     getMovieReviews,
      updateUserName,
      updateEmail,
-    updatePassword}
+    updatePassword,
+movieLike,
+movieIsLiked,
+movieLikeCount}
