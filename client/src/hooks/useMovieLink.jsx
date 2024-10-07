@@ -13,7 +13,7 @@ const useMovieLink = () => {
         const responsePopular = await axios.get(urlPopular);
         const dataPopular = responsePopular.data.results;
         setMovies(dataPopular);
-        console.log("movie",dataPopular)
+        // console.log("movie",dataPopular)
 
         // Fetch Upcoming Movies
         let urlUpcoming = "https://api.themoviedb.org/3/movie/upcoming?api_key=4b2313ca982860407b4ff3a8e3258ff7";

@@ -3,13 +3,13 @@ class ApiError extends Error{
         statusCode,
         message="Something went wrong",
         errors=[],
-        stack=" "
+        stack=""
     ){
         super(message)
         this.message=message
         this.statusCode=statusCode
         this.data=null
-        this.stack=stack
+        this.success=false
         this.errors=errors
 
         if(stack){

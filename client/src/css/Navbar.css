@@ -32,13 +32,12 @@
   cursor: pointer;
 }
 
-/* Style for the user section */
 .userSection {
   display: flex;
   align-items: center;
   color: white;
   cursor: pointer;
-  position: relative; /* Needed for the dropdown positioning */
+  position: relative;
 }
 
 .userIcon {
@@ -50,7 +49,13 @@
   font-size: 16px;
 }
 
-/* Style for the dropdown menu */
+.profileImage {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
 .dropdownMenu {
   position: absolute;
   top: 40px;

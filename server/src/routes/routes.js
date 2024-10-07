@@ -8,12 +8,14 @@ import { getMovieReviews, getUserDetails, loginUser,
     updateEmail, 
     updatePassword, 
     updateUserName, 
+    uploadProfileImage, 
     userRegister, 
     userReview,
 }
 
     from "../controllers/user.controllers.js";
 import verifyJWT from "../middleware/Auth.middleware.js";
+import {upload} from "../middleware/Multer.middleware.js"
 const router=Router()
 
 router.route('/')
@@ -29,5 +31,9 @@ router.route('/update-email').post(verifyJWT,updateEmail)
 router.route('/update-password').post(verifyJWT,updatePassword)
 router.route('/movie-like').post(verifyJWT,movieLike)
 router.route('/movie-is-liked/:movieId').get(verifyJWT,movieIsLiked)
-router.route("/movie-likes-count").post(verifyJWT,movieLikeCount)
+router.route("/movie-likes-count").post(movieLikeCount)
+router.route("/update-profile-image").post(verifyJWT,
+    upload.single('profileImage'),
+    uploadProfileImage
+)
 export default router

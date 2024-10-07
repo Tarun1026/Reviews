@@ -1,7 +1,7 @@
 import mongoose,{Schema} from "mongoose";
 
 const reviewSchema=new Schema({
-    reviews: [{
+    
         reviewText: {
             type: String,
             required: true,
@@ -10,7 +10,7 @@ const reviewSchema=new Schema({
             type: String,
             required: true,
         },
-    }],
+   
     movieId:{
         type:Number
     },

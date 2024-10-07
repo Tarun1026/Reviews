@@ -19,21 +19,13 @@ const userSchema=new Schema({
         type:String,
         required:true,
     },
+    profileImage:{
+        type:String
+    },
     refreshToken:{
         type:String,
         
-    },
-    userReviews:[{
-        movieId:{
-            type:Number
-        },
-        movieTitle:{
-            type:String
-        },
-        reviewText: {
-            type: String,
-        },
-    }]
+    }
 },{timestamps:true})
 
 userSchema.pre('save',async function(next){

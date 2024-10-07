@@ -10,9 +10,9 @@
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  text-align: left; /* Left-align the text for better readability */
+  text-align: left; 
   position: relative;
-  color: #333; /* Ensure visible text color */
+  color: #333;
   align-items: center;
 }
 
@@ -23,17 +23,37 @@
   margin-bottom: 30px;
 }
 
+/* Profile Avatar */
 .profile-avatar {
   width: 100px;
   height: 100px;
-  background-color: #007bff;
-  color: white;
   border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
+  object-fit:fill;
+  cursor: pointer;
 }
+
+/* Profile Icon */
+.profile-icon {
+  cursor: pointer;
+  color: #007bff;
+}
+
+/* Upload Button Styling */
+.upload-btn {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+  background-color: #218838;
+}
+
 
 /* Account Field Labels */
 .account-field label {

@@ -16,9 +16,9 @@ function Profile() {
     };
 
     fetchUserDetails();
-  }, []); // Empty dependency array to run only once
+  }, []);
 
-  // Render loading state while fetching data
+
   if (!user) {
     return <div className='check'>Loading user details...</div>;
   }

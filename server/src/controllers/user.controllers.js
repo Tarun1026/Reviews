@@ -5,6 +5,7 @@ import { User } from "../models/user.model.js";
 import { Liked } from '../models/Liked.model.js';
 import jwt from "jsonwebtoken"
 import { Review } from '../models/Review.model.js';
+import { uploadOnCloudinary } from '../utils/Cloudinary.js';
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
     if(!user){
@@ -182,55 +183,23 @@ const userReview = asyncHanlder(async (req, res) => {
     }
 
     // Find the existing review document for the given movieId
-    let movieReview = await Review.findOne({ movieId });
+    const movieReview = await Review.findOne({ movieId });
 
-    if (!movieReview) {
+     
         // If it doesn't exist, create a new document
-        movieReview = await Review.create({
+    const movieReviewCreate = await Review.create({
             movieId,
             movieTitle,
-            reviews: [{
-                reviewText,
-                username: req.user?.username // Get username from request
-            }]
-        });
-    } else {
-        // If it exists, push the new review into the reviews array
-        movieReview.reviews.push({
             reviewText,
-            username: req.user?.username // Get username from request
+            username: req.user?.username 
+          
         });
-        await movieReview.save(); // Save the updated document
-    }
-    //  console.log("req user",req.user)
-    const userFind = await User.findById(req.user._id);
-if (!userFind) {
-    throw new ApiError(404, "User not found");
-}
-
-// Create the new review object
-    const newReview = {
-        movieId,
-        movieTitle,
-        reviewText,
-    };
-
-    // Check if userReviews exists, if not, initialize it as an array
-    if (userFind.userReviews && Array.isArray(userFind.userReviews)) {
-        userFind.userReviews.push(newReview);
-    } else {
-        // Initialize userReviews as an array with the new review
-        userFind.userReviews = [newReview];
-    }
-
-    // Save the updated user document
-    await userFind.save();
-
-    // Log the updated user data
-    console.log("user data", userFind);
+    
+        
+    
 
     return res.status(200).json(
-        new ApiResponse(200, {movieReview,userFind}, "Review Sent Successfully")
+        new ApiResponse(200, {movieReviewCreate}, "Review Sent Successfully")
     );
 });
 
@@ -250,21 +219,76 @@ const getUserDetails=asyncHanlder(async(req,res)=>{
 
 const getMovieReviews=asyncHanlder(async(req,res)=>{
     const{movieId}=req.body
-    // console.log("movieId",movieId)
     const movie=await Review.findOne({movieId})
-    // console.log("mo",movie)
+    let movieReviewDetails=null
     if (movie){
-        res
+        movieReviewDetails=await Review.aggregate([
+            {
+                $match:{
+                    movieId:movieId
+                }
+            },
+            {
+                $lookup:{
+                    from:"reviews",
+                    localField:"movieId",
+                    foreignField:"movieId",
+                    as:"currentMovieReview"
+                }
+            },
+            {
+                $lookup:{
+                    from:"reviews",
+                    localField:"username",
+                    foreignField:"username",
+                    as:"currentUserReview"
+                }
+            },
+            {
+                $addFields:{
+                    movieReviewCount:{
+                        $size:"$currentMovieReview"
+                    },
+                    userReviewCount:{
+                        $size:"$currentUserReview"
+                    }
+                }
+            },
+            {
+                $project:{
+                    username:1,
+                    movieId:1,
+                    movieTitle:1,
+                    reviewText:1,
+                    currentMovieReview:1,
+                    currentUserReview:1,
+                    movieReviewCount:1,
+                    userReviewCount:1,
+                }
+            }
+        ])
+        if(!movieReviewDetails?.length){
+            throw new ApiError("Something wrong in getting movie database")
+        }
+        return res
         .status(200)
         .json(
-            new ApiResponse(200,movie.reviews,"Reviews Fetched")
+            new ApiResponse(
+                200,
+                movieReviewDetails[0],
+                "Send movie details"
+            )
         )
     }
     else{
-        res
+        return res
         .status(200)
         .json(
-            new ApiResponse(200,{},"Reviews Fetched")
+            new ApiResponse(
+                200,
+                {},
+                "Send zero review details"
+            )
         )
     }
 })
@@ -473,6 +497,35 @@ const movieLikeCount=asyncHanlder(async(req,res)=>{
         )
     }
 })
+
+const uploadProfileImage=asyncHanlder(async(req,res)=>{
+    console.log("req.files",req.file)
+    // console.log("reqbody",req.body)
+    const profileImagePath=req.file?.path
+    if (!profileImagePath){
+        throw new ApiError("Profile Image not found")
+    }
+    const profileImg=await uploadOnCloudinary(profileImagePath)
+    if(!profileImg){
+        throw new ApiError("photo not upload")
+    }
+
+    const user=await User.findById(req.user._id).select(
+        "-password -refreshToken"
+    )
+    user.profileImage=profileImg.url
+    await user.save({validateBeforeSave:false})
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            user,
+            "Profile Image Upload successfully"
+        )
+    )
+})
 export {userRegister,
         loginUser,
         logOutUser,
@@ -486,4 +539,5 @@ export {userRegister,
     updatePassword,
 movieLike,
 movieIsLiked,
-movieLikeCount}
+movieLikeCount,
+uploadProfileImage}

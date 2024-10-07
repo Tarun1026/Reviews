@@ -8,16 +8,24 @@ import "../css/Navbar.css";
 const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   const [user, setUser] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false); // State for logout modal
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      const userDetails = await getUserDetail();
-      setUser(userDetails);
-    };
-
-    fetchUserDetails();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      fetchUserDetails();
+    }
   }, []);
+
+  const fetchUserDetails = async () => {
+    const userDetails = await getUserDetail();
+    if (userDetails) {
+      setUser(userDetails);
+      localStorage.setItem('user', JSON.stringify(userDetails));
+    }
+  };
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -33,33 +41,39 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
 
   const handleLogoutConfirm = () => {
     setLogoutModalOpen(false);
-    onLogout(); // Call the passed logout handler
+    localStorage.removeItem('user');
+    setUser(null);
+    onLogout();
   };
 
   return (
     <div className="navDiv">
       <div className="navItem">Movie Review</div>
-      <div className="navItem"><Link to="/movies" className='navItemLink'>Movies</Link></div>
+      <div className="navItem">
+        <Link to="/movies" className="navItemLink">Movies</Link>
+      </div>
       <div className="navItem">Web Series</div>
       <div className="navItem">TV Shows</div>
       <input type="text" className="searchInput" placeholder="Search..." />
 
       <div className="navRight">
-        {isLoggedIn ? (
+        {user ? (
           <div className="userSection" onClick={toggleDropdown}>
-            <FaUserCircle className="userIcon" />
-            <span className="username">{user.username}</span>
+            {user.profileImage ? (
+              <img src={user.profileImage} alt="Profile" className="profileImage" />
+            ) : (
+              <FaUserCircle className="userIcon" />
+            )}
+            <span className="username">{user?.username}</span>
 
             {dropdownVisible && (
               <div className="dropdownMenu">
                 <div className="dropdownItem">Your Activity</div>
                 <div className="dropdownItem">Your Watchlist</div>
                 <div className="dropdownItem">
-                  <Link to="/user-account-setting">
-                  Account Settings
-                  </Link>
-                  </div>
-                <div className="dropdownItem" onClick={openLogoutModal}>Logout</div> {/* Open modal on logout */}
+                  <Link to="/user-account-setting">Account Settings</Link>
+                </div>
+                <div className="dropdownItem" onClick={openLogoutModal}>Logout</div>
               </div>
             )}
           </div>
@@ -70,7 +84,6 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
         )}
       </div>
 
-      {/* Logout Confirmation Modal */}
       <LogoutModal
         isOpen={logoutModalOpen}
         onClose={closeLogoutModal}

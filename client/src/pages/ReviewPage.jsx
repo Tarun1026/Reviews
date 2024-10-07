@@ -39,7 +39,12 @@ const ReviewPage = () => {
       try {
         const result = await axios.post('/api/users/movie-reviews', { movieId: movie.id });
         console.log("Fetched reviews:", result.data);
-        setMovieReviews(result.data.data);
+        if (result.data.data.currentMovieReview){
+          setMovieReviews(result.data.data.currentMovieReview);
+        }
+        else{
+          setMovieReviews([])
+        }
       } catch (err) {
         console.log("Error fetching reviews:", err);
       }
@@ -48,9 +53,9 @@ const ReviewPage = () => {
     fetchMovieReviews();
   }, [movie.id]);
 
-  useEffect(() => {
-    console.log("Updated movieReviews:", movieReviews);
-  }, [movieReviews]);
+  // useEffect(() => {
+  //   console.log("Updated movieReviews:", movieReviews);
+  // }, [movieReviews]);
 
   useEffect(() => {
     const fetchLikeStatus = async () => {

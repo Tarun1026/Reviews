@@ -9,6 +9,7 @@ const AccountSettings = () => {
     username: '',
     email: '',
     password: '********', // Default to hidden password
+    profileImage: '', // Add profile image
   });
 
   const [editMode, setEditMode] = useState({
@@ -23,15 +24,19 @@ const AccountSettings = () => {
     confirmNewPassword: '',
   });
 
+  const [profileImage, setProfileImage] = useState(null);
+
   // Fetch user details when component mounts
   useEffect(() => {
     const fetchUserDetails = async () => {
       const userDetails = await getUserDetail();
+      
       if (userDetails) {
         setUserData({
           username: userDetails.username,
           email: userDetails.email,
-          password: '********', // Do not expose password
+          password: '********',
+          profileImage: userDetails.profileImage, // Get profile image URL
         });
       }
     };
@@ -51,6 +56,10 @@ const AccountSettings = () => {
     setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+
   // Function to send updated details to backend for specific field
   const handleSave = async (field) => {
     try {
@@ -66,8 +75,8 @@ const AccountSettings = () => {
           alert('New password and confirmation do not match');
           return;
         }
-        if (passwordData.newPassword.length<6) {
-          alert('Password must be greater than 6 character');
+        if (passwordData.newPassword.length < 6) {
+          alert('Password must be greater than 6 characters');
           return;
         }
         payload = {
@@ -77,8 +86,8 @@ const AccountSettings = () => {
       }
 
       // Send the update to the backend only for the specific field
-      const response = await axios.post(`/api/users/update-${field}`, {payload});
-      // console.log("pay",payload)
+      const response = await axios.post(`/api/users/update-${field}`, payload);
+
       if (response.status === 200) {
         alert(`${field} updated successfully`);
         setEditMode({ ...editMode, [field]: false }); // Exit edit mode
@@ -91,12 +100,57 @@ const AccountSettings = () => {
     }
   };
 
+  // Function to handle profile image upload
+  const handleProfileImageUpload = async () => {
+    if (!profileImage) {
+      alert("Please select an image first.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append('profileImage', profileImage); // Append the profile image
+
+    try {
+      const response = await axios.post('/api/users/update-profile-image', formData); // Send formData directly
+
+      if (response.status === 200) {
+        alert("Profile image uploaded successfully");
+      } else {
+        alert("Failed to upload profile image");
+      }
+    } catch (error) {
+      console.error("Error uploading profile image:", error);
+      alert("Error uploading profile image");
+    }
+  };
+
   return (
     <div className="account-settings">
       <h2 className="account-settings-title">Account Settings</h2>
-      
+
       <div className="profile-section">
-        <FaUserCircle size={100} className="profile-icon" />
+        {userData.profileImage ? (
+          <img
+            src={userData.profileImage}
+            alt="Profile"
+            className="profile-avatar"
+            onClick={() => document.getElementById('profileImageInput').click()}
+          />
+        ) : (
+          <FaUserCircle
+            size={100}
+            className="profile-icon"
+            onClick={() => document.getElementById('profileImageInput').click()}
+          />
+        )}
+        <input
+          type="file"
+          id="profileImageInput"
+          style={{ display: 'none' }}
+          onChange={handleImageChange}
+        />
+        {profileImage && (
+          <button className="upload-btn" onClick={handleProfileImageUpload}>Upload Profile Image</button>
+        )}
       </div>
 
       <div className="account-section">

@@ -14,7 +14,7 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess  }) {
     e.preventDefault();
     await axios.post("/api/users/login", { email, password })
     .then((result) => {
-      console.log(result);
+      console.log("log",result);
       if (onLoginSuccess) { 
         onLoginSuccess(); // Ensure this is only called if defined
       }
