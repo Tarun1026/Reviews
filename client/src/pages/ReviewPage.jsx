@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../component/Navbar';
-import { FaStar, FaRegStar, FaThumbsUp } from 'react-icons/fa'; // Import thumbs up icon
+import { FaStar, FaRegStar, FaThumbsUp } from 'react-icons/fa'; 
+import { FaUserCircle } from "react-icons/fa"; 
 import '../css/ReviewPage.css';
 import axios from 'axios';
 
@@ -114,50 +115,57 @@ const ReviewPage = () => {
       <Navbar />
       <div className="reviewPageContainer">
         <div className="topSection">
-          <div className="titleDateContainer">
+        <div className="movie">
+            <div className="movie__intro">
+                <img className="movie__backdrop" src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} />
+            </div>
+            <div className="movie__detail">
+                <div className="movie__detailLeft">
+                    <div className="movie__posterBox">
+                        <img className="movie__poster" src={`https://image.tmdb.org/t/p/original${movie.poster_path}`} />
+                    </div>
+                </div>
+                <div className="movie__detailRight">
+                    <div className="movie__detailRightTop">
+                        <div className="movie__name">{movie.original_title }</div>
+                        {/* <div className="movie__tagline">{movie.tagline }</div> */}
+                        <div className="movie__rating">
+                            {movie.vote_average} <i class="fas fa-star" />
+                            <span className="movie__voteCount">{ "(" + movie.vote_count + ") votes" }</span>
+                        </div>  
+                        {/* <div className="movie__runtime">{movie.runtime + " mins" }</div> */}
+                        <div className="movie__releaseDate">{movie.release_date }</div>
+                        {/* <div className="movie__genres">
+                            {
+                                movie && movie.genre_ids
+                                ? 
+                                movie.genres.map(genre => (
+                                    <><span className="movie__genre" id={genre.id}>{genre.name}</span></>
+                                )) 
+                                : 
+                                ""
+                            }
+                        </div> */}
+                    </div>
+                    <div className="movie__detailRightBottom">
+                        <div className="synopsisText">Synopsis</div>
+                        <div>{movie.overview }</div>
+                    </div>
+                    
+                </div>
+            </div>
+            </div>
+          {/* <div className="titleDateContainer">
             <h1>{movie.title}</h1>
             <h2>{movie.release_date} | {movie.original_language.toUpperCase()}</h2>
-          </div>
+          </div> */}
 
-          <div className="ratingsRow">
-            <div className="ratingContainer">
-              <h2>Movie Rating</h2>
-              <div className="ratingDetails">
-                <FaStar size={40} />
-                <div>
-                  <h3>{movie.vote_average}<span>/ 10</span></h3>
-                </div>
-              </div>
-            </div>
-            <div className="userRatingContainer">
-              <h2>Your Rating</h2>
-              <div className="userStarIcon">
-                <FaRegStar size={50} />
-              </div>
-            </div>
-            <div className="popularityContainer">
-              <h2>Popularity</h2>
-              <div className="popularityValue">
-                <h3>{movie.popularity}</h3>
-              </div>
-            </div>
-          </div>
+          
         </div>
 
-        {/* Like Button and Like Count */}
-        <div className="likeSection">
-          <button
-            className="likeButton"
-            onClick={handleLikeClick}
-            style={{ color: hasLiked ? 'blue' : 'grey' }} // Color changes based on hasLiked state
-          >
-            <FaThumbsUp size={30} />
-          </button>
-          <p>{likeCount} Likes</p>
-        </div>
+        
 
-
-        <div className="bottomSection">
+        {/* <div className="bottomSection">
           <div className="imagesContainer">
             <img
               src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -171,11 +179,22 @@ const ReviewPage = () => {
             />
           </div>
           <p className="movieOverview">{movie.overview}</p>
-        </div>
+        </div> */}
 
+
+        <div className="likeSection">
+          <button
+            className="likeButton"
+            onClick={handleLikeClick}
+            style={{ color: hasLiked ? 'blue' : 'grey' }} 
+          >
+            <FaThumbsUp size={30} />
+          </button>
+          <p>{likeCount} Likes</p>
+        </div>
         <div className="reviewSection">
           <button onClick={handleReviewClick} className="reviewButton">
-            {isReviewVisible ? 'Hide Review' : '+ Write a Review'}
+            {isReviewVisible ? 'Hide Review' : '+ Add Review'}
           </button>
 
           {isReviewVisible && (
@@ -190,18 +209,45 @@ const ReviewPage = () => {
             </div>
           )}
 
-          <div className="existingReviews">
-            <h2>Reviews</h2>
-            {movieReviews.length > 0 ? (
-              movieReviews.map((review, index) => (
-                <div key={review._id} className="singleReview">
-                  <p><strong>{review.username}:</strong> {review.reviewText}</p>
-                </div>
-              ))
-            ) : (
-              <p>No reviews available</p>
-            )}
+<div className="existingReviews">
+  <h2>Reviews</h2>
+  {movieReviews.length > 0 ? (
+    movieReviews.map((review, index) => (
+      <div key={review._id} className="singleReview">
+        <div className="reviewContent">
+          <div className="ratingCommentSection">
+            {/* Displaying Rating */}
+            <div className="ratingStars">
+  <FaStar size={20} className="filledStar" />
+  <span>{review.rating}/10</span>
+</div>
+
+            {/* Displaying Review Text */}
+            <div className="reviewText">{review.reviewText}</div>
           </div>
+          {/* Three dots for additional options */}
+          <div className="reviewOptions">
+            <span>...</span>
+          </div>
+        </div>
+        <div className="reviewFooter">
+          {/* Displaying User Profile Image or Default Icon */}
+          <div className="reviewUser">
+            {review.profileImage ? (
+              <img src={review.profileImage} alt={review.username} className="profileImage" />
+            ) : (
+              <FaUserCircle size={30} />
+            )}
+            <span>{review.username}</span>
+          </div>
+        </div>
+      </div>
+    ))
+  ) : (
+    <p>No reviews available</p>
+  )}
+</div>
+
         </div>
       </div>
     </div>

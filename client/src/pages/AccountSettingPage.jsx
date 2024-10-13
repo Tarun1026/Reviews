@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import getUserDetail from '../hooks/GetUserDetails';
 import axios from 'axios'; // Use axios to send data to the backend
 import "../css/AccountSettingPage.css";
-import { FaUserCircle } from "react-icons/fa"; // Profile icon
+import { FaUserCircle } from "react-icons/fa"; 
 
 const AccountSettings = () => {
   const [userData, setUserData] = useState({

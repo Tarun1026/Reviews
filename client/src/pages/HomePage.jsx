@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../models/model";
 import RegisterModel from "../models/register.model";
 import LoginModel from "../models/login.model";
-import useMovieLink from "../hooks/useMovieLink"
-
+import useMovieLink from "../hooks/useMovieLink";
+import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 import Navbar from "../component/Navbar"; 
 import axios from "axios";
 import "../css/HomePage.css";
+import { useNavigate } from 'react-router-dom';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { movies } = useMovieLink();
+  const { movies, newReleaseMovies, topRatedMovies } = useMovieLink();
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
+  const [nowPlayingIndex, setNowPlayingIndex] = useState(0);
+  const [topRatedIndex, setTopRatedIndex] = useState(0);
+  const [moviesToShow, setMoviesToShow] = useState(5); // New state for movies to show
+
+  const navigate = useNavigate();
 
   const handleRegisterClick = () => {
     setIsLogin(false);
@@ -37,44 +45,176 @@ function HomePage() {
     setModalOpen(false);
   };
 
-  const handleLogout =async () => {
+  const handleLogout = async () => {
     await axios.post("/api/users/logOut")
-    .then((result) => {
-      console.log("res",result)
-      setIsLoggedIn(false);
-    })
-    .catch(err => console.log(err));
+      .then((result) => {
+        setIsLoggedIn(false);
+      })
+      .catch(err => console.log(err));
   };
 
-  const goToNextMovie = () => {
-    setCurrentMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
+  // const goToNextMovie = () => {
+  //   setCurrentMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
+  // };
+
+  // const goToPreviousMovie = () => {
+  //   setCurrentMovieIndex(
+  //     (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
+  //   );
+  // };
+
+  const goToNextNowPlaying = () => {
+    setNowPlayingIndex((prevIndex) => (prevIndex + 1) % newReleaseMovies.length);
   };
 
-  const goToPreviousMovie = () => {
-    setCurrentMovieIndex(
-      (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
+  const goToPreviousNowPlaying = () => {
+    setNowPlayingIndex(
+      (prevIndex) => (prevIndex - 1 + newReleaseMovies.length) % newReleaseMovies.length
     );
   };
+
+  const goToNextTopRated = () => {
+    setTopRatedIndex((prevIndex) => (prevIndex + 1) % topRatedMovies.length);
+  };
+
+  const goToPreviousTopRated = () => {
+    setTopRatedIndex(
+      (prevIndex) => (prevIndex - 1 + topRatedMovies.length) % topRatedMovies.length
+    );
+  };
+
+  const handleMovieClick = (movie) => {
+    navigate('/review', { state: { movie } });
+  };
+
+  // Function to update the number of movies to show based on window size
+  // Function to update the number of movies to show based on window size
+const updateMoviesToShow = () => {
+  const width = window.outerWidth;
+  // console.log("Current width:", width); 
+
+  if (width < 400) {
+    setMoviesToShow(1);
+    // console.log("Setting movies to show: 1");
+  } else if (width < 600) {
+    setMoviesToShow(2);
+    // console.log("Setting movies to show: 2");
+  } else if (width < 900) {
+    setMoviesToShow(3);
+    // console.log("Setting movies to show: 3");
+  } else if (width < 1200) {
+    setMoviesToShow(4);
+    // console.log("Setting movies to show: 4");
+  } else {
+    setMoviesToShow(5);
+    // console.log("Setting movies to show: 5");
+  }
+};
+
+useEffect(() => {
+  updateMoviesToShow(); // Set initial number of movies on mount
+
+  const handleResize = () => {
+    // console.log("Resize event detected."); // Debug statement for resize
+    updateMoviesToShow(); // Update number of movies on resize
+  };
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize); // Cleanup listener
+}, []);
 
   return (
     <div className="homePageContainer">
       <Navbar onRegisterClick={handleRegisterClick} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+
+      {/* Featured Movie Slider */}
+      
       <div className="movieSlider">
-        <button className="prevButton" onClick={goToPreviousMovie}>
-          ❮
-        </button>
-        <div className="movieContainer">
-          {movies.length > 0 && (
+      <Carousel
+        showArrows={true}
+      
+        infiniteLoop={true}
+        showThumbs={false}
+        showStatus={false}
+        autoPlay={true}
+        interval={3000}
+      >
+        {movies.map((movie, index) => (
+          <div key={index} className="movieContainer" onClick={() => handleMovieClick(movie)}>
             <img
-              src={`https://image.tmdb.org/t/p/w500${movies[currentMovieIndex].poster_path}`}
-              alt={movies[currentMovieIndex].title}
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
               className="moviePoster"
             />
-          )}
+          </div>
+        ))}
+      </Carousel>
+    </div>
+
+      {/* Now Playing Section */}
+      <div className="movieSection">
+        <h2>Trending Today</h2>
+        <div className="carouselContainer">
+          <button className="prevButton" onClick={goToPreviousNowPlaying}><SlArrowLeftCircle /></button>
+          <div className="movieCards">
+            {newReleaseMovies.slice(nowPlayingIndex, nowPlayingIndex + moviesToShow).map((movie, index) => (
+              <div
+                key={index}
+                className="movieCardLarge"
+                onClick={() => handleMovieClick(movie)}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="moviePosterLarge"
+                />
+                <div className="ratingContainer">
+                  <span className="star">⭐</span>
+                  <span className="rating">{movie.vote_average}</span>
+                </div>
+                <div className="movieDetails">
+                  <h3>{movie.title}</h3>
+                  <p>Release year • {movie.release_date.substring(0, 4)}</p>
+                  <button className="seeReviewsButton">See reviews</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="nextButton" onClick={goToNextNowPlaying}><SlArrowRightCircle /></button>
         </div>
-        <button className="nextButton" onClick={goToNextMovie}>
-          ❯
-        </button>
+      </div>
+
+      {/* Top Rated Section */}
+      <div className="movieSection2">
+        <h2>Top Rated</h2>
+        <div className="carouselContainer">
+          <button className="prevButton" onClick={goToPreviousTopRated}><SlArrowLeftCircle /></button>
+          <div className="movieCards">
+            {topRatedMovies.slice(topRatedIndex, topRatedIndex + moviesToShow).map((movie, index) => (
+              <div
+                key={index}
+                className="movieCardLarge"
+                onClick={() => handleMovieClick(movie)}
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  alt={movie.title}
+                  className="moviePosterLarge"
+                />
+                <div className="ratingContainer">
+                  <span className="star">⭐</span>
+                  <span className="rating">{movie.vote_average}</span>
+                </div>
+                <div className="movieDetails">
+                  <h3>{movie.title}</h3>
+                  <p>Release year • {movie.release_date.substring(0, 4)}</p>
+                  <button className="seeReviewsButton">See reviews</button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button className="nextButton" onClick={goToNextTopRated}><SlArrowRightCircle /></button>
+        </div>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>

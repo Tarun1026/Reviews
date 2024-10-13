@@ -256,14 +256,15 @@ const getMovieReviews=asyncHanlder(async(req,res)=>{
             },
             {
                 $project:{
-                    username:1,
-                    movieId:1,
-                    movieTitle:1,
-                    reviewText:1,
+                    // username:1,
+                    // movieId:1,
+                    // movieTitle:1,
+                    // reviewText:1,
                     currentMovieReview:1,
                     currentUserReview:1,
                     movieReviewCount:1,
                     userReviewCount:1,
+                    // profileImage:1
                 }
             }
         ])
@@ -466,7 +467,8 @@ const movieLikeCount=asyncHanlder(async(req,res)=>{
                 likedBy:1,
                 likedByMeTo:1,
                 likedCount:1,
-                userLikesCount:1
+                userLikesCount:1,
+                // profileImage:1
 
             }
         }
@@ -474,7 +476,7 @@ const movieLikeCount=asyncHanlder(async(req,res)=>{
         if(!movieDetails?.length){
             throw new ApiError("Movie Details not fetched")
         }
-        console.log("lo",movieDetails)
+        // console.log("lo",movieDetails)
     return res
     .status(200)
     .json(
@@ -499,21 +501,33 @@ const movieLikeCount=asyncHanlder(async(req,res)=>{
 })
 
 const uploadProfileImage=asyncHanlder(async(req,res)=>{
-    console.log("req.files",req.file)
+    // console.log("req.files",req.file)
     // console.log("reqbody",req.body)
     const profileImagePath=req.file?.path
     if (!profileImagePath){
-        throw new ApiError("Profile Image not found")
+        throw new ApiError(401,"Profile Image not found")
     }
     const profileImg=await uploadOnCloudinary(profileImagePath)
     if(!profileImg){
-        throw new ApiError("photo not upload")
+        throw new ApiError(400,"photo not upload")
     }
 
     const user=await User.findById(req.user._id).select(
         "-password -refreshToken"
     )
     user.profileImage=profileImg.url
+    const userFind=req.user.username
+    console.log("userfind",userFind)
+    const reviewUpdate = await Review.updateMany(
+        { username: userFind }, // Match all reviews with the same username
+        { $set: { profileImage: profileImg.url } }, // Set the new profileImage
+        { multi: true } // Optional, 'multi' updates all matches, but `updateMany` does this by default
+    );
+
+    if (reviewUpdate.nModified > 0) {
+        console.log(`Updated ${reviewUpdate.nModified} reviews with new profile image`);
+    }
+
     await user.save({validateBeforeSave:false})
 
     return res

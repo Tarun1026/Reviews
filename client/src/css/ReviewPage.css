@@ -1,7 +1,104 @@
+.movie {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+}
+
+.movie__intro {
+  width: 100%;
+}
+
+.movie__backdrop {
+  width: 100%;
+  height: 600px;
+  object-fit:cover;
+  object-position: 0 35%;
+}
+
+.movie__detail {
+  align-items: center;
+  width: 75%;
+  display: flex;
+  position: relative;
+  bottom: 225px;
+}
+
+.movie__detailLeft {
+  margin-right: 30px;
+}
+
+.movie__poster {
+  width:300px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.86) 0px 22px 40px 6px;
+}
+
+.movie__detailRight {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 450px;
+  justify-content:space-between ;
+}
+
+.movie__detailRightTop > div{
+  text-shadow: 0px 0px 5px #000000;
+  margin-bottom: .5rem;
+}
+
+.movie__name {
+  margin-left: -10px;
+  font-weight: 600;
+  font-size: 3rem;
+}
+
+.movie__voteCount {
+  margin-left: 1rem;
+}
+
+.movie__genres {
+  margin: 1.25rem 0;
+}
+
+.movie__genre {
+  padding: .5rem;
+  border: 2px solid white;
+  border-radius: 20px;
+  margin-right: 1rem;
+}
+
+
+.movie__detailRightBottom {
+  margin: 2rem 0;
+  flex: 0.8;
+}
+
+.synopsisText {
+  margin-top: 30px;
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+.synopsisText > div:last-of-type {
+  margin-left: auto;
+}
+
+
+
+
+/* my codehere */
+
+
+
 .reviewPageContainer {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .topSection {
@@ -110,9 +207,9 @@
 
 /* Other styles remain the same */
 
-.reviewSection {
+/* .reviewSection {
   margin-top: 30px;
-}
+} */
 
 .reviewButton {
   padding: 10px 20px;
@@ -207,4 +304,120 @@
 .likeSection p {
   font-size: 1.2rem;
   margin: 0;
+}
+
+/* Review Section Background */
+.reviewSection {
+  margin-top: 30px;
+  background-color: #1c1c1c; /* Blackish background to match theme */
+  padding: 20px;
+  border-radius: 10px;
+  color: white; /* White text color for better readability */
+}
+
+/* Single Review Container */
+.singleReview {
+  padding: 20px;
+  background-color: #2b2b2b; /* Darker background for individual review cards */
+  margin-bottom: 15px;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Review Content Area */
+.reviewContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Rating Section */
+.ratingStars {
+  color: gold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.filledStar {
+  margin-right: 5px;
+}
+
+/* Review Text */
+.reviewText {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #ddd;
+}
+
+/* Review Options (Three Dots) */
+.reviewOptions {
+  font-size: 1.5rem;
+  color: #bbb;
+  cursor: pointer;
+}
+
+/* Review Footer (User Info) */
+.reviewFooter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+/* User Profile */
+.reviewUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #bbb;
+}
+
+.profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.reviewUser span {
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* Adjusting the reviews section margin */
+.existingReviews {
+  margin-top: 30px;
+  padding: 20px;
+}
+
+/* Rating Stars - Keep Yellow */
+.ratingStars {
+  color: gold; /* Ensures the stars remain yellow */
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.filledStar {
+  margin-right: 5px;
+}
+
+/* Rating text - Lighter color */
+.ratingStars span {
+  color: #aaa; /* Light color for the rating text (e.g., 7/10) */
+  margin-left: 5px; /* Adding space between the star and the rating text */
+  font-size: 1.1rem;
+}
+
+/* Bold and Stylish Username */
+.reviewUser span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff; /* White color for visibility */
+  text-transform: capitalize; /* Capitalize the username for a polished look */
 }

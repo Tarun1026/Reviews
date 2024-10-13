@@ -17,6 +17,9 @@ const reviewSchema=new Schema({
     movieTitle:{
         type:String
     },
+    profileImage:{
+        type:String
+    }
     // username:{
     //     type:String,
     //     required:true
