@@ -4,6 +4,7 @@
   display: flex;
   flex-direction:column;
   align-items: center;
+  height: 115vh;
 }
 
 .movie__intro {
@@ -49,7 +50,7 @@
 }
 
 .movie__name {
-  margin-left: -10px;
+  margin-left: -5px;
   font-weight: 600;
   font-size: 3rem;
 }
@@ -282,7 +283,7 @@
 
 .likeButton {
   padding: 10px 20px;
-  background-color: rgb(238, 235, 235);
+  background-color: transparent;
   color: white;
   border: none;
   border-radius: 5px;
@@ -292,9 +293,9 @@
   gap: 5px;
 }
 
-.likeButton:hover {
+/* .likeButton:hover {
   background-color: #0056b3;
-}
+} */
 
 .likeButton:disabled {
   background-color: #ccc;
@@ -308,6 +309,7 @@
 
 /* Review Section Background */
 .reviewSection {
+
   margin-top: 30px;
   background-color: #1c1c1c; /* Blackish background to match theme */
   padding: 20px;
@@ -409,8 +411,8 @@
 
 /* Rating text - Lighter color */
 .ratingStars span {
-  color: #aaa; /* Light color for the rating text (e.g., 7/10) */
-  margin-left: 5px; /* Adding space between the star and the rating text */
+  color: #aaa; 
+  margin-left: 5px;
   font-size: 1.1rem;
 }
 
@@ -420,4 +422,66 @@
   font-weight: bold;
   color: #fff; /* White color for visibility */
   text-transform: capitalize; /* Capitalize the username for a polished look */
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between; /* Space between left and right sections */
+  align-items: center; /* Align items vertically in the center */
+  width: 100%; /* Ensure the buttons container spans the full width */
+  gap: 20px;
+}
+
+.likeSection {
+  display: flex;
+  align-items: center; /* Vertical alignment for like button and text */
+  gap: 10px;
+  flex: 1; /* Pushes the like section to the left */
+}
+
+.sortDropdownContainer,
+.reviewButton,
+.count {
+  display: flex;
+  align-items: center; /* Align these elements vertically */
+}
+
+.sortDropdownContainer {
+  margin-right: 10px; /* Add space between dropdown and review button */
+}
+
+.count {
+  color: #ddd;
+  margin-right: 20px; /* Space between the count and sort dropdown */
+}
+
+.sortDropdown {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.reviewButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reviewButton:hover {
+  background-color: #0056b3;
+}
+
+.likeCount {
+  margin-left: 10px;
+  font-size: 1rem;
+}
+
+
+.count{
+  color: #ddd;
+  font-size: 1.5rem;
 }

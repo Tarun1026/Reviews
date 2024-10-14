@@ -171,7 +171,7 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
 })
 const userReview = asyncHanlder(async (req, res) => {
     const { reviewText, movieId, movieTitle } = req.body;
-    
+    console.log("")
     if (reviewText === "") {
         throw new ApiError("Review should not be empty");
     }
@@ -191,7 +191,8 @@ const userReview = asyncHanlder(async (req, res) => {
             movieId,
             movieTitle,
             reviewText,
-            username: req.user?.username 
+            username: req.user?.username,
+            profileImage:req.user?.profileImage
           
         });
     
