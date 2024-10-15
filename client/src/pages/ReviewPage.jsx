@@ -141,7 +141,7 @@ const ReviewPage = () => {
               </div>
               <div className="movie__detailRight">
                 <div className="movie__detailRightTop">
-                  <div className="movie__name">{movie.original_title}</div>
+                  <div className="movie__name">{movie.original_title || movie.name}</div>
 
                   <div className="movie__rating">
                     {movie.vote_average} <i class="fas fa-star" />
@@ -150,7 +150,7 @@ const ReviewPage = () => {
                     </span>
                   </div>
 
-                  <div className="movie__releaseDate">{movie.release_date}</div>
+                  <div className="movie__releaseDate">{movie.release_date || movie.first_air_date}</div>
                 </div>
                 <div className="movie__detailRightBottom">
                   <div className="synopsisText">Description</div>

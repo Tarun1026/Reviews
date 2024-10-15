@@ -1,31 +1,21 @@
-import { useState, useEffect } from 'react';
-import getUserDetail from '../hooks/GetUserDetails';
+import { useState, useRef, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import LogoutModal from '../models/Logout.model';
+import loadMovies from '../hooks/useTMDBSearch';
+import { useNavigate } from 'react-router-dom';
 import "../css/Navbar.css";
+import image from "../assets/medium-cover.jpg";
 
 const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   const [user, setUser] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-      fetchUserDetails();
-    }
-  }, []);
-
-  const fetchUserDetails = async () => {
-    const userDetails = await getUserDetail();
-    if (userDetails) {
-      setUser(userDetails);
-      localStorage.setItem('user', JSON.stringify(userDetails));
-    }
-  };
+  const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
+  
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
@@ -46,6 +36,31 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
     onLogout();
   };
 
+  // Function to fetch movies as user types
+  useEffect(() => {
+    const fetchMovies = async () => {
+      if (searchTerm) {
+        const moviesData = await loadMovies(searchTerm);
+        setMovies(moviesData);
+      } else {
+        setMovies([]);
+      }
+    };
+
+    const debounceFetch = setTimeout(() => {
+      fetchMovies();
+    }, 300); // Debounce time of 300ms
+
+    return () => clearTimeout(debounceFetch); // Clean up the timeout
+  }, [searchTerm]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleMovieClick=(movie)=>{
+    navigate('/review',{state:{movie}})
+  }
   return (
     <div className="navDiv">
       <div className="navItem">Movie Review</div>
@@ -54,7 +69,40 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
       </div>
       <div className="navItem">Web Series</div>
       <div className="navItem">TV Shows</div>
-      <input type="text" className="searchInput" placeholder="Search..." />
+      <div className="search-container">
+        <div className="search-element">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search Movie Title ..."
+            ref={searchInputRef}
+            value={searchTerm}
+            onChange={handleSearchChange} // Trigger search on input change
+          />
+
+          <div className="search-list">
+            {searchTerm && movies.length === 0 && (
+              <p>No results found.</p>
+            )}
+            {movies.length > 0 && (
+              movies.map((movie) => (
+                <div key={movie.id} className="search-list-item" onClick={()=>{handleMovieClick(movie)}}>
+                  <div className="search-item-thumbnail">
+                    <img
+                      src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : image}
+                      alt={movie.name || movie.title}
+                    />
+                  </div>
+                  <div className="search-item-info">
+                    <h3>{movie.name || movie.title}</h3>
+                    <p>{movie.release_date || movie.first_air_date}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
 
       <div className="navRight">
         {user ? (

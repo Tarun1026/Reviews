@@ -242,3 +242,38 @@ h2 {
 .seeReviewsButton:hover {
   background-color: #59b1f4;
 }
+
+.carouselContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.prevButton, .nextButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 3rem;
+  z-index: 10; 
+  transition: transform 0.3s ease; 
+}
+
+.prevButton:hover, .nextButton:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
+}
+
+.movieCards {
+  display: flex;
+  overflow: hidden; /* Hide overflow for a cleaner look */
+  transition: transform 0.5s ease; /* Smooth transition for movie card sliding */
+}
+
+.movieCardLarge {
+  min-width: 200px; 
+  margin: 0 5px;
+  transition: transform 0.3s ease; 
+}
+
+.movieCardLarge:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}

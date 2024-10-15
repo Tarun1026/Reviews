@@ -25,6 +25,7 @@ const useMovieLink = () => {
         let urlNewReleases = "https://api.themoviedb.org/3/movie/now_playing?api_key=4b2313ca982860407b4ff3a8e3258ff7";
         const responseNew = await axios.get(urlNewReleases);
         const dataNewReleases = responseNew.data.results;
+        // console.log("data",dataNewReleases)
         setNewReleaseMovies(dataNewReleases);
 
         let urlTopReleases = "https://api.themoviedb.org/3/movie/top_rated?api_key=4b2313ca982860407b4ff3a8e3258ff7";

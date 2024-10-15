@@ -53,15 +53,7 @@ function HomePage() {
       .catch(err => console.log(err));
   };
 
-  // const goToNextMovie = () => {
-  //   setCurrentMovieIndex((prevIndex) => (prevIndex + 1) % movies.length);
-  // };
-
-  // const goToPreviousMovie = () => {
-  //   setCurrentMovieIndex(
-  //     (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
-  //   );
-  // };
+ 
 
   const goToNextNowPlaying = () => {
     setNowPlayingIndex((prevIndex) => (prevIndex + 1) % newReleaseMovies.length);
@@ -132,7 +124,7 @@ useEffect(() => {
       <div className="movieSlider">
       <Carousel
         showArrows={true}
-      
+        // selectedItem={3},
         infiniteLoop={true}
         showThumbs={false}
         showStatus={false}
