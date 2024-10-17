@@ -8,6 +8,7 @@ import ReviewPage from './pages/ReviewPage';
 import Profile from './pages/Profile';
 // import MovieList from './hooks/useIMDBLink';
 import AccountSettings from './pages/AccountSettingPage';
+import WebSeriesPage from './pages/WebSeriesPage';
 // import getUserDetails from './pages/GetUserDetails';
 function App() {
   
@@ -21,7 +22,7 @@ function App() {
         <Route path="/review" element={<ReviewPage />} />
        <Route path='/profile' element={<Profile />}/>
        <Route path="/user-account-setting" element={<AccountSettings/>} />      
-        
+        <Route path='/webseries' element={<WebSeriesPage/>} />
       </Routes>
     </Router>
     </>

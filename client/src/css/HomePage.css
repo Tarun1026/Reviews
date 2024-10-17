@@ -6,10 +6,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* img {
+  display: block;
+  margin: 0;
+  padding: 0;
+} */
+
+
 .homePageContainer {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* width: 100vw; */
 }
 
 .navDiv {
@@ -67,7 +75,7 @@ body {
   margin-top: 20px;
   margin-left:40px;
   width: 40%;
-  /* position: relative; */
+
 }
 
 .movieContainer {
@@ -98,10 +106,12 @@ body {
 }
 
 .prevButton {
+  z-index: 10; 
   left: -30px;
 }
 
 .nextButton {
+  /* z-index: 1; */
   right: -30px;
 }
 
@@ -154,19 +164,42 @@ h2 {
   position: relative;
   width: 90vw;
 }
+.carouselContainer1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  /* margin-top:25rem;
+  height: 2rem; */
+  width: 96%;
+}
+
 
 .movieCards {
   display: flex;
-  gap: 25px;
+  gap: 15px;
   flex-wrap: nowrap;
   justify-content: center;
   width: 100%;
   overflow: hidden;
+  transition: transform 0.5s ease; 
+}
+.movieCards1 {
+  /* display: flex; */
+  gap: 25px;
+  padding-right: 0%;
+  /* padding: 20px; */
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 100%;
+  /* overflow: hidden; */
+  transition: transform 0.5s ease; 
 }
 
 .movieCardLarge {
   background-color: #1e1e1e;
   width: 280px;
+ 
   transition: transform 0.3s;
   cursor: pointer;
 }
@@ -184,6 +217,7 @@ h2 {
 .movieDetails {
   text-align: left;
   padding: 10px;
+  /* height: 8rem; */
 }
 
 .movieDetails h3 {
@@ -200,7 +234,7 @@ h2 {
 .ratingContainer {
   margin-bottom: 10px;
   position: absolute;
-  top: 60%;
+  top: 58%;
   transform: translateY(-50%);
   background-color: rgba(2, 0, 0, 0.7); /* Blackish background */
   border-radius: 20px; 
@@ -254,7 +288,7 @@ h2 {
   border: none;
   cursor: pointer;
   font-size: 3rem;
-  z-index: 10; 
+  
   transition: transform 0.3s ease; 
 }
 
@@ -262,11 +296,6 @@ h2 {
   transform: scale(1.2); /* Slightly enlarge on hover */
 }
 
-.movieCards {
-  display: flex;
-  overflow: hidden; /* Hide overflow for a cleaner look */
-  transition: transform 0.5s ease; /* Smooth transition for movie card sliding */
-}
 
 .movieCardLarge {
   min-width: 200px; 
@@ -277,3 +306,104 @@ h2 {
 .movieCardLarge:hover {
   transform: scale(1.05); /* Slightly enlarge on hover */
 }
+
+.slick-track {
+  display: flex;  /* Align slides horizontally */
+  overflow: hidden; /* Prevent overflow issues */
+  margin: 0;
+  padding: 0; /* Optional, based on layout needs */
+}
+
+.slick-slide {
+  padding-right: 20px; /* Space between slides */
+  margin: 0;  /* Ensure no margin affects layout */
+  height: auto; /* Adjust height based on content */
+  box-sizing: border-box; /* Include padding in width */
+}
+
+/* Styling for the filter button container */
+.filterButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 30px;
+  margin-top: 20px; /* Increased margin to separate from the content */
+  position: relative;
+  z-index: 1;
+}
+
+/* Styling for the filter button */
+.filterButton {
+  background-color: #5a5a5a; /* Darker background for contrast */
+  color: white;
+  padding: 12px 20px; /* Increased padding for a bigger button */
+  border: none;
+  border-radius: 10px; /* Rounded corners for a smoother look */
+  cursor: pointer;
+  font-size: 16px; /* Larger font size for better readability */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.filterButton:hover {
+  background-color: #4a4a4a; /* Slightly darker on hover */
+}
+
+/* Styling for filter options dropdown */
+.filterOptions {
+  position: absolute;
+  top: 60px; /* Adjusted to position dropdown below the button */
+  right: 10;
+  background-color: #222; /* Dark background for dropdown */
+  padding: 20px; /* Increased padding for more space */
+  border-radius: 15px; /* More rounded corners */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Enhanced shadow for depth */
+  z-index: 2;
+  width: 300px; /* Fixed width for uniformity */
+}
+
+/* Styling for labels within the filter options */
+.filterOptions label {
+  display: block;
+  margin-bottom: 12px; /* Increased spacing between labels */
+  color: #fff;
+  font-size: 14px; /* Larger font size for labels */
+}
+
+/* Styling for dropdowns and inputs */
+.filterOptions select,
+.filterOptions input {
+  width: 100%; /* Full width for inputs */
+  padding: 10px; /* Increased padding for comfort */
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #333; /* Dark background for inputs */
+  color: #fff;
+  margin-bottom: 15px; /* Spacing between inputs */
+  font-size: 14px; /* Larger font size for inputs */
+}
+.filterOptions input{
+  width: 93%;
+}
+/* Styling for apply filter button */
+.applyFilterButton {
+  background-color: #59b1f4; /* Bright blue for visibility */
+  padding: 12px; /* Increased padding for a bigger button */
+  border: none;
+  border-radius: 10px; /* Rounded corners */
+  color: white;
+  cursor: pointer;
+  font-size: 16px; /* Larger font size for better readability */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.applyFilterButton:hover {
+  background-color: #468fca; /* Darker blue on hover */
+}
+
+/* Add margin to the movie section for space below the filter */
+.movieSection,
+.movieSection2 {
+  margin-top: 30px; /* More space for better separation */
+}
+
+
+

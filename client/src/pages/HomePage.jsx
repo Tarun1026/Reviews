@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import Modal from "../models/model";
 import RegisterModel from "../models/register.model";
 import LoginModel from "../models/login.model";
@@ -10,8 +10,50 @@ import "../css/HomePage.css";
 import { useNavigate } from 'react-router-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 5, // Dynamically update based on screen size
+  slidesToScroll: 2,
+  arrows:false,
+  // nextArrow: <NextArrow />,
+  // prevArrow: <PrevArrow />,
+  
+  responsive: [
+    { breakpoint: 1200, settings: { slidesToShow: 4 } },
+    { breakpoint: 900, settings: { slidesToShow: 3 } },
+    { breakpoint: 600, settings: { slidesToShow: 2 } },
+    { breakpoint: 400, settings: { slidesToShow: 1 } }
+  ]
+};
+const settings2 = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 5, // Dynamically update based on screen size
+  slidesToScroll: 2,
+  arrows:false,
+  // nextArrow: <NextArrow />,
+  // prevArrow: <PrevArrow />,
+  
+  responsive: [
+    { breakpoint: 1200, settings: { slidesToShow: 4 } },
+    { breakpoint: 900, settings: { slidesToShow: 3 } },
+    { breakpoint: 600, settings: { slidesToShow: 2 } },
+    { breakpoint: 400, settings: { slidesToShow: 1 } }
+  ]
+};
 
 function HomePage() {
+  const sliderRef = useRef(null);
+  const sliderRef2 = useRef(null);
+
+  
+ 
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -55,25 +97,25 @@ function HomePage() {
 
  
 
-  const goToNextNowPlaying = () => {
-    setNowPlayingIndex((prevIndex) => (prevIndex + 1) % newReleaseMovies.length);
-  };
+  // const goToNextNowPlaying = () => {
+  //   setNowPlayingIndex((prevIndex) => (prevIndex + 1) % newReleaseMovies.length);
+  // };
 
-  const goToPreviousNowPlaying = () => {
-    setNowPlayingIndex(
-      (prevIndex) => (prevIndex - 1 + newReleaseMovies.length) % newReleaseMovies.length
-    );
-  };
+  // const goToPreviousNowPlaying = () => {
+  //   setNowPlayingIndex(
+  //     (prevIndex) => (prevIndex - 1 + newReleaseMovies.length) % newReleaseMovies.length
+  //   );
+  // };
 
-  const goToNextTopRated = () => {
-    setTopRatedIndex((prevIndex) => (prevIndex + 1) % topRatedMovies.length);
-  };
+  // const goToNextTopRated = () => {
+  //   setTopRatedIndex((prevIndex) => (prevIndex + 1) % topRatedMovies.length);
+  // };
 
-  const goToPreviousTopRated = () => {
-    setTopRatedIndex(
-      (prevIndex) => (prevIndex - 1 + topRatedMovies.length) % topRatedMovies.length
-    );
-  };
+  // const goToPreviousTopRated = () => {
+  //   setTopRatedIndex(
+  //     (prevIndex) => (prevIndex - 1 + topRatedMovies.length) % topRatedMovies.length
+  //   );
+  // };
 
   const handleMovieClick = (movie) => {
     navigate('/review', { state: { movie } });
@@ -81,39 +123,39 @@ function HomePage() {
 
   // Function to update the number of movies to show based on window size
   // Function to update the number of movies to show based on window size
-const updateMoviesToShow = () => {
-  const width = window.outerWidth;
+// const updateMoviesToShow = () => {
+//   const width = window.outerWidth;
   // console.log("Current width:", width); 
 
-  if (width < 400) {
-    setMoviesToShow(1);
-    // console.log("Setting movies to show: 1");
-  } else if (width < 600) {
-    setMoviesToShow(2);
-    // console.log("Setting movies to show: 2");
-  } else if (width < 900) {
-    setMoviesToShow(3);
-    // console.log("Setting movies to show: 3");
-  } else if (width < 1200) {
-    setMoviesToShow(4);
-    // console.log("Setting movies to show: 4");
-  } else {
-    setMoviesToShow(5);
-    // console.log("Setting movies to show: 5");
-  }
-};
+//   if (width < 400) {
+//     setMoviesToShow(1);
+//     // console.log("Setting movies to show: 1");
+//   } else if (width < 600) {
+//     setMoviesToShow(2);
+//     // console.log("Setting movies to show: 2");
+//   } else if (width < 900) {
+//     setMoviesToShow(3);
+//     // console.log("Setting movies to show: 3");
+//   } else if (width < 1200) {
+//     setMoviesToShow(4);
+//     // console.log("Setting movies to show: 4");
+//   } else {
+//     setMoviesToShow(5);
+//     // console.log("Setting movies to show: 5");
+//   }
+// };
 
-useEffect(() => {
-  updateMoviesToShow(); // Set initial number of movies on mount
+// useEffect(() => {
+//   updateMoviesToShow(); // Set initial number of movies on mount
 
-  const handleResize = () => {
-    // console.log("Resize event detected."); // Debug statement for resize
-    updateMoviesToShow(); // Update number of movies on resize
-  };
+//   const handleResize = () => {
+//     // console.log("Resize event detected."); // Debug statement for resize
+//     updateMoviesToShow(); // Update number of movies on resize
+//   };
 
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize); // Cleanup listener
-}, []);
+//   window.addEventListener('resize', handleResize);
+//   return () => window.removeEventListener('resize', handleResize); // Cleanup listener
+// }, []);
 
   return (
     <div className="homePageContainer">
@@ -122,7 +164,7 @@ useEffect(() => {
       {/* Featured Movie Slider */}
       
       <div className="movieSlider">
-      <Carousel
+       <Carousel
         showArrows={true}
         // selectedItem={3},
         infiniteLoop={true}
@@ -130,7 +172,7 @@ useEffect(() => {
         showStatus={false}
         autoPlay={true}
         interval={3000}
-      >
+       >
         {movies.map((movie, index) => (
           <div key={index} className="movieContainer" onClick={() => handleMovieClick(movie)}>
             <img
@@ -146,10 +188,11 @@ useEffect(() => {
       {/* Now Playing Section */}
       <div className="movieSection">
         <h2>Trending Today</h2>
-        <div className="carouselContainer">
-          <button className="prevButton" onClick={goToPreviousNowPlaying}><SlArrowLeftCircle /></button>
-          <div className="movieCards">
-            {newReleaseMovies.slice(nowPlayingIndex, nowPlayingIndex + moviesToShow).map((movie, index) => (
+        <div className="carouselContainer1">
+        <button className="prevButton" onClick={() => sliderRef.current.slickPrev()}><SlArrowLeftCircle /></button>
+          <div className="movieCards1">
+          <Slider ref={sliderRef} {...settings}>
+            {newReleaseMovies.map((movie, index) => (
               <div
                 key={index}
                 className="movieCardLarge"
@@ -171,18 +214,20 @@ useEffect(() => {
                 </div>
               </div>
             ))}
+            </Slider>
           </div>
-          <button className="nextButton" onClick={goToNextNowPlaying}><SlArrowRightCircle /></button>
+          <button className="nextButton" onClick={() => sliderRef.current.slickNext()}><SlArrowRightCircle /></button>
         </div>
       </div>
 
       {/* Top Rated Section */}
       <div className="movieSection2">
         <h2>Top Rated</h2>
-        <div className="carouselContainer">
-          <button className="prevButton" onClick={goToPreviousTopRated}><SlArrowLeftCircle /></button>
-          <div className="movieCards">
-            {topRatedMovies.slice(topRatedIndex, topRatedIndex + moviesToShow).map((movie, index) => (
+        <div className="carouselContainer1">
+        <button className="prevButton" onClick={() => sliderRef2.current.slickPrev()}><SlArrowLeftCircle /></button>
+          <div className="movieCards1">
+          <Slider ref={sliderRef2} {...settings2}>
+            {topRatedMovies.map((movie, index) => (
               <div
                 key={index}
                 className="movieCardLarge"
@@ -204,8 +249,9 @@ useEffect(() => {
                 </div>
               </div>
             ))}
+            </Slider>
           </div>
-          <button className="nextButton" onClick={goToNextTopRated}><SlArrowRightCircle /></button>
+          <button className="nextButton" onClick={() => sliderRef2.current.slickNext()}><SlArrowRightCircle /></button>
         </div>
       </div>
 
@@ -219,5 +265,5 @@ useEffect(() => {
     </div>
   );
 }
-
+export { settings, settings2 }; 
 export default HomePage;

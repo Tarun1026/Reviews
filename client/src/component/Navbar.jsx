@@ -1,3 +1,5 @@
+// import { useState, useEffect } from 'react';
+import getUserDetail from '../hooks/GetUserDetails';
 import { useState, useRef, useEffect } from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
@@ -15,6 +17,22 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null);
   
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      fetchUserDetails();
+    }
+  }, []);
+
+  const fetchUserDetails = async () => {
+    const userDetails = await getUserDetail();
+    if (userDetails) {
+      setUser(userDetails);
+      localStorage.setItem('user', JSON.stringify(userDetails));
+    }
+  };
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
@@ -63,11 +81,15 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   }
   return (
     <div className="navDiv">
-      <div className="navItem">Movie Review</div>
+      <div className="navItem">
+      <Link to="/" className="navItemLink">Movie Review</Link>
+        </div>
       <div className="navItem">
         <Link to="/movies" className="navItemLink">Movies</Link>
       </div>
-      <div className="navItem">Web Series</div>
+      <div className="navItem">
+       <Link to="/webseries" className='navItemLink'>Web Series</Link> 
+        </div>
       <div className="navItem">TV Shows</div>
       <div className="search-container">
         <div className="search-element">
