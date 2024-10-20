@@ -90,7 +90,9 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
       <div className="navItem">
        <Link to="/webseries" className='navItemLink'>Web Series</Link> 
         </div>
-      <div className="navItem">TV Shows</div>
+      <div className="navItem">
+      <Link to="/tvShows" className='navItemLink'>TV Shows</Link> 
+      </div>
       <div className="search-container">
         <div className="search-element">
           <input

@@ -1,53 +1,66 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-function useTVShowsLink() {
-    const [tvShows,setTVShows]=useState([])
-    const [newWebSeries,setNewWebSeries]=useState([])
-    useEffect(()=>{
+// import { networkIds } from '../utils/NetworkIDs/webSeriesNetworkId';
+function useTVShowsLink(networkIds) { // Default to an empty object for filterOptions
+    const [tvShows, setTVShows] = useState([]); // For storing all TV shows
+    const [newWebSeries, setNewWebSeries] = useState([]); // For storing newly released web series
+   
+   
+    useEffect(() => {
         const fetchTVShows = async () => {
+           
+            const results = [];
+        
             try {
-              const response = await axios.get(
-                `https://api.themoviedb.org/3/discover/tv`, 
-                {
-                  params: {
-                    api_key: '4b2313ca982860407b4ff3a8e3258ff7',
-                 
-                    sort_by: 'vote_count.desc', 
-               
-                  }
+                for (const id of networkIds) {
+                    const response = await axios.get(`https://api.themoviedb.org/3/discover/tv`, {
+                        params: {
+                            api_key: '4b2313ca982860407b4ff3a8e3258ff7',
+                            with_networks: id, 
+                            sort_by: 'vote_count.desc',
+                            // "vote_count.gte":"23980",
+                            // with_original_language:"hi"
+                        }
+                    });
+                    results.push(...response.data.results); // Combine results
                 }
-              );
-            //   const filteredShows = response.data.results.filter(show => show.vote_average >= 7);
-            //   console.log("flietre",filteredShows)
-              console.log( "tv shows",response.data.results); 
-              setTVShows(response.data.results)
+        
+                const uniqueResults = [...new Map(results.map(item => [item.id, item])).values()];
+                setTVShows(uniqueResults); // Set fetched TV shows
             } catch (error) {
-              console.error('Error fetching TV shows:', error);
-              return [];
+                console.error('Error fetching TV shows:', error);
             }
 
+            const results2=[]
             try {
-                const response = await axios.get('https://api.themoviedb.org/3/discover/tv', {
-                  params: {
-                    api_key: '4b2313ca982860407b4ff3a8e3258ff7',  // Replace with your TMDb API key
-                    sort_by: 'first_air_date.desc',  // Sort by most recent air date
-                    first_air_date_gte: '2023-01-01',  // Shows released after January 1, 2023
-                    first_air_date_lte: new Date().toISOString().split('T')[0],  // Shows released up to today
-                    'vote_count.gte': 10,  // Only shows with at least 10 votes
-                    page: 1
-                  }
-                });
-            
-                console.log('New Web Series:', response.data.results);
-                setNewWebSeries(response.data.results)
-              } catch (error) {
-                console.error('Error fetching new web series:', error);
-              }
-            
-          };
-          fetchTVShows()
-        },[])
-  return {tvShows,newWebSeries}
+                for (const id of networkIds) {
+                    const response = await axios.get(`https://api.themoviedb.org/3/discover/tv`, {
+                       params: {
+                        api_key: '4b2313ca982860407b4ff3a8e3258ff7',
+                        "first_air_date.gte": '2023-01-01',
+                        "first_air_date.lte": new Date().toISOString().split('T')[0],
+                        'vote_count.gte': 10,
+                        // page: 1
+                        
+                }})
+                
+                    results2.push(...response.data.results); // Combine results
+                }
+        
+                const uniqueResults2 = [...new Map(results2.map(item => [item.id, item])).values()];
+                setNewWebSeries(uniqueResults2); // Set fetched TV shows
+            } catch (error) {
+                console.error('Error fetching TV shows:', error);
+            }
+       
+
+        };
+
+        fetchTVShows();
+    }, []);
+
+
+    return { tvShows, newWebSeries};
 }
 
-export default useTVShowsLink
+export default useTVShowsLink;

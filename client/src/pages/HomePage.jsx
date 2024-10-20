@@ -3,6 +3,7 @@ import Modal from "../models/model";
 import RegisterModel from "../models/register.model";
 import LoginModel from "../models/login.model";
 import useMovieLink from "../hooks/useMovieLink";
+import useTVShowsLink from "../hooks/useTVShowsLink";
 import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 import Navbar from "../component/Navbar"; 
 import axios from "axios";
@@ -13,55 +14,17 @@ import { Carousel } from 'react-responsive-carousel';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-const settings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 5, // Dynamically update based on screen size
-  slidesToScroll: 2,
-  arrows:false,
-  // nextArrow: <NextArrow />,
-  // prevArrow: <PrevArrow />,
-  
-  responsive: [
-    { breakpoint: 1200, settings: { slidesToShow: 4 } },
-    { breakpoint: 900, settings: { slidesToShow: 3 } },
-    { breakpoint: 600, settings: { slidesToShow: 2 } },
-    { breakpoint: 400, settings: { slidesToShow: 1 } }
-  ]
-};
-const settings2 = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 5, // Dynamically update based on screen size
-  slidesToScroll: 2,
-  arrows:false,
-  // nextArrow: <NextArrow />,
-  // prevArrow: <PrevArrow />,
-  
-  responsive: [
-    { breakpoint: 1200, settings: { slidesToShow: 4 } },
-    { breakpoint: 900, settings: { slidesToShow: 3 } },
-    { breakpoint: 600, settings: { slidesToShow: 2 } },
-    { breakpoint: 400, settings: { slidesToShow: 1 } }
-  ]
-};
+import { settings } from "../component/SettingSlider";
 
 function HomePage() {
   const sliderRef = useRef(null);
   const sliderRef2 = useRef(null);
 
-  
- 
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { movies, newReleaseMovies, topRatedMovies } = useMovieLink();
-  const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
-  const [nowPlayingIndex, setNowPlayingIndex] = useState(0);
-  const [topRatedIndex, setTopRatedIndex] = useState(0);
-  const [moviesToShow, setMoviesToShow] = useState(5); // New state for movies to show
+ const {newWebSeries}=useTVShowsLink()
 
   const navigate = useNavigate();
 
@@ -95,67 +58,11 @@ function HomePage() {
       .catch(err => console.log(err));
   };
 
- 
-
-  // const goToNextNowPlaying = () => {
-  //   setNowPlayingIndex((prevIndex) => (prevIndex + 1) % newReleaseMovies.length);
-  // };
-
-  // const goToPreviousNowPlaying = () => {
-  //   setNowPlayingIndex(
-  //     (prevIndex) => (prevIndex - 1 + newReleaseMovies.length) % newReleaseMovies.length
-  //   );
-  // };
-
-  // const goToNextTopRated = () => {
-  //   setTopRatedIndex((prevIndex) => (prevIndex + 1) % topRatedMovies.length);
-  // };
-
-  // const goToPreviousTopRated = () => {
-  //   setTopRatedIndex(
-  //     (prevIndex) => (prevIndex - 1 + topRatedMovies.length) % topRatedMovies.length
-  //   );
-  // };
-
   const handleMovieClick = (movie) => {
     navigate('/review', { state: { movie } });
   };
 
-  // Function to update the number of movies to show based on window size
-  // Function to update the number of movies to show based on window size
-// const updateMoviesToShow = () => {
-//   const width = window.outerWidth;
-  // console.log("Current width:", width); 
-
-//   if (width < 400) {
-//     setMoviesToShow(1);
-//     // console.log("Setting movies to show: 1");
-//   } else if (width < 600) {
-//     setMoviesToShow(2);
-//     // console.log("Setting movies to show: 2");
-//   } else if (width < 900) {
-//     setMoviesToShow(3);
-//     // console.log("Setting movies to show: 3");
-//   } else if (width < 1200) {
-//     setMoviesToShow(4);
-//     // console.log("Setting movies to show: 4");
-//   } else {
-//     setMoviesToShow(5);
-//     // console.log("Setting movies to show: 5");
-//   }
-// };
-
-// useEffect(() => {
-//   updateMoviesToShow(); // Set initial number of movies on mount
-
-//   const handleResize = () => {
-//     // console.log("Resize event detected."); // Debug statement for resize
-//     updateMoviesToShow(); // Update number of movies on resize
-//   };
-
-//   window.addEventListener('resize', handleResize);
-//   return () => window.removeEventListener('resize', handleResize); // Cleanup listener
-// }, []);
+ 
 
   return (
     <div className="homePageContainer">
@@ -226,7 +133,7 @@ function HomePage() {
         <div className="carouselContainer1">
         <button className="prevButton" onClick={() => sliderRef2.current.slickPrev()}><SlArrowLeftCircle /></button>
           <div className="movieCards1">
-          <Slider ref={sliderRef2} {...settings2}>
+          <Slider ref={sliderRef2} {...settings}>
             {topRatedMovies.map((movie, index) => (
               <div
                 key={index}
@@ -244,7 +151,7 @@ function HomePage() {
                 </div>
                 <div className="movieDetails">
                   <h3>{movie.title}</h3>
-                  <p>Release year • {movie.release_date.substring(0, 4)}</p>
+                  <p>Release year • {movie.release_date || movie.first_air_date}</p>
                   <button className="seeReviewsButton">See reviews</button>
                 </div>
               </div>
@@ -265,5 +172,5 @@ function HomePage() {
     </div>
   );
 }
-export { settings, settings2 }; 
+// export { settings }; 
 export default HomePage;

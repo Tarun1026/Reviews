@@ -8,74 +8,24 @@ import '../css/MoviesPage.css';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import { settings,settings2 } from './HomePage';
+import { settings} from '../component/SettingSlider';
+import { genreMovieMap } from '../utils/Genre/genreMovieMap';
+import FilterOptions from '../component/Filter';
+import FilterCard from '../component/FilterCards/FilterCard';
 const MoviesPage = () => {
+  const endPoint="movie"
   const { movies, upcomingMovies } = useMovieLink();
-  const { popularMovies } = useIMDBLink();
-  
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [upcomingIndex, setUpcomingIndex] = useState(0);
-  const [popularIndex, setPopularIndex] = useState(0); // New state for popular movies
-  const [moviesPerView, setMoviesPerView] = useState(1); 
-
+  const [appliedFilters, setAppliedFilters] = useState({
+    genre: '',
+    language: '',
+    releaseYear: '',
+    popularity: ''
+  });
   const navigate = useNavigate(); 
 
   const sliderRef = useRef(null);
   const sliderRef2 = useRef(null);
-  useEffect(() => {
-    const updateMoviesPerView = () => {
-      const containerWidth = window.innerWidth; 
-      const movieWidth = 220; 
-      const maxMoviesPerRow = Math.floor(containerWidth / movieWidth); 
-      setMoviesPerView(maxMoviesPerRow > 0 ? maxMoviesPerRow : 1); 
-    };
   
-    updateMoviesPerView(); 
-    window.addEventListener('resize', updateMoviesPerView);
-  
-    return () => {
-      window.removeEventListener('resize', updateMoviesPerView);
-    };
-  }, []);
-
-  // // Handlers for slider navigation (New Releases)
-  // const goToNextMovie = () => {
-  //   setCurrentIndex((prevIndex) => 
-  //     (prevIndex + moviesPerView) % movies.length
-  //   );
-  // };
-
-  // const goToPreviousMovie = () => {
-  //   setCurrentIndex((prevIndex) =>
-  //     (prevIndex - moviesPerView + movies.length) % movies.length
-  //   );
-  // };
-
-  // // Handlers for slider navigation (Upcoming Movies)
-  // const goToNextUpcomingMovie = () => {
-  //   setUpcomingIndex((prevIndex) =>
-  //     (prevIndex + moviesPerView) % upcomingMovies.length
-  //   );
-  // };
-
-  // const goToPreviousUpcomingMovie = () => {
-  //   setUpcomingIndex((prevIndex) =>
-  //     (prevIndex - moviesPerView + upcomingMovies.length) % upcomingMovies.length
-  //   );
-  // };
-
-  // Handlers for slider navigation (Popular Movies)
-  const goToNextPopularMovie = () => {
-    setPopularIndex((prevIndex) =>
-      (prevIndex + moviesPerView) % popularMovies.length
-    );
-  };
-
-  const goToPreviousPopularMovie = () => {
-    setPopularIndex((prevIndex) =>
-      (prevIndex - moviesPerView + popularMovies.length) % popularMovies.length
-    );
-  };
 
   const handleMovieClick = (movie) => {
     navigate('/review', { state: { movie } });
@@ -84,7 +34,8 @@ const MoviesPage = () => {
   return (
     <div className="newMoviesPageContainer">
       <Navbar />
-
+      <FilterOptions setAppliedFilters={setAppliedFilters} genreMap={genreMovieMap} />
+      <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint}/>
       {/* New Releases Slider */}
       <div className="movieSection">
         <h2>New Releases</h2>
@@ -126,7 +77,7 @@ const MoviesPage = () => {
         <div className="carouselContainer1">
         <button className="prevButton" onClick={() => sliderRef2.current.slickPrev()}><SlArrowLeftCircle /></button>
           <div className="movieCards1">
-          <Slider ref={sliderRef2} {...settings2}>
+          <Slider ref={sliderRef2} {...settings}>
             {upcomingMovies.map((movie, index) => (
               <div
                 key={index}
@@ -156,7 +107,7 @@ const MoviesPage = () => {
       </div>
       
       {/* Popular Movies Slider */}
-      <div className="newMovieSection">
+      {/* <div className="newMovieSection">
         <h2>Popular Movies</h2>
         <div className="newMovieSlider">
           <button className="newPrevButton" onClick={goToPreviousPopularMovie}>❮</button>
@@ -176,8 +127,8 @@ const MoviesPage = () => {
             ))}
           </div>
           <button className="newNextButton" onClick={goToNextPopularMovie}>❯</button>
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </div>
   );
 };

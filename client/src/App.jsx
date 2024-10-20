@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 // import MovieList from './hooks/useIMDBLink';
 import AccountSettings from './pages/AccountSettingPage';
 import WebSeriesPage from './pages/WebSeriesPage';
+import TVShows from './pages/TVShows';
 // import getUserDetails from './pages/GetUserDetails';
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
        <Route path='/profile' element={<Profile />}/>
        <Route path="/user-account-setting" element={<AccountSettings/>} />      
         <Route path='/webseries' element={<WebSeriesPage/>} />
+        <Route path='/tvShows' element={<TVShows/>} />
       </Routes>
     </Router>
     </>

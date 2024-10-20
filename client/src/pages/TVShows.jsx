@@ -10,8 +10,8 @@ import "slick-carousel/slick/slick-theme.css";
 import FilterOptions from "../component/Filter";
 import { genreMap } from "../utils/Genre/genreUtils";
 import FilterCard from "../component/FilterCards/FilterCard";
-import { networkIds } from "../utils/NetworkIDs/webSeriesNetworkId";
-function WebSeriesPage() {
+import { networkIds } from "../utils/NetworkIDs/TVShowsNetworkId";
+function TVShows() {
   const endPoint="tv"
   const [appliedFilters, setAppliedFilters] = useState({
     genre: '',
@@ -40,7 +40,7 @@ function WebSeriesPage() {
       
 <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint}/>
       <div className="movieSection">
-        <h2>Top Rated</h2>
+        <h2>Hindi Shows</h2>
         <div className="carouselContainer1">
           <button className="prevButton" onClick={() => sliderRef.current.slickPrev()}>
             <SlArrowLeftCircle />
@@ -118,4 +118,4 @@ function WebSeriesPage() {
   );
 }
 
-export default WebSeriesPage;
+export default TVShows;
