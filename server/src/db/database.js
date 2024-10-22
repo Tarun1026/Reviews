@@ -3,6 +3,7 @@ import { dbName } from "../constant.js";
 import dotenv from "dotenv"
 
 dotenv.config()
+// console.log(process.env.MONGODB_URL,dbName)
 const dbConnect=async()=>{
     try {
         // db.users.dropIndex("userName_1")

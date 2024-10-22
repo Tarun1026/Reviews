@@ -66,7 +66,9 @@ const loginUser=asyncHanlder(async(req,res)=>{
     })
     if(!user){
         throw new ApiError(401,"User not found")
+
     }
+    console.log("error",user)
     const passwordCheck=await user.isPasswordCorrect(password)
     if(!passwordCheck){
         throw new ApiError(401,"Password is wrong")

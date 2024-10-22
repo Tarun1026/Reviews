@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 // import { networkIds } from '../utils/NetworkIDs/webSeriesNetworkId';
-function useTVShowsLink(networkIds) { // Default to an empty object for filterOptions
+function useTVShowsLink(networkIds,languageHindi,languagePunjabi) { // Default to an empty object for filterOptions
     const [tvShows, setTVShows] = useState([]); // For storing all TV shows
     const [newWebSeries, setNewWebSeries] = useState([]); // For storing newly released web series
    
@@ -17,15 +17,16 @@ function useTVShowsLink(networkIds) { // Default to an empty object for filterOp
                         params: {
                             api_key: '4b2313ca982860407b4ff3a8e3258ff7',
                             with_networks: id, 
-                            sort_by: 'vote_count.desc',
-                            // "vote_count.gte":"23980",
-                            // with_original_language:"hi"
+                            // sort_by: 'vote_count.desc',
+          
+                        //    "with_original_language": "hi" 
                         }
                     });
                     results.push(...response.data.results); // Combine results
                 }
         
                 const uniqueResults = [...new Map(results.map(item => [item.id, item])).values()];
+                console.log("unique",uniqueResults)
                 setTVShows(uniqueResults); // Set fetched TV shows
             } catch (error) {
                 console.error('Error fetching TV shows:', error);
