@@ -1,78 +1,99 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import "../css/RegisterModel.css";
 import { Link } from "react-router-dom";
-import googleIcon from '../assets/google.svg'; // Import as a regular image
-import axios from "axios"
-const RegisterModel=({ onSwitchToLogin })=> {
+import { Alert } from 'react-bootstrap'; // Import Bootstrap Alert
+import axios from "axios";
 
-  const [username,setusername]=useState()
-  const[email,setEmail]=useState()
-  const [password,setPassword]=useState()
-  const[confirmPassword,setConfirmPassword]=useState()
+const RegisterModel = ({ onSwitchToLogin }) => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-        username,
-        email,
-        password,
-        confirmPassword,
+      username,
+      email,
+      password,
+      confirmPassword,
     };
-    await axios.post("/api/users/register", data)
-        .then((result) => console.log(result))
-        .catch(err => console.log("Error:", err));
-};
+
+    try {
+      const result = await axios.post("/api/users/register", data);
+      console.log(result);
+
+      if (result.data.success) {
+        setShowAlert(true); // Show alert on successful registration
+
+        // Hide the alert after 3 seconds
+        setTimeout(() => {
+          setShowAlert(false); // Hide alert after 3 seconds
+        }, 3000);
+        onSwitchToLogin();
+      }
+    } catch (err) {
+      console.log("Error:", err);
+      // Optionally, you can handle error messages with another alert
+    }
+  };
+
   return (
     <div className="registerMainContainer">
       <div className="registerFormContainer">
         <h2 className="heading">Register</h2>
+
+        {showAlert && (
+          <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
+            Registration successful!
+          </Alert>
+        )}
+
         <div className="registerInputContainer">
           <input
             className="registerInputField"
             type="text"
-            // id="username"
-            // name="username"
-            onChange={(e)=>setusername(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <label htmlFor="username" className="labels">Username</label>
         </div>
+
         <div className="registerInputContainer">
           <input
             className="registerInputField"
             type="email"
-            // id="email"
-            // name="email"
-            onChange={(e)=>setEmail(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <label htmlFor="email" className="labels">Email</label>
         </div>
+
         <div className="registerInputContainer">
           <input
             className="registerInputField"
             type="password"
-            // id="createPassword"
-            // name="createPassword"
-            onChange={(e)=>setPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <label htmlFor="createPassword" className="labels">Create Password</label>
         </div>
+
         <div className="registerInputContainer">
           <input
             className="registerInputField"
             type="password"
-            // id="confirmPassword"
-            // name="confirmPassword"
-            onChange={(e)=>setConfirmPassword(e.target.value)}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <label htmlFor="confirmPassword" className="labels">Confirm Password</label>
         </div>
+
         <div>
           <button className="btnRegister" onClick={handleSubmit}>Register</button>
         </div>
-        <div className="registerWith">or Register with</div>
-        <div className="googleButton">
-          <img src={googleIcon} alt="Google" className="googleIcon" />
-        </div>
+
         <div className="member">
           Already a member? <Link onClick={onSwitchToLogin}>Login</Link>
         </div>

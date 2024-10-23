@@ -1,5 +1,6 @@
 const loadMovies = async (searchItem) => {
-    const url = `https://api.themoviedb.org/3/search/multi?api_key=4b2313ca982860407b4ff3a8e3258ff7&query=${searchItem}`;
+  const apiKey = import.meta.env.VITE_TMDB_API;
+    const url = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${searchItem}`;
     try {
       const res = await fetch(url);
       const data = await res.json();

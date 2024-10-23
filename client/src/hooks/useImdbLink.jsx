@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 
 const useIMDBLink = () => {
   const [popularMovies, setPopularMovies] = useState([]);
-
+  const apiKey = import.meta.env.VITE_IMDB_API;
   useEffect(() => {
     const fetchMovies = async () => {
       const url = "https://imdb188.p.rapidapi.com/api/v1/getPopularMovies";
       const options = {
         method: "POST",
         headers: {
-          "x-rapidapi-key": "a1dab9bf6dmshb7ca80ddae28c6cp1d84a2jsnce613014eb03",
+          "x-rapidapi-key": `${apiKey}`,
           "x-rapidapi-host": "imdb188.p.rapidapi.com",
           "Content-Type": "application/json",
         },

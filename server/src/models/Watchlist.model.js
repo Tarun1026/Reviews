@@ -1,18 +1,16 @@
 import mongoose,{Schema} from "mongoose";
 
-const reviewSchema=new Schema({
+const watchListSchema=new Schema({
     
-        reviewText: {
-            type: String,
-            required: true,
-        },
+      
         username: {
             type: String,
             required: true,
         },
    
     movieId:{
-        type:Number
+        type:Number,
+        required:true,
     },
     movieTitle:{
         type:String
@@ -20,14 +18,11 @@ const reviewSchema=new Schema({
     profileImage:{
         type:String
     },
-    // username:{
-    //     type:String,
+  
+    // rating:{
+    //     type:Number,
     //     required:true
     // }
-    rating:{
-        type:Number,
-        required:true
-    }
 },{timestamps:true})
 
-export const Review=mongoose.model('Review',reviewSchema)
+export const WatchList=mongoose.model('WatchList',watchListSchema)

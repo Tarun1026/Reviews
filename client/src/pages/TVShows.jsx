@@ -18,7 +18,7 @@ function TVShows() {
     releaseYear: "",
     popularity: "",
   });
-  const { tvShows, newWebSeries } = useTVShowsLink(networkIds,languageHindi,languagePunjabi);
+  const { tvShows, newWebSeries,hindi,punjabi } = useTVShowsLink(networkIds,languageHindi,languagePunjabi);
  
 
   return (
@@ -33,7 +33,8 @@ function TVShows() {
       <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} />
       <MovieCards movieSent={tvShows} heading={"Top Rated"} />
       <MovieCards movieSent={newWebSeries} heading={"New Releases"} />
-      <MovieCards movieSent={newWebSeries} heading={"English"} />
+      <MovieCards movieSent={hindi} heading={"Hindi"} />
+      <MovieCards movieSent={punjabi} heading={"Punjabi"} />
     </div>
   );
 }

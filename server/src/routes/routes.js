@@ -5,12 +5,17 @@ import { getMovieReviews, getUserDetails, loginUser,
     movieLike, 
     movieLikeCount, 
     refreshAccessToken, 
+    reviewDelete, 
+    reviewEdit, 
     updateEmail, 
     updatePassword, 
     updateUserName, 
     uploadProfileImage, 
+    userActivity, 
     userRegister, 
     userReview,
+    watchlist,
+    watchListCheck,
 }
 
     from "../controllers/user.controllers.js";
@@ -36,4 +41,9 @@ router.route("/update-profile-image").post(verifyJWT,
     upload.single('profileImage'),
     uploadProfileImage
 )
+router.route('/watch-list/:movieId').get(verifyJWT,watchListCheck)
+router.route("/delete-review").post(verifyJWT,reviewDelete)
+router.route('/edit-review').post(verifyJWT,reviewEdit)
+router.route('/add-to-watchlist').post(verifyJWT,watchlist)
+router.route("/get-user-activity").get(verifyJWT,userActivity)
 export default router

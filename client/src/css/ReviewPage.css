@@ -293,9 +293,6 @@
   gap: 5px;
 }
 
-/* .likeButton:hover {
-  background-color: #0056b3;
-} */
 
 .likeButton:disabled {
   background-color: #ccc;
@@ -485,3 +482,273 @@
   color: #ddd;
   font-size: 1.5rem;
 }
+.reviewInput {
+  width: 100%;
+  height: 100px;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+.reviewInput:focus {
+  border-color: blue;
+}
+
+.submitReviewButton {
+  background-color: blue;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submitReviewButton:hover {
+  background-color: darkblue;
+}
+
+.reviewInputContainer {
+  background-color: rgba(45, 45, 45, 0.9); /* Darker semi-transparent background */
+  border-radius: 10px; /* Smooth rounded corners */
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Softer shadow */
+  /* width: 100%;  */
+  max-width: 100%; /* Ensures no extra margin on smaller screens */
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.reviewInputContainer textarea {
+  width: 95%; 
+  height: 100px;
+  background-color: #2f2f2f; /* Dark gray background for textarea */
+  border: 1px solid #555; /* Border to make textarea stand out */
+  border-radius: 8px;
+  padding: 10px;
+  color: #f0f0f0; /* Light text color */
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: none;
+}
+
+.reviewInputContainer textarea::placeholder {
+  color: rgba(240, 240, 240, 0.6); /* Lighter placeholder text */
+  font-style: italic;
+}
+
+.reviewInputContainer button {
+  background-color: #4a90e2; /* Blue button to contrast with dark background */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  /* width: 90%;  */
+}
+
+.reviewInputContainer button:hover {
+  background-color: #357ab7; /* Slightly darker blue on hover */
+}
+
+.dropdown {
+  background-color: #2f2f2f; /* Dark background matching the theme */
+  color: #f0f0f0; /* Light text for contrast */
+  border: 1px solid #555; /* Border to separate from background */
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%; /* Full width for dropdown */
+  font-size: 1rem;
+}
+
+.dropdown option {
+  background-color: #2f2f2f; /* Dark background for options */
+  color: #f0f0f0; /* Light text for options */
+}
+
+.ratingSelection {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ratingSelection label {
+  font-size: 1.3rem;
+  color: #f0f0f0; /* Light color to match dark background */
+  margin-right: 10px;
+}
+
+.ratingSelection select {
+  background-color: #2f2f2f; /* Dark background for the dropdown */
+  color: #f0f0f0; /* Light text for contrast */
+  border: 1px solid #555; /* Subtle border */
+  border-radius: 8px; /* Rounded corners for smooth UI */
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for interactivity */
+}
+
+.ratingSelection select:hover {
+  border-color: #4a90e2; /* Blue border on hover for better interactivity */
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.6); /* Soft blue glow on hover */
+}
+
+.ratingSelection select:focus {
+  border-color: #4a90e2; /* Blue border when focused */
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.8); /* Stronger glow on focus */
+}
+
+.ratingSelection option {
+  background-color: #2f2f2f; /* Dark background for options */
+  color: #f0f0f0; /* Light text for options */
+}
+
+.optionsDropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  right: 0;
+}
+
+.optionsDropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+}
+
+.optionsDropdown button:hover {
+  color: blue;
+}
+
+/* .reviewText {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+} */
+
+.reviewText textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #2f2f2f;
+  color: white;
+  border: 1px solid #ccc;
+  resize: none;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.ratingSelection {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.ratingSelection label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.ratingSelection select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.reviewText button {
+  padding: 8px 16px;
+  margin-right: 10px;
+  background-color: #007bff;
+  /* color: white; */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reviewText button:hover {
+  background-color: #0056b3;
+}
+
+.reviewText .cancelEditButton {
+  background-color: #dc3545;
+}
+
+.reviewText .cancelEditButton:hover {
+  background-color: #c82333;
+}
+
+.movie__intro {
+  position: relative; /* Enable positioning for absolute children */
+}
+
+
+
+.watchlistButton {
+  position: absolute; /* Position the button absolutely within the movie__intro div */
+  top: 20px; /* Adjust top position as needed */
+  right: 20px; /* Adjust right position as needed */
+  background-color: rgba(0, 0, 0, 0.7); /* Dark background */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Slightly rounded corners */
+  padding: 10px 15px; /* Padding around the button */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-size: 16px; /* Font size */
+  display: flex; /* Use flexbox for icon and text */
+  align-items: center; /* Center items vertically */
+}
+
+.watchlistButton span {
+  margin-right: 5px; /* Space between the icon and text */
+  font-size: 20px; /* Icon size */
+}
+
+.watchlistButton:hover {
+  background-color: rgba(255, 255, 255, 0.3); /* Change color on hover */
+}
+.watchlistButton {
+  background-color: #007bff; /* Default color */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.watchlistButton.in-watchlist {
+  background-color: #28a745; /* Change color when in watchlist */
+}
+
+.watchlistButton:hover {
+  opacity: 0.8;
+}
+
+.reviewCard__options {
+  position: relative;
+}
+
+.optionsDropdown {
+  position: absolute;
+  /* top: 100%; */
+  /* right: 1;
+   */
+   margin-right: 30px;
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 1;
+}
+

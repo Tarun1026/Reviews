@@ -1,35 +1,5 @@
 export const networkIds = [
-    "43",    // ABC
-    "66",    // CBS
-    "56",    // NBC
-    "61",    // Fox
 
-    "67",    // AMC
-    "172",   // FX
-    "14",    // The CW
-    "51",    // BBC One
-    "52",    // BBC Two
-    "53",    // BBC Three
-    "54",    // BBC Four
-    "55",    // ITV
-    "57",    // Channel 4
-    "58",    // Channel 5
-    "138",   // Discovery Channel
-    "60",    // National Geographic
-    "73",    // History Channel
-    "74",    // TBS
-    "75",    // Comedy Central
-    "76",    // Cartoon Network
-    "118",   // Adult Swim
-    "77",    // ESPN
-    "78",    // MTV
-    "79",    // VH1
-    "80",    // Bravo
-    "81",    // E!
-    "112",   // Starz
-    "116",   // Paramount Network
-
- 
     "384",   // Hulu
   
     

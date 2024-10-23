@@ -5,7 +5,7 @@ function useFilterMovies(filterOptions = {},endPoint) {
   
     const [filteredShows, setFilteredShows] = useState([]); 
     const [showsData,setShowsData]=useState(false)
- 
+    const apiKey = import.meta.env.VITE_TMDB_API;
   
     
     const fetchMultiplePages = async () => {
@@ -31,7 +31,7 @@ function useFilterMovies(filterOptions = {},endPoint) {
         for (let page = 1; page <= 3; page++) {
           const response = await axios.get(`https://api.themoviedb.org/3/discover/${endPoint}`, {
             params: {
-              api_key: '4b2313ca982860407b4ff3a8e3258ff7',
+              api_key: `${apiKey}`,
               with_genres: filterOptions?.genre || null,
               with_original_language: filterOptions?.language || null,
               "first_air_date.gte": filterOptions?.releaseYear || null,

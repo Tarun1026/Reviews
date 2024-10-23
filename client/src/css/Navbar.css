@@ -11,6 +11,7 @@
   align-items: center;
   padding: 10px;
   background-color: black;
+  /* height: 10rem; */
 }
 
 .navItem {
@@ -96,8 +97,8 @@
   /* border-bottom-left-radius: 3px; */
   outline: none;
   color: var(--light-dark-color);
-  width: 300px;
-  height: 0.8rem;
+  width: 345px;
+  height: 1rem;
 }
 .search-list{
   position: absolute;
@@ -160,7 +161,8 @@
 .registerButton {
   background-color: #ff6347;
   border: none;
-  padding: 5px 10px;
+  /* height: 1.2rem; */
+  padding: 5px 5px;
   color: white;
   cursor: pointer;
 }
@@ -171,6 +173,7 @@
   color: white;
   cursor: pointer;
   position: relative;
+  z-index: 2;
 }
 
 .userIcon {
@@ -213,4 +216,22 @@
 
 .dropdownItem:hover {
   background-color: #f0f0f0;
+}
+
+.navItemLink {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  
+}
+
+.navItemLink.active {
+  background-color: #ff6347; /* Color when active */
+  color: black; /* Text color when active */
+}
+
+.navItemLink:hover {
+  
+  background-color: #ff6347; /* Hover color */
+  color: black;
 }

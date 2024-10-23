@@ -1,6 +1,8 @@
 // import { useState, useEffect } from 'react';
 import getUserDetail from '../hooks/GetUserDetails';
 import { useState, useRef, useEffect } from 'react';
+import {  useLocation } from 'react-router-dom';
+
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import LogoutModal from '../models/Logout.model';
@@ -17,6 +19,15 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null);
   
+  const location = useLocation(); // Get the current route
+  const [activeLink, setActiveLink] = useState('');
+
+  // Set the active link based on the current route
+  useEffect(() => {
+    const currentPath = location.pathname;
+    setActiveLink(currentPath);
+  }, [location]);
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -81,17 +92,37 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   }
   return (
     <div className="navDiv">
-      <div className="navItem">
-      <Link to="/" className="navItemLink">Movie Review</Link>
-        </div>
-      <div className="navItem">
-        <Link to="/movies" className="navItemLink">Movies</Link>
+       <div className="navItem">
+        <Link
+          to="/"
+          className={`navItemLink ${activeLink === '/' ? 'active' : ''}`} // Check if the path is active
+        >
+          Home
+        </Link>
       </div>
       <div className="navItem">
-       <Link to="/webseries" className='navItemLink'>Web Series</Link> 
-        </div>
+        <Link
+          to="/movies"
+          className={`navItemLink ${activeLink === '/movies' ? 'active' : ''}`}
+        >
+          Movies
+        </Link>
+      </div>
       <div className="navItem">
-      <Link to="/tvShows" className='navItemLink'>TV Shows</Link> 
+        <Link
+          to="/webseries"
+          className={`navItemLink ${activeLink === '/webseries' ? 'active' : ''}`}
+        >
+          Web Series
+        </Link>
+      </div>
+      <div className="navItem">
+        <Link
+          to="/tvShows"
+          className={`navItemLink ${activeLink === '/tvShows' ? 'active' : ''}`}
+        >
+          TV Shows
+        </Link>
       </div>
       <div className="search-container">
         <div className="search-element">

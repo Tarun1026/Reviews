@@ -71,15 +71,15 @@ body {
   padding: 20px;
 }
 
-.movieSlider {
-  margin-top: 20px;
-  margin-left:40px;
-  width: 40%;
+/* .movieSlider {
+  margin:20px;
+  margin-top: 10px;
+  /* width: 40%; */
 
-}
+
 
 .movieContainer {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   width: 100%;
   display: flex;
   justify-content: center;
@@ -88,8 +88,8 @@ body {
 
 .moviePoster {
   width: 30vw;
-  height: 70vh;
-  border-radius: 20px;
+  height: 88vh;
+  /* border-radius: 20px; */
 }
 
 .prevButton,

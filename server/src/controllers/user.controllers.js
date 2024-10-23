@@ -6,6 +6,8 @@ import { Liked } from '../models/Liked.model.js';
 import jwt from "jsonwebtoken"
 import { Review } from '../models/Review.model.js';
 import { uploadOnCloudinary } from '../utils/Cloudinary.js';
+import mongoose from 'mongoose';
+import { WatchList } from '../models/Watchlist.model.js';
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
     if(!user){
@@ -172,7 +174,7 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
     }
 })
 const userReview = asyncHanlder(async (req, res) => {
-    const { reviewText, movieId, movieTitle } = req.body;
+    const { reviewText, movieId, movieTitle,rating } = req.body;
     console.log("")
     if (reviewText === "") {
         throw new ApiError("Review should not be empty");
@@ -185,7 +187,7 @@ const userReview = asyncHanlder(async (req, res) => {
     }
 
     // Find the existing review document for the given movieId
-    const movieReview = await Review.findOne({ movieId });
+    // const movieReview = await Review.findOne({ movieId });
 
      
         // If it doesn't exist, create a new document
@@ -193,6 +195,7 @@ const userReview = asyncHanlder(async (req, res) => {
             movieId,
             movieTitle,
             reviewText,
+            rating,
             username: req.user?.username,
             profileImage:req.user?.profileImage
           
@@ -408,7 +411,7 @@ const movieLike=asyncHanlder(async(req,res)=>{
         )
     }
 })
-// Fetch if the movie is liked by the user
+
 const movieIsLiked = asyncHanlder(async (req, res) => {
     const { movieId } = req.params;
     const name = req.user.username;
@@ -421,6 +424,16 @@ const movieIsLiked = asyncHanlder(async (req, res) => {
     }
 });
 
+const watchListCheck=asyncHanlder(async(req,res)=>{
+    const { movieId } = req.params;
+    const name = req.user.username;
+    const movie= await WatchList.findOne({movieId:movieId,username:name})
+    if (movie) {
+        return res.status(200).json({ movie: true });
+    } else {
+        return res.status(200).json({ movie: false });
+    }
+})
 const movieLikeCount=asyncHanlder(async(req,res)=>{
     const { movieId } = req.body;
     const movie=await Liked.findOne({movieId:movieId})
@@ -543,6 +556,160 @@ const uploadProfileImage=asyncHanlder(async(req,res)=>{
         )
     )
 })
+
+const reviewDelete = asyncHanlder(async (req, res) => {
+    const { reviewId } = req.body;
+
+    // Convert reviewId to ObjectId
+    const objectId = new mongoose.Types.ObjectId(reviewId);
+
+    const review = await Review.findById(objectId);
+    if (!review) {
+        throw new ApiError(401, "Review Not Found");
+    }
+
+    await Review.findByIdAndDelete(objectId);
+
+    return res.status(200).json(new ApiResponse(200, review, "Review Deleted Successfully"));
+});
+
+const reviewEdit=asyncHanlder(async(req,res)=>{
+    const {reviewId,reviewText,rating}=req.body
+// console.log("body",req.body)
+    const review = await Review.findById(reviewId);
+   
+    if(!review){
+        throw new ApiError(402,"Review Id Not found")
+
+    }
+
+    review.reviewText=reviewText
+    review.rating=rating
+
+    await review.save({validateBeforeSave:false})
+
+    return res.
+    status(200).
+    json(new ApiResponse(
+        200,review,"review edit successfully"
+    ))
+})
+
+const watchlist=asyncHanlder(async(req,res)=>{
+    const {movieId,movieTitle}=req.body
+    const user=req.user.username
+    console.log("find",req.body)
+    const movie= await WatchList.findOne({movieId:movieId,username:user})
+    if (!movie){
+        const data=await WatchList.create({
+            username:user,
+            movieId:movieId,
+            movieTitle:movieTitle
+        })
+
+        if(!data){
+            throw new ApiError(400,"Error while creating watchlist data")
+        }
+    
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,data,"Added to watchlist successfully"
+            )
+        )
+    }
+    else{
+        const del=await WatchList.deleteOne({movieId:movieId,username:user})
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,del,"Removed from watchlist"
+            )
+        )
+    }
+
+    
+})
+
+const userActivity=asyncHanlder(async(req,res)=>{
+    const name=req.user.username
+    try {
+        const userActivityDetails=await Review.aggregate([
+            {
+                $match: {
+                    username: name // Match the user by their username
+                }
+            },
+            {
+                $lookup:{
+                    from:"reviews",
+                    localField:"username",
+                    foreignField:"username",
+                    as:"userReviews"
+                }
+            },
+            {
+                $lookup:{
+                    from:"likes",
+                    localField: "username",
+                    foreignField:"user_Name",
+                    as:"userLikes"
+                }
+            },
+            {
+                $lookup:{
+                    from:"watchlists",
+                    localField:"username",
+                    foreignField:"username",
+                    as:"userWatchList"
+                }
+            },
+            {
+                $addFields:{
+                    userReviewCount:{
+                        $size:"$userReviews"
+                    },
+                    userLikesCount:{
+                        $size:"$userLikes"
+                    },
+                    userWatchListCount:{
+                        $size:"$userWatchList"
+                    }
+                }
+            },
+            {
+                $project:{
+                    userReviews:1,
+                    userLikes:1,
+                    userWatchList:1,
+                    userReviewCount:1,
+                    userLikesCount:1,
+                    userWatchListCount:1
+                    // profileImage:1
+                }
+            }
+           
+        ])
+        if (!userActivityDetails || userActivityDetails.length === 0) {
+            return res.status(404).json({ message: "No user activity found." });
+        }
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                userActivityDetails[0],
+                "Sent User Activity details"
+            )
+        )
+    } catch (error) {
+        console.log("eroor fetching user act",error)
+    }
+    
+    
+})
 export {userRegister,
         loginUser,
         logOutUser,
@@ -557,4 +724,9 @@ export {userRegister,
 movieLike,
 movieIsLiked,
 movieLikeCount,
-uploadProfileImage}
+uploadProfileImage,
+reviewDelete,
+reviewEdit,
+watchlist,
+watchListCheck,
+userActivity}

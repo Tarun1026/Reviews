@@ -68,6 +68,7 @@ function HomePage() {
       <div className="movieSlider">
         <Carousel
           showArrows={true}
+          showIndicators={false}
           // selectedItem={3},
           infiniteLoop={true}
           showThumbs={false}
@@ -75,14 +76,14 @@ function HomePage() {
           autoPlay={true}
           interval={3000}
         >
-          {movies.map((movie, index) => (
+          {topRatedMovies.map((movie, index) => (
             <div
               key={index}
               className="movieContainer"
               onClick={() => handleMovieClick(movie)}
             >
               <img
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                 alt={movie.title}
                 className="moviePoster"
               />

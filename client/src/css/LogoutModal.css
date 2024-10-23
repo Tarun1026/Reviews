@@ -13,10 +13,12 @@
   
   .logoutModalContent {
     background-color: white;
-    padding: 20px;
+    color: black;
+    padding: 15px;
     border-radius: 10px;
     text-align: center;
     width: 300px;
+ 
   }
   
   .logoutModalButtons {
