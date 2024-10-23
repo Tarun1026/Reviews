@@ -28,7 +28,7 @@ const useMovieLink = () => {
         const dataUpcoming = responseUpcoming.data.results;
         setUpcomingMovies(dataUpcoming);
 
-        let urlNewReleases = `https://api.themoviedb.org/3/movie/now_playing?${apiKey}`;
+        let urlNewReleases = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}`;
         const responseNew = await axios.get(urlNewReleases);
         const dataNewReleases = responseNew.data.results;
         // console.log("data",dataNewReleases)
