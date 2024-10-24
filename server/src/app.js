@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser"
 const app=express()
 
 app.use(cors({
-    origin:"*",
+    origin:"https://reviews-c2hf-client.vercel.app/",
     credentials:true
 }))
 app.use(express.json({limit:"16kb"}))
