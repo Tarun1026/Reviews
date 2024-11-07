@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser"
 const app=express()
 
 app.use(cors({
-    origin: 'https://reviews-eight-kappa.vercel.app',
+    origin: 'https://reviews-coral.vercel.app',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     credentials: true
 }))
