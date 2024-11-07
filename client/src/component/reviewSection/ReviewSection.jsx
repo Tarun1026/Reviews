@@ -15,7 +15,7 @@ function ReviewSection({review,database,movie}) {
     const [user, setUser] = useState(null);
     const [showReplySectionId, setShowReplySectionId] = useState(null); 
   const [replyText, setReplyText] = useState("");
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   
     useEffect(() => {
         // console.log("useEffect triggered");
@@ -37,7 +37,7 @@ function ReviewSection({review,database,movie}) {
     const handleSaveEdit = async (reviewId) => {
         try {
          
-          await axios.post(`/api/users/edit-review`, {
+          await axios.post(`${apiUrl}/api/users/edit-review`, {
             reviewId: reviewId,
             reviewText: editReviewText,
             rating: editRating,
@@ -65,7 +65,7 @@ function ReviewSection({review,database,movie}) {
     
       const handleDeleteReview = async (reviewId) => {
         try {
-          await axios.post(`/api/users/delete-review`, {
+          await axios.post(`${apiUrl}/api/users/delete-review`, {
             reviewId: reviewId,
           });
           alert("Review deleted successfully!");
@@ -85,7 +85,7 @@ function ReviewSection({review,database,movie}) {
 
       const handleReplySubmit = async (reviewId) => {
         try {
-          const result = await axios.post("/api/users/add-reply", {
+          const result = await axios.post(`${apiUrl}/api/users/add-reply`, {
             movieId: movie.id,
             reviewId: reviewId,
             reviewText: replyText,

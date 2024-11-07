@@ -19,9 +19,9 @@ const RegisterModel = ({ onSwitchToLogin }) => {
       password,
       confirmPassword,
     };
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      const result = await axios.post("/api/users/register", data);
+      const result = await axios.post(`${apiUrl}/api/users/register`, data);
       console.log(result);
 
       if (result.data.success) {

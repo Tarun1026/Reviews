@@ -41,10 +41,10 @@ function HomePage() {
     setIsLoggedIn(true);
     setModalOpen(false);
   };
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogout = async () => {
     await axios
-      .post("/api/users/logOut")
+      .post(`${apiUrl}/api/users/logOut`)
       .then((result) => {
         setIsLoggedIn(false);
       })

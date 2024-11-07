@@ -26,6 +26,7 @@ const AccountSettings = () => {
 
   const [profileImage, setProfileImage] = useState(null);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch user details when component mounts
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -86,7 +87,7 @@ const AccountSettings = () => {
       }
 
       // Send the update to the backend only for the specific field
-      const response = await axios.post(`/api/users/update-${field}`, payload);
+      const response = await axios.post(`${apiUrl}/api/users/update-${field}`, payload);
 
       if (response.status === 200) {
         alert(`${field} updated successfully`);
@@ -110,7 +111,7 @@ const AccountSettings = () => {
     formData.append('profileImage', profileImage); // Append the profile image
 
     try {
-      const response = await axios.post('/api/users/update-profile-image', formData); // Send formData directly
+      const response = await axios.post(`${apiUrl}/api/users/update-profile-image`, formData); // Send formData directly
 
       if (response.status === 200) {
         alert("Profile image uploaded successfully");

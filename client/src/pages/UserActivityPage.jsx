@@ -11,11 +11,11 @@ const UserActivityPage = ({ userId }) => {
     const [likedItems, setLikedItems] = useState([]); // State for liked movies and web series
     const [userReviews, setUserReviews] = useState([]); // State for user reviews
     const navigate = useNavigate();
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchUserActivity = async () => {
             try {
-                const response = await axios.get('/api/users/get-user-activity');
+                const response = await axios.get(`${apiUrl}/api/users/get-user-activity`);
                 setActivityData(response.data.data);
                 await fetchLikedItems(response.data.data);
                 setUserReviews(response.data.data.userReviews); // Set user reviews
