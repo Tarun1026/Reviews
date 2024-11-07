@@ -9,21 +9,21 @@ const reviewSchema=new Schema({
         username: {
             type: String,
             required: true,
+            lowercase:true
         },
    
     movieId:{
-        type:Number
+        type:Number,
+        required:true
     },
     movieTitle:{
-        type:String
+        type:String,
+        required:true
     },
     profileImage:{
         type:String
     },
-    // username:{
-    //     type:String,
-    //     required:true
-    // }
+   
     rating:{
         type:Number,
         required:true

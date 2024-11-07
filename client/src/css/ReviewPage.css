@@ -752,3 +752,35 @@
   z-index: 1;
 }
 
+.replySection {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* .replySection input {
+  flex: -1;
+} */
+
+.existingReplies {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.reply {
+  margin-top: 5px;
+}
+.btnReply{
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-align: start;
+}
+
+/* // repluy */
+.btnReply{
+  background-color: transparent;
+  color: white;
+  border: none;
+  text-align: start;
+}

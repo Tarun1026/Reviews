@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getMovieReviews, getUserDetails, loginUser, 
+import { getMovieReply, getMovieReviews, getUserDetails, loginUser, 
     logOutUser, 
     movieIsLiked, 
     movieLike, 
@@ -7,6 +7,7 @@ import { getMovieReviews, getUserDetails, loginUser,
     refreshAccessToken, 
     reviewDelete, 
     reviewEdit, 
+    reviewReply, 
     updateEmail, 
     updatePassword, 
     updateUserName, 
@@ -46,4 +47,6 @@ router.route("/delete-review").post(verifyJWT,reviewDelete)
 router.route('/edit-review').post(verifyJWT,reviewEdit)
 router.route('/add-to-watchlist').post(verifyJWT,watchlist)
 router.route("/get-user-activity").get(verifyJWT,userActivity)
+router.route('/add-reply').post(verifyJWT,reviewReply)
+router.route('/movie-reply').post(verifyJWT,getMovieReply)
 export default router

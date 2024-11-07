@@ -8,6 +8,8 @@ import { Review } from '../models/Review.model.js';
 import { uploadOnCloudinary } from '../utils/Cloudinary.js';
 import mongoose from 'mongoose';
 import { WatchList } from '../models/Watchlist.model.js';
+import { Reply } from '../models/Reply.model.js';
+// import ReviewSection from '../../../client/src/component/reviewSection/ReviewSection.jsx';
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
     if(!user){
@@ -559,25 +561,32 @@ const uploadProfileImage=asyncHanlder(async(req,res)=>{
 
 const reviewDelete = asyncHanlder(async (req, res) => {
     const { reviewId } = req.body;
-
-    // Convert reviewId to ObjectId
     const objectId = new mongoose.Types.ObjectId(reviewId);
 
     const review = await Review.findById(objectId);
     if (!review) {
-        throw new ApiError(401, "Review Not Found");
+        const dlReply=await Reply.findById(objectId)
+        if (!dlReply){
+            throw new ApiError(401, "Review Not Found");
+        }
+        await Reply.deleteOne(dlReply)
     }
-
+else{
     await Review.findByIdAndDelete(objectId);
-
+    const reply=await Reply.findOne({parentId:objectId})
+     if (reply){
+        const filter={parentId:objectId}
+        await Reply.deleteMany(filter)
+     }
+}
     return res.status(200).json(new ApiResponse(200, review, "Review Deleted Successfully"));
 });
 
 const reviewEdit=asyncHanlder(async(req,res)=>{
-    const {reviewId,reviewText,rating}=req.body
+    const {reviewId,reviewText,rating,database}=req.body
 // console.log("body",req.body)
+if (database=="Review"){
     const review = await Review.findById(reviewId);
-   
     if(!review){
         throw new ApiError(402,"Review Id Not found")
 
@@ -593,7 +602,29 @@ const reviewEdit=asyncHanlder(async(req,res)=>{
     json(new ApiResponse(
         200,review,"review edit successfully"
     ))
+}
+else{
+    const review = await Reply.findById(reviewId);
+    if(!review){
+        throw new ApiError(402,"Review Id Not found")
+
+    }
+
+    review.reviewText=reviewText
+
+    await review.save({validateBeforeSave:false})
+
+    return res.
+    status(200).
+    json(new ApiResponse(
+        200,review,"review edit successfully"
+    ))
+}
+    
+   
+    
 })
+
 
 const watchlist=asyncHanlder(async(req,res)=>{
     const {movieId,movieTitle}=req.body
@@ -710,6 +741,102 @@ const userActivity=asyncHanlder(async(req,res)=>{
     
     
 })
+
+const reviewReply=asyncHanlder(async(req,res)=>{
+    const {movieId,movieTitle,reviewId,reviewText}=req.body
+    const objectId= new mongoose.Types.ObjectId(reviewId)
+    const review = await Review.findById(objectId);
+    if(!review){
+        throw new ApiError(404,"Review Not Found")
+    }
+    if([movieId,reviewText].some((field)=>field?.trim=="")){
+        throw new ApiError(401,"Field are required")
+    }
+
+    const name=req.user.username
+    const profile=req.user.profileImage ||null
+    // console.log("rev",reviewText)
+    const reply=await Reply.create({
+        parentId:objectId,
+        movieId:movieId,
+        username:name,
+        reviewText:reviewText,
+        movieTitle:movieTitle||null,
+        
+        profileImage:profile||null
+
+    })
+
+    if(!reply){
+        console.log("Something went wrong")
+    }
+
+    // console.log("rew",req.body)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,reply,"Reply Submitted"
+        )
+    )
+})
+
+const getMovieReply=asyncHanlder(async(req,res)=>{
+    const {movieId}=req.body
+    // console.log("req",req.body)
+    if (!movieId){
+        throw new ApiError(400,"Movie id not get")
+    }
+    const movie=await Reply.findOne({movieId:movieId})
+    if (!movie){
+        return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                201,"Movie zero reply"
+            )
+        )
+    }
+    else{
+        const getReply=await Reply.aggregate([
+            {
+                $match:{
+                    movieId:movieId
+                }
+            },
+            {
+                $lookup:{
+                    from:"replies",
+                    localField:"movieId",
+                    foreignField:"movieId",
+                    as:"movieReplies"
+                }
+            },
+        
+            {
+                $project:{
+                    // movieId:1,
+                    // movieTitle:1,
+                    movieReplies:1,
+                    // username:1,
+                    // profileImage:1
+                }
+            }
+        ])
+        if (getReply.length==0){
+            throw new ApiError(400,"Reply not get")
+        }
+        return res.
+        status(200)
+        .json(
+            new ApiResponse(
+                200,getReply[0],"reply of this movie"
+            )
+        )
+    }
+})
+
 export {userRegister,
         loginUser,
         logOutUser,
@@ -729,4 +856,6 @@ reviewDelete,
 reviewEdit,
 watchlist,
 watchListCheck,
-userActivity}
+userActivity,
+reviewReply,
+getMovieReply}
