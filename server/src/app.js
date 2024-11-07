@@ -5,12 +5,9 @@ import cookieParser from "cookie-parser"
 const app=express()
 
 app.use(cors({
-    origin: (origin, callback) => {
-        // Allow requests from any origin
-        callback(null, true);
-    },
+    origin: 'https://reviews-c2hf-client.vercel.app/', // Replace with your actual frontend URL
     credentials: true
-}));
+}))
 app.use(express.json({limit:"16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
