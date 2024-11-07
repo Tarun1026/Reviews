@@ -9,11 +9,11 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("/api/users/login", { email, password });
+      const result = await axios.post(`${apiUrl}/api/users/login`, { email, password });
       console.log("log", result);
       if (result.data.success) { // Check success based on your API response
         setShowAlert(true); // Show alert on successful login
