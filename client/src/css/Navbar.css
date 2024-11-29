@@ -255,6 +255,16 @@
 .registerButton:hover {
   background-color: #666;
 }
+
+.sideBar{
+  display: none;
+}
+
+.image{
+  width:30px;
+  height: 30px;
+  object-fit: cover;
+}
 @media (max-width: 996px) {
   .navDiv {
     font-size:13px;
@@ -308,8 +318,48 @@
   }
 }
 
-/* @media (max-width: 500px) {
+@media (max-width: 500px) {
   .navDiv{
-    display: block;
+    display: none;
   }
-} */
+  
+  .sideBar{
+    display: inline-table;
+    /* flex-direction: row; */
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .search-container {
+    justify-content: flex-start;
+    height:auto;
+  }
+  .navItemSide{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  .mobile{
+    position: absolute; /* Sticks the div in one position */
+
+    right: 0;
+    background-color: black;
+    color: white;
+    padding: 10px;
+
+    
+    z-index: 999;
+  }
+
+  .userSection{
+    padding: 10px;
+  }
+
+  .navItem{
+    font-size: 21px;
+    font-weight: bold;
+  }
+  .registerButton{
+    margin-left: 7px;
+    background-color: #ff6347;
+    padding: 5px 10px;
+  }
+}
