@@ -207,7 +207,7 @@ const userReview = asyncHanlder(async (req, res) => {
     
 
     return res.status(200).json(
-        new ApiResponse(200, {movieReviewCreate}, "Review Sent Successfully")
+        new ApiResponse(200, {movieReviewCreate}, "Review Submitted Successfully")
     );
 });
 
@@ -304,7 +304,7 @@ const getMovieReviews=asyncHanlder(async(req,res)=>{
 
 const updateUserName=asyncHanlder(async(req,res)=>{
     console.log("rew",req.body)
-    const {payload}=req.body
+    const payload=req.body
     console.log("paylo",payload.username)
     const findUser=payload.username
     const user=await User.findOne({findUser})
@@ -328,7 +328,7 @@ const updateUserName=asyncHanlder(async(req,res)=>{
 })
 
 const updateEmail=asyncHanlder(async(req,res)=>{
-    const {payload}=req.body
+    const payload=req.body
     const email=payload.email
     const user=await User.findOne({email})
     if(user){
@@ -350,7 +350,7 @@ const updateEmail=asyncHanlder(async(req,res)=>{
 })
 
 const updatePassword=asyncHanlder(async(req,res)=>{
-    const{payload}=req.body
+    const payload=req.body
     const oldPassword=payload.oldPassword
     const newPassword=payload.newPassword
     const user=await User.findById(req.user._id)
@@ -665,12 +665,22 @@ const watchlist=asyncHanlder(async(req,res)=>{
 })
 
 const userActivity=asyncHanlder(async(req,res)=>{
+    console.log("activity")
     const name=req.user.username
     try {
-        const userActivityDetails=await Review.aggregate([
+        const userActivityDetails=await User.aggregate([
             {
                 $match: {
-                    username: name // Match the user by their username
+                    username: name,
+                }
+            },
+            
+            {
+                $lookup:{
+                    from:"likes",
+                    localField: "username",
+                    foreignField:"user_Name",
+                    as:"userLikes"
                 }
             },
             {
@@ -679,14 +689,6 @@ const userActivity=asyncHanlder(async(req,res)=>{
                     localField:"username",
                     foreignField:"username",
                     as:"userReviews"
-                }
-            },
-            {
-                $lookup:{
-                    from:"likes",
-                    localField: "username",
-                    foreignField:"user_Name",
-                    as:"userLikes"
                 }
             },
             {
@@ -724,8 +726,10 @@ const userActivity=asyncHanlder(async(req,res)=>{
            
         ])
         if (!userActivityDetails || userActivityDetails.length === 0) {
+            console.log("here we",userActivityDetails)
             return res.status(404).json({ message: "No user activity found." });
         }
+        console.log("down",userActivityDetails)
         return res
         .status(200)
         .json(

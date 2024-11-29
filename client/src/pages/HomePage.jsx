@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import MovieCards from "../component/movieCards/MovieCards";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function HomePage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -20,47 +23,52 @@ function HomePage() {
 
   const navigate = useNavigate();
 
-  const handleRegisterClick = () => {
-    setIsLogin(false);
-    setModalOpen(true);
-  };
+  // const handleRegisterClick = () => {
+  //   setIsLogin(false);
+  //   setModalOpen(true);
+  // };
 
-  const handleLoginClick = () => {
-    setIsLogin(true);
-  };
+  // const handleLoginClick = () => {
+  //   setIsLogin(true);
+  // };
 
-  const handleSwitchToRegister = () => {
-    setIsLogin(false);
-  };
+  // const handleSwitchToRegister = () => {
+  //   setIsLogin(false);
+  // };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  // const handleCloseModal = () => {
+  //   setModalOpen(false);
+  //   window.location.reload();
+  // };
 
-  const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-    setModalOpen(false);
-  };
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const handleLogout = async () => {
-    await axios
-      .post(`${apiUrl}/api/users/logOut`)
-      .then((result) => {
-        setIsLoggedIn(false);
-      })
-      .catch((err) => console.log(err));
-  };
+  // const handleLoginSuccess = () => {
+  //   setIsLoggedIn(true);
+  //   setModalOpen(false);
+  // };
+  // const apiUrl = import.meta.env.VITE_API_URL;
+  // const handleLogout = async () => {
+  //   await axios
+  //     .post(`/api/users/logOut`)
+  //     .then((result) => {
+  //       if (result.data.success) {
+  //         toast.success(result.data.message, {
+  //           position: "top-center",
+  //           autoClose: 3000,
+  //         });
+  //       }
+  //       setIsLoggedIn(false);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
-  const handleMovieClick = (movie) => {
-    navigate("/review", { state: { movie } });
-  };
+  // const handleMovieClick = (movie) => {
+  //   navigate("/review", { state: { movie } });
+  // };
 
   return (
     <div className="homePageContainer">
       <Navbar
-        onRegisterClick={handleRegisterClick}
-        isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
+        
       />
 
       {/* Featured Movie Slider */}
@@ -94,7 +102,7 @@ function HomePage() {
       <MovieCards movieSent={newReleaseMovies} heading={"Trending Today"} />
       <MovieCards movieSent={topRatedMovies} heading={"Top Rated"} />
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      {/* <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         {isLogin ? (
           <LoginModel
             onSwitchToRegister={handleSwitchToRegister}
@@ -103,7 +111,8 @@ function HomePage() {
         ) : (
           <RegisterModel onSwitchToLogin={handleLoginClick} />
         )}
-      </Modal>
+      </Modal> */}
+      <ToastContainer/>
     </div>
   );
 }

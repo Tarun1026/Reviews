@@ -22,9 +22,12 @@ function WebSeriesPage() {
     <div>
       <Navbar />
 
-      <FilterOptions setAppliedFilters={setAppliedFilters} genreMap={genreMap} />
+      <FilterOptions 
+      setAppliedFilters={setAppliedFilters} 
+      genreMap={genreMap} 
+      />
       
-<FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint}/>
+<FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} netId={networkIds}/>
 <MovieCards movieSent={tvShows} heading={"Top Rated"}/>
 <MovieCards movieSent={newWebSeries} heading={"New Releases"}/>
 

@@ -22,6 +22,7 @@ import { getMovieReply, getMovieReviews, getUserDetails, loginUser,
     from "../controllers/user.controllers.js";
 import verifyJWT from "../middleware/Auth.middleware.js";
 import {upload} from "../middleware/Multer.middleware.js"
+import { removeProfileImage } from "../controllers/profile.controller.js";
 const router=Router()
 
 router.route('/')
@@ -46,7 +47,8 @@ router.route('/watch-list/:movieId').get(verifyJWT,watchListCheck)
 router.route("/delete-review").post(verifyJWT,reviewDelete)
 router.route('/edit-review').post(verifyJWT,reviewEdit)
 router.route('/add-to-watchlist').post(verifyJWT,watchlist)
-router.route("/get-user-activity").get(verifyJWT,userActivity)
+router.route('/get-user-activity').get(verifyJWT,userActivity)
 router.route('/add-reply').post(verifyJWT,reviewReply)
 router.route('/movie-reply').post(verifyJWT,getMovieReply)
+router.route('/remove-profile-image').post(verifyJWT,removeProfileImage)
 export default router

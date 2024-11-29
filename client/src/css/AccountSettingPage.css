@@ -3,23 +3,30 @@
   background-color: #d7d8da;
  
 } */
+ body{
+  background-color: #201f1f;
+ }
 .account-settings {
   max-width: 500px;
-  margin: 30px auto;
+  margin: 50px auto;
+  margin-top: 10px;
+  margin-bottom: 0px;
+
   padding: 30px 30px;
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: left; 
-  position: relative;
-  color: #333;
+  /* position: relative; */
+  color: #fcfbfb;
   align-items: center;
+  background-color: #282727;
 }
 
 /* Profile Section with Avatar */
 .profile-section {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   margin-bottom: 30px;
 }
 
@@ -39,14 +46,33 @@
 }
 
 /* Upload Button Styling */
+.uploadIcon{
+  margin-right: 5px;
+  margin-bottom: 3px;
+}
 .upload-btn {
   margin-top: 10px;
-  padding: 8px 15px;
-  background-color: #28a745;
+  margin-left: 20px;
+  /* padding: 8px 15px; */
+  background-color: #288ea7;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  height: 40px;
+  transition: background-color 0.3s ease;
+}
+.upload-btn2 {
+  margin-top: 10px;
+  margin-left: 20px;
+  padding-right: 30px;
+  /* width: 10rem; */
+  background-color: #494949;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
   transition: background-color 0.3s ease;
 }
 
@@ -70,7 +96,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #f0f4f8;
+  background-color: #1717c7;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
@@ -133,20 +159,15 @@
 }
 
 /* Account Settings Title */
-.account-settings-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #333; /* Visible title color */
-}
+
 
 /* Center the Account Settings Title */
 .account-settings-title {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 30px;
-  color: #333;
-  text-align: center; /* Center the title */
+ 
+
 }
 
 /* Section Title Styling */
@@ -154,7 +175,7 @@
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #333;
+  /* color: #333; */
   text-align: left; /* Align section headings to the left */
 }
 
@@ -165,7 +186,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #f0f4f8;
+  background-color: #414040;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }

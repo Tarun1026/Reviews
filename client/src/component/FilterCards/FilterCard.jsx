@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import useFilterMovies from "../../hooks/useFilterMovies";
-function FilterCard({ setAppliedFilters,endPoint }) {
-    const {  filteredShows,showsData} = useFilterMovies(setAppliedFilters,endPoint);
+function FilterCard({ setAppliedFilters,endPoint,netId }) {
+    const {  filteredShows,showsData} = useFilterMovies(setAppliedFilters,endPoint,netId);
     
     const sliderRef3 = useRef(null);
     const navigate = useNavigate();

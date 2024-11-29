@@ -2,7 +2,9 @@
 import getUserDetail from '../hooks/GetUserDetails';
 import { useState, useRef, useEffect } from 'react';
 import {  useLocation } from 'react-router-dom';
-
+import Modal from '../models/model';
+import RegisterModel from '../models/register.model';
+import LoginModel from '../models/login.model';
 import { FaUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import LogoutModal from '../models/Logout.model';
@@ -11,17 +13,38 @@ import { useNavigate } from 'react-router-dom';
 import "../css/Navbar.css";
 import image from "../assets/medium-cover.jpg";
 
-const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
+const Navbar = ({  onRegisterClick, onLogout }) => {
   const [user, setUser] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null);
-  
+  const [isLogin, setIsLogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
   const location = useLocation(); // Get the current route
   const [activeLink, setActiveLink] = useState('');
 
+  const handleRegisterClick = () => {
+    setIsLogin(false);
+    setModalOpen(true);
+  };
+
+  const handleLoginClick = () => {
+    setIsLogin(true);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    window.location.reload();
+  };
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setModalOpen(false);
+  };
   // Set the active link based on the current route
   useEffect(() => {
     const currentPath = location.pathname;
@@ -29,20 +52,23 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
   }, [location]);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    // const storedUser = localStorage.getItem('user');
+    // if (storedUser) {
+    //   setUser(JSON.parse(storedUser));
+    // } else {
       fetchUserDetails();
-    }
+  
+    
   }, []);
 
   const fetchUserDetails = async () => {
     const userDetails = await getUserDetail();
-    if (userDetails) {
+    console.log("home",userDetails)
+    // if (userDetails) {
       setUser(userDetails);
-      localStorage.setItem('user', JSON.stringify(userDetails));
-    }
+    //   localStorage.setItem('user', JSON.stringify(userDetails));
+    // }
+    
   };
   const navigate = useNavigate();
 
@@ -58,11 +84,12 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
     setLogoutModalOpen(false);
   };
 
+  
   const handleLogoutConfirm = () => {
     setLogoutModalOpen(false);
     localStorage.removeItem('user');
     setUser(null);
-    onLogout();
+    // handleLogoutt();
   };
 
   // Function to fetch movies as user types
@@ -171,21 +198,31 @@ const Navbar = ({ isLoggedIn, onRegisterClick, onLogout }) => {
 
             {dropdownVisible && (
               <div className="dropdownMenu">
-                <div className="dropdownItem">Your Activity</div>
+                <div className="dropdownItem">
+                <Link to="/user-activity" className='link'>Your Activity</Link>
+                  </div>
                 <div className="dropdownItem">Your Watchlist</div>
                 <div className="dropdownItem">
-                  <Link to="/user-account-setting">Account Settings</Link>
+                  <Link to="/user-account-setting" className='link'>Account Settings</Link>
                 </div>
                 <div className="dropdownItem" onClick={openLogoutModal}>Logout</div>
               </div>
             )}
           </div>
         ) : (
-          <button className="registerButton" onClick={onRegisterClick}>
-            Register
-          </button>
+          <button className="registerButton" onClick={handleRegisterClick}>
+          Register
+        </button>
         )}
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        {isLogin ? (
+          <LoginModel onSwitchToRegister={handleRegisterClick} onLoginSuccess={handleLoginSuccess} />
+        ) : (
+          <RegisterModel onSwitchToLogin={handleLoginClick} />
+        )}
+      </Modal>
 
       <LogoutModal
         isOpen={logoutModalOpen}

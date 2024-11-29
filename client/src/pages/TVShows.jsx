@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../component/Navbar";
 import useTVShowsLink from "../hooks/useTVShowsLink";
-
 import FilterOptions from "../component/Filter";
 import { genreMap } from "../utils/Genre/genreUtils";
 import FilterCard from "../component/FilterCards/FilterCard";
@@ -18,9 +17,9 @@ function TVShows() {
     releaseYear: "",
     popularity: "",
   });
-  const { tvShows, newWebSeries,hindi,punjabi } = useTVShowsLink(networkIds,languageHindi,languagePunjabi);
+  const { tvShows, newWebSeries,hindi,punjabi } = 
+  useTVShowsLink(networkIds,languageHindi,languagePunjabi);
  
-
   return (
     <div>
       <Navbar />
@@ -28,9 +27,10 @@ function TVShows() {
       <FilterOptions
         setAppliedFilters={setAppliedFilters}
         genreMap={genreMap}
+        
       />
 
-      <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} />
+      <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} netId={networkIds} />
       <MovieCards movieSent={tvShows} heading={"Top Rated"} />
       <MovieCards movieSent={newWebSeries} heading={"New Releases"} />
       <MovieCards movieSent={hindi} heading={"Hindi"} />

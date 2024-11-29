@@ -1,6 +1,6 @@
 export const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 5, // Dynamically update based on screen size
     slidesToScroll: 2,

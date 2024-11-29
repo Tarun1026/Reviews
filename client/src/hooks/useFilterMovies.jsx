@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function useFilterMovies(filterOptions = {},endPoint) { 
+function useFilterMovies(filterOptions = {},endPoint,netId) { 
   
     const [filteredShows, setFilteredShows] = useState([]); 
     const [showsData,setShowsData]=useState(false)
@@ -28,27 +28,30 @@ function useFilterMovies(filterOptions = {},endPoint) {
           voteAverageParams['vote_average.gte'] = 9;
         }
   
-        for (let page = 1; page <= 3; page++) {
+        for (const id of netId) {
           const response = await axios.get(`https://api.themoviedb.org/3/discover/${endPoint}`, {
             params: {
               api_key: `${apiKey}`,
               with_genres: filterOptions?.genre || null,
               with_original_language: filterOptions?.language || null,
               "first_air_date.gte": filterOptions?.releaseYear || null,
-              page: page,
+              with_networks: id,
+              // page: page,
               ...voteAverageParams // Spread the vote average params dynamically
             },
           });
-          console.log('Fetched Page:', page, response.data.results);
-          allShows = allShows.concat(response.data.results);
+          console.log('Fetched Page:', response.data.results);
+          allShows.push(...response.data.results)
         }
-  
+        const uniqueResults = [
+          ...new Map(allShows.map((item) => [item.id, item])).values(),
+        ];
         if (allShows.length === 0) {
           setShowsData(true);
           console.log("No shows found for the given filters.");
         }
   
-        setFilteredShows(allShows);
+        setFilteredShows(uniqueResults);
       } catch (error) {
         console.error('Error fetching TV shows with filters:', error);
       }

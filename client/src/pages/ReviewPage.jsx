@@ -8,6 +8,9 @@ import {
 import "../css/ReviewPage.css";
 import axios from "axios";
 import ReviewSection from "../component/reviewSection/ReviewSection";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const ReviewPage = () => {
   const location = useLocation();
   const { movie } = location.state;
@@ -21,11 +24,13 @@ const ReviewPage = () => {
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [watchlistSuccess, setWatchlistSuccess] = useState(false);
   const [movieReplies, setMovieReplies] = useState([]);
+
   const apiUrl = import.meta.env.VITE_API_URL;
   const fetchMovieReviews = async () => {
     
+    // console.log("chk",movieReplies)
     try {
-      const result = await axios.post(`${apiUrl}/api/users/movie-reviews`, {
+      const result = await axios.post(`/api/users/movie-reviews`, {
         movieId: movie.id,
       });
       setReviewCount(result.data.data.movieReviewCount);
@@ -33,6 +38,7 @@ const ReviewPage = () => {
       setMovieReviews(result.data.data.currentMovieReview || []);
     } catch (err) {
       console.log("Error fetching reviews:", err);
+      
     }
   };
 
@@ -45,7 +51,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchMovieLikes = async () => {
       try {
-        const res = await axios.post(`${apiUrl}/api/users/movie-likes-count`, {
+        const res = await axios.post(`/api/users/movie-likes-count`, {
           movieId: movie.id,
         });
         setLikeCount(res.data.data.likedCount || 0);
@@ -60,7 +66,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const result = await axios.get(`${apiUrl}/api/users/movie-is-liked/${movie.id}`);
+        const result = await axios.get(`/api/users/movie-is-liked/${movie.id}`);
         setHasLiked(result.data.liked);
       } catch (err) {
         console.log("Error fetching like status:", err);
@@ -76,7 +82,7 @@ const ReviewPage = () => {
 
   const handleLikeClick = async () => {
     try {
-      const result = await axios.post(`${apiUrl}/api/users/movie-like`, {
+      const result = await axios.post(`/api/users/movie-like`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
@@ -84,6 +90,12 @@ const ReviewPage = () => {
       window.location.reload();
     } catch (err) {
       console.log("Error sending like:", err);
+      if(err.message=="Request failed with status code 400"){
+        toast.warn("Please Login To Proceed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -91,32 +103,66 @@ const ReviewPage = () => {
     e.preventDefault();
 
     if (!reviewText || rating === 0) {
-      alert("Please write a review and select a rating from 1 to 10.");
+      
+        toast.error("Print Write a Review and Enter Rating", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      
       return;
     }
 
     try {
-      await axios.post("/api/users/user-review", {
+      const result=await axios.post("/api/users/user-review", {
         reviewText,
         rating,
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
-      alert("Review submitted successfully!");
+      if (result.data.success) {
+        toast.success(result.data.message, {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
       setReviewText("");
       setRating(0);
 
       // Refresh reviews after submission
-      fetchMovieReviews(); // Re-fetch the reviews to get the updated list
+      // fetchMovieReviews(); 
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
     } catch (err) {
       console.log(err);
+      if(err.message=="Request failed with status code 400"){
+        toast.warn("Please Login To Proceed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
-
+  useEffect(() => {
+    const fetchWatchlistStatus = async () => {
+      try {
+        const result = await axios.get(`/api/users/watch-list/${movie.id}`);
+      
+        setIsInWatchlist(result.data.movie);
+      } catch (err) {
+        console.log("Error fetching watchlist status:", err);
+      }
+    };
+  
+    fetchWatchlistStatus();
+  }, [movie.id]);
+  
+  
+  
   const handleAddToWatchlist = async () => {
     try {
-      const result = await axios.post(`${apiUrl}/api/users/add-to-watchlist`, {
+      const result = await axios.post(`/api/users/add-to-watchlist`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
@@ -132,18 +178,43 @@ const ReviewPage = () => {
       }
 
       console.log("res", result);
-      alert(result.data.message || "Added to watchlist successfully!");
+      // alert(result.data.message || "Added to watchlist successfully!");
+      const popup=result.data.message || "Added to watchlist successfully!"
+      // if (result.data.success) {
+        toast.success(popup, {
+          position: "top-center",
+          autoClose: 3000,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      // }
       // Optionally refresh or update state here if needed
     } catch (err) {
       console.error("Error adding to watchlist:", err);
-      alert("Failed to add to watchlist.");
+    
+      if(err.message=="Request failed with status code 400"){
+        toast.warn("Please Login To Proceed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+      else{
+        toast.error("Failed to add watchList", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+        
+
     }
   };
 
 
   const movieReplys = async () => {
     try {
-      const rep = await axios.post(`${apiUrl}/api/users/movie-reply`, {
+      const rep = await axios.post(`/api/users/movie-reply`, {
         movieId: movie.id,
       });
       console.log("mr", rep.data.data.movieReplies);
@@ -158,9 +229,11 @@ const ReviewPage = () => {
     movieReplys();
   }, []);
 
+
+  
   return (
     <div>
-      <Navbar />
+       <Navbar/>
       <div className="reviewPageContainer">
         <div className="topSection">
           <div className="movie">
@@ -176,8 +249,15 @@ const ReviewPage = () => {
                 }`}
                 onClick={handleAddToWatchlist}
               >
-                {watchlistSuccess ? <FaCheck /> : "+"} {/* Show tick or '+' */}
-                {isInWatchlist ? " In Watchlist" : " Add to Watchlist"}
+                {/* {watchlistSuccess ? : "+"} Show tick or '+' */}
+                {isInWatchlist ? (
+  <>
+    <FaCheck /> In Watchlist
+  </>
+) : (
+  "Add to Watchlist"
+)}
+
               </button>
             </div>
             <div className="movie__detail">
@@ -267,7 +347,7 @@ const ReviewPage = () => {
               <div key={review._id} className="singleReview">
                 <ReviewSection review={review} database={"Review"} movie={movie}/>
                 
-                {movieReplies.length > 0 && (
+                {movieReplies?.length > 0 && (
                   <div className="existingReplies">
                     {movieReplies.map((reply) => (
                       <div key={reply._id} className="reply">
@@ -288,6 +368,7 @@ const ReviewPage = () => {
           )}
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

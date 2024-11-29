@@ -4,31 +4,38 @@ import "../css/LoginPage.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Alert } from 'react-bootstrap'; // Import Bootstrap Alert
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL || '';
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post(`${apiUrl}/api/users/login`, { email, password });
+      const result = await axios.post(`/api/users/login`, { email, password });
       console.log("log", result);
       if (result.data.success) { // Check success based on your API response
-        setShowAlert(true); // Show alert on successful login
+        if (result.data.success) {
+          toast.success(result.data.message, {
+            position: "top-center",
+            autoClose: 3000,
+          });
 
-        // Set a timeout to hide the alert after 2-3 seconds
-        setTimeout(() => {
-          setShowAlert(false); // Hide alert after 3 seconds
-          if (onLoginSuccess) {
+          setTimeout(() => {
             onLoginSuccess();
-          }
-        }, 3000); // 3000 milliseconds = 3 seconds
+            window.location.reload();
+          }, 3000);
       }
+    }
     } catch (err) {
-      console.log(err);
-      // Handle error here (you could show another alert for login errors)
+      
+      toast.error("Invalid Details", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      console.error("Error:", err);
     }
   };
 
@@ -36,11 +43,7 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
     <div className="loginMainContainer">
       <div className="registerFormContainer">
         <h2 className="heading">Login</h2>
-        {showAlert && (
-          <Alert variant="success" onClose={() => setShowAlert(false)} dismissible>
-            Login successful!
-          </Alert>
-        )}
+      
         <div className="registerInputContainer">
           <input
             className="registerInputField"
@@ -72,6 +75,7 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
           Don't have an account? <Link onClick={onSwitchToRegister}>Register</Link>
         </div>
       </div>
+      <ToastContainer/>
     </div>
   );
 }
