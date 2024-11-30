@@ -25,7 +25,16 @@ const userSchema=new Schema({
     refreshToken:{
         type:String,
         
-    }
+    },
+    isVerified:{
+        type:Boolean,
+        default:false
+    },
+    verficationToken:{
+        type:String,
+        // default
+    },
+    verficationTokenExpiresAt:Date,
 },{timestamps:true})
 
 userSchema.pre('save',async function(next){

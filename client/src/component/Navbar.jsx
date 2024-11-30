@@ -172,7 +172,7 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
                 </div>
               </div>
              </div>
-          <div onClick={toggleSideBar}><IoMdMenu size={25}/></div>
+          <div onClick={toggleSideBar} className="menu"><IoMdMenu size={25}/></div>
         </div>
              {sideBarVisible && (
              <div className="mobile">

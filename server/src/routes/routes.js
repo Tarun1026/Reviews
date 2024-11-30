@@ -20,6 +20,7 @@ import { getMovieReply, getMovieReviews, getUserDetails, loginUser,
 }
 
     from "../controllers/user.controllers.js";
+import { verificationCode, verifyEmail } from "../controllers/verify.controllers.js";
 import verifyJWT from "../middleware/Auth.middleware.js";
 import {upload} from "../middleware/Multer.middleware.js"
 import { removeProfileImage } from "../controllers/profile.controller.js";
@@ -51,4 +52,6 @@ router.route('/get-user-activity').get(verifyJWT,userActivity)
 router.route('/add-reply').post(verifyJWT,reviewReply)
 router.route('/movie-reply').post(verifyJWT,getMovieReply)
 router.route('/remove-profile-image').post(verifyJWT,removeProfileImage)
+router.route('/send-verification-code').post(verifyJWT,verificationCode)
+router.route('/verify-email').post(verifyJWT,verifyEmail)
 export default router

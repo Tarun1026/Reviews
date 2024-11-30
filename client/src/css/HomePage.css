@@ -22,18 +22,7 @@ body {
 
 
 
-.navItem {
-  margin-right: 20px;
-  cursor: pointer;
-  padding: 5px;
-  transition: background-color 0.3s, color 0.3s;
-}
 
-.navItem:hover {
-  background-color: white;
-  color: black;
-  border-radius: 5px;
-}
 
 .searchInput {
   padding: 5px;
@@ -305,5 +294,15 @@ h2 {
   margin-top: 30px; /* More space for better separation */
 }
 
+@media (max-width:768px){
+  .prevButton,
+.nextButton{
+  display: none;
+}
+}
 
-
+@media (max-width: 500px) {
+  .movieContainer{
+    display: none;
+  }
+}

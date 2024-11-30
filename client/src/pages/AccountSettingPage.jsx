@@ -6,9 +6,16 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaUpload } from "react-icons/fa6";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
+import { IoShieldCheckmarkSharp } from "react-icons/io5";
+import { MdCancel } from "react-icons/md";
 import 'react-toastify/dist/ReactToastify.css';
 
 const AccountSettings = () => {
+
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+  const commonDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"];
   const [userData, setUserData] = useState({
     username: "",
     email: "",
@@ -30,20 +37,28 @@ const AccountSettings = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [showDeleteBtn, setShowDeleteBtn] = useState(true);
+  const [checkVerify,setCheckVerify]=useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch user details when component mounts
   useEffect(() => {
     const fetchUserDetails = async () => {
       const userDetails = await getUserDetail();
-
+console.log('us',userDetails.isVerified)
       if (userDetails) {
         setUserData({
           username: userDetails.username,
           email: userDetails.email,
           password: "********",
-          profileImage: userDetails.profileImage, // Get profile image URL
+          profileImage: userDetails.profileImage,
+          isVerified:userDetails?.isVerified,
         });
+        setCheckVerify(userDetails.isVerified);
       }
+      // if(userData.isVerified){
+      //   setCheckVerify(true)
+      //   console.log("check",checkVerify)
+      // }
+      
     };
 
     fetchUserDetails();
@@ -73,9 +88,26 @@ const AccountSettings = () => {
 
       if (field === "username") {
         payload = { username: userData.username };
-      } else if (field === "email") {
+      } 
+      else if (field === "email") {
+        const emailDomain = userData.email.split("@")[1];
+      if (!commonDomains.includes(emailDomain)) {
+      toast.error("Enter Valid Email", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return
+    }
+    if (!emailRegex.test(userData.email)){
+      toast.error("Enter Valid Email", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return
+    }
         payload = { email: userData.email };
-      } else if (field === "password") {
+      } 
+      else if (field === "password") {
         // Validate password fields
         if (passwordData.newPassword !== passwordData.confirmNewPassword) {
     
@@ -113,10 +145,7 @@ const AccountSettings = () => {
           window.location.reload();
         }, 3000);
         const userDetails = await getUserDetail();
-        // if (userDetails) {
-        //   setUser(userDetails);
-        //   localStorage.setItem('user', JSON.stringify(userDetails));
-        // }
+       
         setEditMode({ ...editMode, [field]: false }); // Exit edit mode
       } else {
         toast.error(`Failed to update ${field}`, {
@@ -204,6 +233,83 @@ const AccountSettings = () => {
       console.log("Error Deleting file",error)
     }
   }
+
+
+  const sendVerificationCode = async () => {
+    // if(userData.email!=email){
+    //   toast.error("Please Enter Same Email or Update it First", {
+    //     position: "top-center",
+    //     autoClose: 3000,
+    //   });
+    //   return
+    // }
+    try {
+      const response = await axios.post(`/api/users/send-verification-code`, {
+        email: userData.email,
+      });
+  
+      if (response.status === 200) {
+        toast.success("Verification code sent to your email", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Failed to send verification code", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Use Same Email or Update it First", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      } 
+      else{
+        toast.error("Error sending verification code", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+      
+    }
+  };
+  
+  const verifyEmail = async () => {
+    console.log("vemail")
+    try {
+      const response = await axios.post(`/api/users/verify-email`, {
+        email: userData.email,
+        code: verificationCode,
+      });
+    console.log("res",response)
+      if (response.status === 200) {
+        setIsVerified(true);
+        toast.success("Email verified successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      } 
+      // else if(response.status === 201){
+      //   toast.error(response.data.data, {
+      //     position: "top-center",
+      //     autoClose: 3000,
+      //   });
+      // }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error("Invalid or Expired Code", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Error verifying email", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+    }}
   return (
     <div className="account-settings">
       <h2 className="account-settings-title">Account Settings</h2>
@@ -288,27 +394,62 @@ const AccountSettings = () => {
       </div>
 
       <div className="account-section">
-        <h3>Email</h3>
-        <div className="account-field">
-          {editMode.email ? (
-            <input
-              type="email"
-              name="email"
-              value={userData.email}
-              onChange={handleInputChange}
-            />
-          ) : (
-            <span>{userData.email}</span>
-          )}
-          <button
-            onClick={() =>
-              editMode.email ? handleSave("email") : handleEditClick("email")
-            }
-          >
-            {editMode.email ? "Save" : "Edit"}
-          </button>
-        </div>
-      </div>
+      <h3>
+  Email 
+  {checkVerify ? (
+      <>
+      <IoShieldCheckmarkSharp  title="Verified" className="checkmark"/>
+      <span className="verifyIcon">Verified</span>
+    </>
+  ) : (
+    <>
+      <MdCancel  title="Verified" className="checkmark2"/>
+      <span className="verifyIcon">Not Verified</span>
+    </>
+  )}
+</h3>
+
+  
+  <div className="account-field">
+    {editMode.email ? (
+      <input
+        type="email"
+        name="email"
+        value={userData.email}
+        onChange={handleInputChange}
+      />
+    ) : (
+      <span>{userData.email}</span>
+    )}
+    <button
+      onClick={() =>
+        editMode.email ? handleSave("email") : handleEditClick("email")
+      }
+    >
+      {editMode.email ? "Save" : "Edit"}
+    </button>
+    {editMode.email && (
+      <button className="send-code-btn" onClick={sendVerificationCode}>
+        Send Verification Code
+      </button>
+    )}
+  </div>
+  {editMode.email && (
+    <div className="verification-section">
+      <input
+        type="text"
+        placeholder="Enter 6-Digit Verfication Code"
+        value={verificationCode}
+        onChange={(e) => setVerificationCode(e.target.value)}
+      />
+      <button className="verify-btn" onClick={verifyEmail}>
+        Verify
+      </button>
+    </div>
+  )}
+  {isVerified && <span className="verified-badge">Verified ✅</span>}
+</div>
+
 
       <div className="account-section">
         <h3>Password</h3>

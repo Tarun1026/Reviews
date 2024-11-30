@@ -211,3 +211,33 @@
   background-color: #0056b3;
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
 }
+
+.send-code-btn, .verify-btn {
+  margin-left: 10px;
+  background-color: #288ea7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 40px;
+}
+
+.verified-badge {
+  margin-left: 10px;
+  color: green;
+  font-weight: bold;
+}
+.checkmark{
+  color: #5aa6f8;
+  margin-left: 5px;
+}
+.checkmark2{
+  color: #fb6d46;
+  margin-left: 5px;
+}
+.verifyIcon{
+  font-size:10px;
+  margin-left: 5px;
+  font-weight: 100;
+  color: #d3d2d2;
+}
