@@ -74,7 +74,8 @@
 }
 
 .logo p span{
-  color: var(--yellow-color);
+  height: 7rem;
+  color: blue;
 }
 .search-element{
   display: -webkit-box;
@@ -289,6 +290,10 @@
     width:320px;
     /* font-size: medium; */
   }
+  .dropdownMenu{
+    font-weight: bold;
+    font-size: medium;
+  }
 }
 @media (max-width: 768px) {
   .navDiv {
@@ -303,6 +308,12 @@
 
   .search-element .form-control{
     width:216px;
+    font-size: medium;
+  }
+  .dropdownMenu{
+    /* right: 0; */
+    margin-left: 0;
+    font-weight: bold;
     font-size: medium;
   }
 }
@@ -322,10 +333,22 @@
     font-size: 14px;
     height: 0.8rem;
     padding: 1rem 1rem;
+    /* width: calc(150px - 5px); */
+  }
+  .search-list .search-list-item{
+    width: calc(150px - 8px);
+    padding: 0.4rem;
   }
   .registerButton{
     padding: 8px 5px;
   }
+  .dropdownMenu{
+    font-weight: bold;
+    font-size: medium;
+  }
+  /* .search-list {
+    width: 0;
+  } */
 }
 
 @media (max-width: 500px) {
@@ -354,8 +377,8 @@
     right: 0;
     background-color: black;
     color: white;
-    padding: 10px;
-
+    padding: 16px;
+    border-bottom-left-radius: 5px;
     
     z-index: 999;
   }
@@ -365,7 +388,7 @@
   }
 
   .navItem{
-    font-size: 21px;
+    font-size: 26px;
     font-weight: bold;
   }
   .registerButton{
@@ -375,5 +398,25 @@
   }
   .menu{
     padding-top: 9px;
+  }
+  .dropdownMenu{
+    font-weight: bold;
+    font-size: medium;
+  }
+  .search-element .form-control{
+    width: 200px;
+  }
+  .search-list .search-list-item{
+    width: calc(200px - 8px);
+  }
+}
+
+@media (max-width: 300px) {
+  .search-element .form-control{
+    width: 150px;
+  }
+  .search-list .search-list-item{
+    width: calc(150px - 8px);
+    padding: 0.4rem;
   }
 }
