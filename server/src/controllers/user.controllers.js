@@ -176,8 +176,8 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
     }
 })
 const userReview = asyncHanlder(async (req, res) => {
-    const { reviewText, movieId, movieTitle,rating } = req.body;
-    console.log("")
+    const { reviewText, movieId, movieTitle,rating,spoiler } = req.body;
+    console.log("review",req.body)
     if (reviewText === "") {
         throw new ApiError("Review should not be empty");
     }
@@ -187,7 +187,7 @@ const userReview = asyncHanlder(async (req, res) => {
     if (movieTitle === "") {
         throw new ApiError("movie Title missing");
     }
-
+   
     // Find the existing review document for the given movieId
     // const movieReview = await Review.findOne({ movieId });
 
@@ -199,8 +199,8 @@ const userReview = asyncHanlder(async (req, res) => {
             reviewText,
             rating,
             username: req.user?.username,
-            profileImage:req.user?.profileImage
-          
+            profileImage:req.user?.profileImage,
+            spoiler
         });
     
         

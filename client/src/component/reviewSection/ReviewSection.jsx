@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaStar, FaRegComment,FaThumbsUp,
-  FaCheck,} from "react-icons/fa";
+import {
+  FaStar,
+  FaRegComment,
+  FaThumbsUp,
+  FaUserCircle,
+  FaAngleDown,
+  FaAngleUp,
+} from "react-icons/fa";
 import { VscKebabVertical } from "react-icons/vsc";
 import getUserDetail from "../../hooks/GetUserDetails";
 import axios from "axios";
@@ -15,8 +21,16 @@ function ReviewSection({ review, database, movie }) {
   const [user, setUser] = useState(null);
   const [showReplySectionId, setShowReplySectionId] = useState(null);
   const [replyText, setReplyText] = useState("");
+  const [showSpoiler, setShowSpoiler] = useState(false);
+  const [replyLiked, setReplyLiked] = useState(false);
+  const [replyLikedCount, setReplyLikedCount] = useState(0);
   const apiUrl = import.meta.env.VITE_API_URL;
 
+  const handleSpoilerClick = () => {
+    setShowSpoiler(!showSpoiler);
+  };
+
+  // console.log("rv",review)
   useEffect(() => {
     // console.log("useEffect triggered");
     fetchUserDetails();
@@ -118,6 +132,71 @@ function ReviewSection({ review, database, movie }) {
       console.log("Error submitting reply:", err);
     }
   };
+
+  const reviewLike = async (review) => {
+    try {
+      // Toggle like status locally for immediate UI feedback
+      // setReplyLiked(!replyLiked);
+
+      // Send like request to backend
+      await axios.post(`/api/users/review-like`, {
+        reviewId: review._id,
+        movieId: movie.id,
+        movieTitle: movie.original_title || movie.name,
+        reviewText: review.reviewText,
+      });
+
+      // Re-fetch the like status from the backend to ensure consistency
+      const result = await axios.get(
+        `/api/users/review-is-liked/${review._id}`
+      );
+      setReplyLiked(result.data.liked);
+
+      const result2 = await axios.get(
+        `/api/users/review-liked-count/${review._id}`
+      );
+      
+      // console.log("rcount",result.data.data.replyLikedCount)
+      setReplyLikedCount(result2.data.data.replyLikedCount || 0);
+    } catch (error) {
+      console.log("Error liking the review:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchReplyLikeStatus = async () => {
+      try {
+        const result = await axios.get(
+          `/api/users/review-is-liked/${review._id}`
+        );
+        setReplyLiked(result.data.liked);
+        // console.log("rlike",result)
+      } catch (err) {
+        console.log("Error fetching Reply like status:", err);
+      }
+    };
+
+    fetchReplyLikeStatus();
+  }, [review._id]);
+
+  // replyLikedCount
+  useEffect(() => {
+    const fetchReplyLikeCount = async () => {
+      try {
+        const result = await axios.get(
+          `/api/users/review-liked-count/${review._id}`
+        );
+        
+        // console.log("rcount",result.data.data.replyLikedCount)
+        setReplyLikedCount(result.data.data.replyLikedCount || 0);
+      } catch (err) {
+        console.log("Error fetching Reply count status:", err);
+      }
+    };
+
+    fetchReplyLikeCount();
+  }, [review._id]);
+
   return (
     <div>
       <div className="reviewContent">
@@ -163,6 +242,37 @@ function ReviewSection({ review, database, movie }) {
                 <button onClick={() => handleSaveEdit(review._id)}>Save</button>
                 <button onClick={handleCancelEdit}>Cancel</button>
               </>
+            ) : review.spoiler && !showSpoiler ? (
+              <div
+                className="spoilerText"
+                style={{
+                  color: "red",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                onClick={handleSpoilerClick}
+              >
+                <span>Spoiler:</span>
+                <FaAngleDown size={20} style={{ marginLeft: "5px" }} />
+              </div>
+            ) : review.spoiler ? (
+              <div>
+                <div
+                  className="spoilerText"
+                  style={{
+                    color: "green",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                  onClick={handleSpoilerClick}
+                >
+                  <span>Spoiler: </span>
+                  <FaAngleUp size={20} style={{ marginLeft: "5px" }} />
+                </div>
+                <div>{review.reviewText}</div>
+              </div>
             ) : (
               <div>{review.reviewText}</div>
             )}
@@ -200,18 +310,39 @@ function ReviewSection({ review, database, movie }) {
       </div>
       {database === "Review" ? (
         <div className="rply">
-          <div className="btnReplyLike"><FaThumbsUp/></div>
-        <button
-          onClick={() => toggleReplySection(review._id)}
-          className="btnReply"
-        >
-          <FaRegComment />
-          
-        </button>
-        <div className="replyHeading">Reply</div>
+          <div
+            className="btnReplyLike"
+            onClick={() => {
+              reviewLike(review);
+            }}
+          >
+            {replyLiked ? (
+              <div>
+                <FaThumbsUp color="blue" /> {replyLikedCount}
+              </div>
+            ) : (
+              <div>
+                <FaThumbsUp /> {replyLikedCount}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => toggleReplySection(review._id)}
+            className="btnReply"
+          >
+            <FaRegComment />
+          </button>
+          <div className="replyHeading">Reply</div>
         </div>
       ) : (
-        ""
+        <div
+          className="btnReplyLike"
+          onClick={() => {
+            reviewLike(review);
+          }}
+        >
+          {replyLiked ? <FaThumbsUp color="blue" /> : <FaThumbsUp />}
+        </div>
       )}
       {showReplySectionId === review._id && (
         <div className="replySection">
@@ -223,12 +354,13 @@ function ReviewSection({ review, database, movie }) {
             className="inputReply"
           />
           <div>
-          <button onClick={() => handleReplySubmit(review._id)}
-            className="doneReply">
-            Reply
-          </button>
+            <button
+              onClick={() => handleReplySubmit(review._id)}
+              className="doneReply"
+            >
+              Reply
+            </button>
           </div>
-          
         </div>
       )}
       <ToastContainer />

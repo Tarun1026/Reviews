@@ -24,6 +24,7 @@ import { verificationCode, verifyEmail } from "../controllers/verify.controllers
 import verifyJWT from "../middleware/Auth.middleware.js";
 import {upload} from "../middleware/Multer.middleware.js"
 import { removeProfileImage } from "../controllers/profile.controller.js";
+import { reviewIsLiked, reviewLike, reviewLikeCount } from "../controllers/commentLike.controllers.js";
 const router=Router()
 
 router.route('/')
@@ -54,4 +55,9 @@ router.route('/movie-reply').post(verifyJWT,getMovieReply)
 router.route('/remove-profile-image').post(verifyJWT,removeProfileImage)
 router.route('/send-verification-code').post(verifyJWT,verificationCode)
 router.route('/verify-email').post(verifyJWT,verifyEmail)
+router.route('/review-like').post(verifyJWT,reviewLike)
+router.route('/review-is-liked/:reviewId').get(verifyJWT, reviewIsLiked);
+router.route('/review-liked-count/:reviewId').get(reviewLikeCount);
+
+
 export default router

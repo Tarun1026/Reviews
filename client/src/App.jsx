@@ -13,6 +13,7 @@ import AccountSettings from './pages/AccountSettingPage';
 import WebSeriesPage from './pages/WebSeriesPage';
 import TVShows from './pages/TVShows';
 import UserActivityPage from './pages/UserActivityPage';
+import ToggleContent from './pages/toggle';
 // import getUserDetails from './pages/GetUserDetails';
 function App() {
   
@@ -29,6 +30,7 @@ function App() {
         <Route path='/webseries' element={<WebSeriesPage/>} />
         <Route path='/tvShows' element={<TVShows/>} />
         <Route path='/user-activity' element={<UserActivityPage/>} />
+        <Route path='/toggle' element={<ToggleContent/>} />
       </Routes>
     </Router>
     </>

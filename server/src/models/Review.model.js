@@ -27,6 +27,10 @@ const reviewSchema=new Schema({
     rating:{
         type:Number,
         required:true
+    },
+    spoiler:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true})
 

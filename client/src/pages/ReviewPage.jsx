@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "../component/Navbar";
-import {
-  FaThumbsUp,
-  FaCheck,
-} from "react-icons/fa";
+import { FaThumbsUp, FaCheck } from "react-icons/fa";
 import "../css/ReviewPage.css";
 import axios from "axios";
 import ReviewSection from "../component/reviewSection/ReviewSection";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ReviewPage = () => {
   const location = useLocation();
@@ -24,10 +21,10 @@ const ReviewPage = () => {
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [watchlistSuccess, setWatchlistSuccess] = useState(false);
   const [movieReplies, setMovieReplies] = useState([]);
+  const [spoiler, setSpoiler] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const fetchMovieReviews = async () => {
-    
     // console.log("chk",movieReplies)
     try {
       const result = await axios.post(`/api/users/movie-reviews`, {
@@ -35,18 +32,16 @@ const ReviewPage = () => {
       });
       setReviewCount(result.data.data.movieReviewCount);
       console.log("Movies Result", result.data.data.currentMovieReview);
+      console.log("spoiler", result.data.data.currentMovieReview);
       setMovieReviews(result.data.data.currentMovieReview || []);
     } catch (err) {
       console.log("Error fetching reviews:", err);
-      
     }
   };
 
   useEffect(() => {
     fetchMovieReviews();
   }, [movie.id]);
-
- 
 
   useEffect(() => {
     const fetchMovieLikes = async () => {
@@ -90,7 +85,7 @@ const ReviewPage = () => {
       window.location.reload();
     } catch (err) {
       console.log("Error sending like:", err);
-      if(err.message=="Request failed with status code 400"){
+      if (err.message == "Request failed with status code 400") {
         toast.warn("Please Login To Proceed", {
           position: "top-center",
           autoClose: 3000,
@@ -103,19 +98,19 @@ const ReviewPage = () => {
     e.preventDefault();
 
     if (!reviewText || rating === 0) {
-      
-        toast.error("Print Write a Review and Enter Rating", {
-          position: "top-center",
-          autoClose: 3000,
-        });
-      
+      toast.error("Print Write a Review and Enter Rating", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+
       return;
     }
 
     try {
-      const result=await axios.post("/api/users/user-review", {
+      const result = await axios.post("/api/users/user-review", {
         reviewText,
         rating,
+        spoiler,
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
@@ -129,13 +124,13 @@ const ReviewPage = () => {
       setRating(0);
 
       // Refresh reviews after submission
-      // fetchMovieReviews(); 
+      // fetchMovieReviews();
       setTimeout(() => {
         window.location.reload();
       }, 3000);
     } catch (err) {
       console.log(err);
-      if(err.message=="Request failed with status code 400"){
+      if (err.message == "Request failed with status code 400") {
         toast.warn("Please Login To Proceed", {
           position: "top-center",
           autoClose: 3000,
@@ -148,18 +143,16 @@ const ReviewPage = () => {
     const fetchWatchlistStatus = async () => {
       try {
         const result = await axios.get(`/api/users/watch-list/${movie.id}`);
-      
+
         setIsInWatchlist(result.data.movie);
       } catch (err) {
         console.log("Error fetching watchlist status:", err);
       }
     };
-  
+
     fetchWatchlistStatus();
   }, [movie.id]);
-  
-  
-  
+
   const handleAddToWatchlist = async () => {
     try {
       const result = await axios.post(`/api/users/add-to-watchlist`, {
@@ -179,38 +172,34 @@ const ReviewPage = () => {
 
       console.log("res", result);
       // alert(result.data.message || "Added to watchlist successfully!");
-      const popup=result.data.message || "Added to watchlist successfully!"
+      const popup = result.data.message || "Added to watchlist successfully!";
       // if (result.data.success) {
-        toast.success(popup, {
-          position: "top-center",
-          autoClose: 3000,
-        });
+      toast.success(popup, {
+        position: "top-center",
+        autoClose: 3000,
+      });
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
       // }
       // Optionally refresh or update state here if needed
     } catch (err) {
       console.error("Error adding to watchlist:", err);
-    
-      if(err.message=="Request failed with status code 400"){
+
+      if (err.message == "Request failed with status code 400") {
         toast.warn("Please Login To Proceed", {
           position: "top-center",
           autoClose: 3000,
         });
-      }
-      else{
+      } else {
         toast.error("Failed to add watchList", {
           position: "top-center",
           autoClose: 3000,
         });
       }
-        
-
     }
   };
-
 
   const movieReplys = async () => {
     try {
@@ -229,11 +218,9 @@ const ReviewPage = () => {
     movieReplys();
   }, []);
 
-
-  
   return (
     <div>
-       <Navbar/>
+      <Navbar />
       <div className="reviewPageContainer">
         <div className="topSection">
           <div className="movie">
@@ -251,13 +238,12 @@ const ReviewPage = () => {
               >
                 {/* {watchlistSuccess ? : "+"} Show tick or '+' */}
                 {isInWatchlist ? (
-  <>
-    <FaCheck /> In Watchlist
-  </>
-) : (
-  "Add to Watchlist"
-)}
-
+                  <>
+                    <FaCheck /> In Watchlist
+                  </>
+                ) : (
+                  "Add to Watchlist"
+                )}
               </button>
             </div>
             <div className="movie__detail">
@@ -333,7 +319,20 @@ const ReviewPage = () => {
                   </option>
                 ))}
               </select>
+              <label htmlFor="spoiler" className="spoiler">
+                Does your review contain spoilers?
+              </label>
+              <select
+                id="spoiler"
+                onChange={(e) =>
+                  setSpoiler(e.target.value === "Yes" ? true : false)
+                }
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
             </div>
+
             <button className="submitReviewButton" onClick={handleSubmit}>
               Submit Review
             </button>
@@ -345,16 +344,23 @@ const ReviewPage = () => {
           {movieReviews.length > 0 ? (
             movieReviews.map((review) => (
               <div key={review._id} className="singleReview">
-                <ReviewSection review={review} database={"Review"} movie={movie}/>
-                
+                <ReviewSection
+                  review={review}
+                  database={"Review"}
+                  movie={movie}
+                />
+
                 {movieReplies?.length > 0 && (
                   <div className="existingReplies">
                     {movieReplies.map((reply) => (
                       <div key={reply._id} className="reply">
                         {reply.parentId == review._id && (
                           <div>
-                            
-                            <ReviewSection review={reply} database={"Reply"} movie={movie}/>
+                            <ReviewSection
+                              review={reply}
+                              database={"Reply"}
+                              movie={movie}
+                            />
                           </div>
                         )}
                       </div>
@@ -368,7 +374,7 @@ const ReviewPage = () => {
           )}
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };
