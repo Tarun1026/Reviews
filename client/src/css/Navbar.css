@@ -329,14 +329,17 @@
     /* height: 200px; */
   }
   .search-element .form-control{
-    width:150px;
+    width:170px;
     font-size: 14px;
     height: 0.8rem;
     padding: 1rem 1rem;
     /* width: calc(150px - 5px); */
   }
+  .search-item-info h3 {
+    font-size: 0.8rem;
+  }
   .search-list .search-list-item{
-    width: calc(150px - 8px);
+    width: calc(170px - 8px);
     padding: 0.4rem;
   }
   .registerButton{

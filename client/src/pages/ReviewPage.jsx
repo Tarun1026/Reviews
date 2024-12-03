@@ -230,6 +230,11 @@ const ReviewPage = () => {
                 src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
                 alt={`${movie.title} backdrop`}
               />
+              <img
+                className="movie__backdrop2"
+                src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                alt={`${movie.title} backdrop`}
+              />
               <button
                 className={`watchlistButton ${
                   isInWatchlist ? "in-watchlist" : ""
@@ -253,6 +258,7 @@ const ReviewPage = () => {
                     className="movie__poster"
                     src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                   />
+                 
                 </div>
               </div>
               <div className="movie__detailRight">
@@ -271,7 +277,10 @@ const ReviewPage = () => {
                   </div>
                 </div>
                 <div className="movie__detailRightBottom">
-                  <div className="synopsisText">Description</div>
+                  <div className="synopsisText">
+                    Description
+                    
+                    </div>
                   <div>{movie.overview}</div>
                 </div>
               </div>
@@ -291,10 +300,12 @@ const ReviewPage = () => {
             </button>
             <p className="likes">{likeCount} Likes</p>
           </div>
+          <div className="countReview">
           <div className="count">{reviewCount ? reviewCount : 0} reviews</div>
           <button onClick={handleReviewClick} className="reviewButton">
             {isReviewVisible ? "Hide Review" : "+ Add Review"}
           </button>
+          </div>
         </div>
 
         {isReviewVisible && (
@@ -306,6 +317,7 @@ const ReviewPage = () => {
               placeholder="Write your review here..."
             />
             <div className="ratingSelection">
+              <div className="select">
               <label htmlFor="rating">Select Rating: </label>
               <select
                 id="rating"
@@ -319,6 +331,8 @@ const ReviewPage = () => {
                   </option>
                 ))}
               </select>
+              </div>
+              <div className="select">
               <label htmlFor="spoiler" className="spoiler">
                 Does your review contain spoilers?
               </label>
@@ -327,10 +341,12 @@ const ReviewPage = () => {
                 onChange={(e) =>
                   setSpoiler(e.target.value === "Yes" ? true : false)
                 }
+                className="media"
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
               </select>
+              </div>
             </div>
 
             <button className="submitReviewButton" onClick={handleSubmit}>

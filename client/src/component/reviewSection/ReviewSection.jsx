@@ -11,6 +11,7 @@ import { VscKebabVertical } from "react-icons/vsc";
 import getUserDetail from "../../hooks/GetUserDetails";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import "../../css/ReviewSection.css"
 import "react-toastify/dist/ReactToastify.css";
 
 function ReviewSection({ review, database, movie }) {
@@ -187,7 +188,7 @@ function ReviewSection({ review, database, movie }) {
           `/api/users/review-liked-count/${review._id}`
         );
         
-        // console.log("rcount",result.data.data.replyLikedCount)
+        console.log("rcount",result.data.data)
         setReplyLikedCount(result.data.data.replyLikedCount || 0);
       } catch (err) {
         console.log("Error fetching Reply count status:", err);
@@ -219,7 +220,7 @@ function ReviewSection({ review, database, movie }) {
                   placeholder="Edit your review here..."
                 />
                 {database === "Review" ? (
-                  <div className="ratingSelection">
+                  <div className="ratingSelection2">
                     <label htmlFor={`edit-rating-${review._id}`}>
                       Select Rating:{" "}
                     </label>
@@ -317,12 +318,13 @@ function ReviewSection({ review, database, movie }) {
             }}
           >
             {replyLiked ? (
-              <div>
-                <FaThumbsUp color="blue" /> {replyLikedCount}
+              <div className="thumb">
+                <FaThumbsUp color="blue" /> 
+              <div className="thumbCount">{replyLikedCount}</div>  
               </div>
             ) : (
-              <div>
-                <FaThumbsUp /> {replyLikedCount}
+              <div className="thumb">
+                <div className="thumbCount">{replyLikedCount}</div> 
               </div>
             )}
           </div>
@@ -341,7 +343,16 @@ function ReviewSection({ review, database, movie }) {
             reviewLike(review);
           }}
         >
-          {replyLiked ? <FaThumbsUp color="blue" /> : <FaThumbsUp />}
+          {replyLiked ? (
+              <div className="thumb">
+                <FaThumbsUp color="blue" /> 
+              <div className="thumbCount">{replyLikedCount}</div>  
+              </div>
+            ) : (
+              <div className="thumb">
+                <div className="thumbCount">{replyLikedCount}</div> 
+              </div>
+            )}
         </div>
       )}
       {showReplySectionId === review._id && (

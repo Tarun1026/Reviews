@@ -4,7 +4,7 @@
   display: flex;
   flex-direction:column;
   align-items: center;
-  height: 115vh;
+  /* max-height: 115vh; */
 }
 
 .movie__intro {
@@ -17,7 +17,9 @@
   object-fit:cover;
   object-position: 0 35%;
 }
-
+.movie__backdrop2 {
+  display: none;
+}
 .movie__detail {
   align-items: center;
   width: 75%;
@@ -88,12 +90,6 @@
 .synopsisText > div:last-of-type {
   margin-left: auto;
 }
-
-
-
-
-/* my codehere */
-
 
 
 .reviewPageContainer {
@@ -206,11 +202,6 @@
   line-height: 1.5;
 }
 
-/* Other styles remain the same */
-
-/* .reviewSection {
-  margin-top: 30px;
-} */
 
 .reviewButton {
   padding: 10px 20px;
@@ -307,7 +298,7 @@
 /* Review Section Background */
 .reviewSection {
 
-  margin-top: 30px;
+  margin-top: -30px;
   background-color: #1c1c1c; /* Blackish background to match theme */
   padding: 20px;
   border-radius: 10px;
@@ -350,6 +341,7 @@
   margin-top: 10px;
   font-size: 1.1rem;
   line-height: 1.6;
+  margin-bottom: 12px;
   color: #ddd;
 }
 
@@ -576,10 +568,12 @@
   margin-bottom: 20px;
 }
 
+
 .ratingSelection label {
   font-size: 1.3rem;
   color: #f0f0f0; /* Light color to match dark background */
   margin-right: 10px;
+  font-weight: bold;
 }
 
 .ratingSelection select {
@@ -587,7 +581,7 @@
   color: #f0f0f0; /* Light text for contrast */
   border: 1px solid #555; /* Subtle border */
   border-radius: 8px; /* Rounded corners for smooth UI */
-  padding: 10px;
+  padding: 5px;
   font-size: 1rem;
   outline: none;
   cursor: pointer;
@@ -632,15 +626,6 @@
   color: blue;
 }
 
-/* .reviewText {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-} */
-
 .reviewText textarea {
   width: 100%;
   padding: 8px;
@@ -653,21 +638,6 @@
   font-size: 16px;
 }
 
-.ratingSelection {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.ratingSelection label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.ratingSelection select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
 
 .reviewText button {
   padding: 8px 16px;
@@ -821,4 +791,87 @@
 
 .spoiler{
   margin-left: 20px;
+}
+.countReview{
+  display: contents;
+}
+@media (max-width: 996px) {
+  .movie__name {
+    font-size: 2.5rem;
+  }
+  .movie__detail {
+    width: 85%;
+    /* margin-left: 12.5%; */
+  }
+  .ratingSelection {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items:start;
+  }
+  .spoiler{
+    margin-left: 0;
+    margin-top: 10px;
+  }
+ 
+}@media (max-width: 700px) {
+  
+  .movie__poster {
+    display: none;
+  }
+
+}
+@media (max-width: 550px) {
+  
+  .movie__name{
+    font-size: 2.3rem;
+  }
+  .movie__detail {
+    width: 95%;
+    /* margin-left: 12.5%; */
+  }
+  .movie__poster {
+    display: none;
+  }
+  .movie__backdrop{
+    display: none;
+  }
+  .movie__backdrop2 {
+    display: flex;
+    width: 100%;
+    /* height: 600px;
+    object-fit:cover; */
+    object-position: 0 35%;
+  }
+  .buttonsContainer{
+    
+    display:contents;
+  }
+  .countReview{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+.reviewSection{
+  margin-top: 0;
+}
+.spoiler{
+  font-size: 20px;
+}
+.ratingSelection label {
+  font-size: medium;
+}
+.ratingSelection select {
+  font-size: 0.8rem;
+}
+}
+@media (max-width: 410px) {
+  .ratingSelection label {
+    font-size: smaller;
+  }
+  .media{
+    margin-top: 10px;
+  }
 }

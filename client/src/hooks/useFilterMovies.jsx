@@ -28,21 +28,21 @@ function useFilterMovies(filterOptions = {},endPoint,netId) {
           voteAverageParams['vote_average.gte'] = 9;
         }
   
-        for (const id of netId) {
+        // for (const id of netId) {
           const response = await axios.get(`https://api.themoviedb.org/3/discover/${endPoint}`, {
             params: {
               api_key: `${apiKey}`,
               with_genres: filterOptions?.genre || null,
               with_original_language: filterOptions?.language || null,
               "first_air_date.gte": filterOptions?.releaseYear || null,
-              with_networks: id,
+              // with_networks: id,
               // page: page,
               ...voteAverageParams // Spread the vote average params dynamically
             },
           });
           console.log('Fetched Page:', response.data.results);
           allShows.push(...response.data.results)
-        }
+        // }
         const uniqueResults = [
           ...new Map(allShows.map((item) => [item.id, item])).values(),
         ];

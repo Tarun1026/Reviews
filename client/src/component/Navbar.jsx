@@ -164,7 +164,7 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
                           />
                         </div>
                         <div className="search-item-info">
-                          <h3>{movie.name || movie.title}</h3>
+                          <h3 >{movie.name || movie.title}</h3>
                           <p>{movie.release_date || movie.first_air_date}</p>
                         </div>
                       </div>
