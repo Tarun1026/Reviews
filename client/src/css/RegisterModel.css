@@ -102,5 +102,6 @@
 .member {
   color: black;
   text-align: center;
-  margin-top: 10px;
+  font-size: medium;
+  margin-top: 15px;
 }

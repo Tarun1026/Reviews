@@ -820,6 +820,20 @@
     display: none;
   }
 
+  .movie__poster {
+    display: none;
+  }
+  .movie__backdrop{
+    display: none;
+  }
+  .movie__backdrop2 {
+    display: flex;
+    width: 100%;
+    /* height: 600px;
+    object-fit:cover; */
+    object-position: 0 35%;
+  }
+
 }
 @media (max-width: 550px) {
   

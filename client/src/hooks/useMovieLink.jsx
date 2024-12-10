@@ -9,17 +9,19 @@ const useMovieLink = () => {
   const [upcomingMovies, setUpcomingMovies] = useState([]);
   const[newReleaseMovies,setNewReleaseMovies]=useState([])
   const[topRatedMovies,setTopRatedMovies]=useState([])
-
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     const fetchData = async () => {
       const apiKey = import.meta.env.VITE_TMDB_API;
       try {
         // Fetch New Releases (Popular Movies)
+        setLoading(true);
         let urlPopular = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`;
         const responsePopular = await axios.get(urlPopular);
         const dataPopular = responsePopular.data.results;
         setMovies(dataPopular);
+        setLoading(false)
         // console.log("movie",dataPopular)
 
         // Fetch Upcoming Movies
@@ -46,7 +48,7 @@ const useMovieLink = () => {
     fetchData();
   }, []);
 
-  return { movies, upcomingMovies ,newReleaseMovies,topRatedMovies};
+  return { movies, upcomingMovies ,newReleaseMovies,topRatedMovies,loading};
 };
 
 export default useMovieLink;

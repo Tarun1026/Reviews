@@ -7,10 +7,19 @@ import axios from "axios";
 import ReviewSection from "../component/reviewSection/ReviewSection";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import getUserDetail from "../hooks/GetUserDetails";
 const ReviewPage = () => {
   const location = useLocation();
-  const { movie } = location.state;
+  const defaultMovie=localStorage.getItem('defaultMovie')
+  const defMovie=JSON.parse(defaultMovie)
+  // console.log('def',defMovie)
+  const  movie  = location.state?.movie || defMovie;
+  if(movie){
+    localStorage.setItem('defaultMovie', JSON.stringify(movie));
+  }
+
+  // console.log("location movie",movie)
+  const [user, setUser] = useState(null);
   const [movieReviews, setMovieReviews] = useState([]);
   const [reviewCount, setReviewCount] = useState(0);
   const [isReviewVisible, setReviewVisible] = useState(false);
@@ -24,6 +33,23 @@ const ReviewPage = () => {
   const [spoiler, setSpoiler] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    // console.log("useEffect triggered");
+    fetchUserDetails();
+  }, []);
+
+  const fetchUserDetails = async () => {
+    try {
+      // console.log("Calling getUserDetail...");
+      const userDetails = await getUserDetail();
+      // console.log("userDetails fetched:", userDetails);
+      setUser(userDetails);
+      
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
   const fetchMovieReviews = async () => {
     // console.log("chk",movieReplies)
     try {
@@ -72,6 +98,13 @@ const ReviewPage = () => {
   }, [movie.id]);
 
   const handleReviewClick = () => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return
+    }
     setReviewVisible(!isReviewVisible);
   };
 

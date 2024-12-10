@@ -43,6 +43,7 @@ function ReviewSection({ review, database, movie }) {
       const userDetails = await getUserDetail();
       // console.log("userDetails fetched:", userDetails);
       setUser(userDetails);
+      
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
@@ -107,6 +108,13 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const toggleReplySection = (reviewId) => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return
+    }
     setShowReplySectionId(showReplySectionId === reviewId ? null : reviewId);
   };
 
@@ -131,15 +139,18 @@ function ReviewSection({ review, database, movie }) {
       }, 3000);
     } catch (err) {
       console.log("Error submitting reply:", err);
+      if (err.message == "Request failed with status code 400") {
+        toast.warn("Please Login To Proceed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
   const reviewLike = async (review) => {
     try {
-      // Toggle like status locally for immediate UI feedback
-      // setReplyLiked(!replyLiked);
 
-      // Send like request to backend
       await axios.post(`/api/users/review-like`, {
         reviewId: review._id,
         movieId: movie.id,
@@ -161,6 +172,12 @@ function ReviewSection({ review, database, movie }) {
       setReplyLikedCount(result2.data.data.replyLikedCount || 0);
     } catch (error) {
       console.log("Error liking the review:", error);
+      if (error.message == "Request failed with status code 400") {
+        toast.warn("Please Login To Proceed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
     }
   };
 
@@ -188,7 +205,7 @@ function ReviewSection({ review, database, movie }) {
           `/api/users/review-liked-count/${review._id}`
         );
         
-        console.log("rcount",result.data.data)
+        // console.log("rcount",result.data.data)
         setReplyLikedCount(result.data.data.replyLikedCount || 0);
       } catch (err) {
         console.log("Error fetching Reply count status:", err);
@@ -324,6 +341,7 @@ function ReviewSection({ review, database, movie }) {
               </div>
             ) : (
               <div className="thumb">
+                <FaThumbsUp color="grey" /> 
                 <div className="thumbCount">{replyLikedCount}</div> 
               </div>
             )}
@@ -340,7 +358,7 @@ function ReviewSection({ review, database, movie }) {
         <div
           className="btnReplyLike"
           onClick={() => {
-            reviewLike(review);
+          reviewLike(review);
           }}
         >
           {replyLiked ? (
@@ -350,6 +368,7 @@ function ReviewSection({ review, database, movie }) {
               </div>
             ) : (
               <div className="thumb">
+                <FaThumbsUp color="grey" /> 
                 <div className="thumbCount">{replyLikedCount}</div> 
               </div>
             )}

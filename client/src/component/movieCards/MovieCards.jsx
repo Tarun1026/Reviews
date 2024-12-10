@@ -5,8 +5,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
 import { settings } from '../SettingSlider';
 import { useNavigate } from 'react-router-dom';
-
-function MovieCards({ movieSent, heading }) {
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
+function MovieCards({ movieSent, heading,loading }) {
     const sliderRef = useRef(null);
     const navigate = useNavigate(); 
 
@@ -15,6 +16,16 @@ function MovieCards({ movieSent, heading }) {
     };
     
     return (
+        <>
+        {
+        loading
+        ?
+        <div className="cards">
+            <SkeletonTheme color="#202020" highlightColor="#444">
+                <Skeleton height={300} duration={2} />
+            </SkeletonTheme>
+        </div>
+        :
         <div className="movieSection">
             <h2>{heading}</h2>
             <div className="carouselContainer1">
@@ -52,7 +63,14 @@ function MovieCards({ movieSent, heading }) {
                 </button>
             </div>
         </div>
-    );
+          
+    
+
+
+                    }
+</>
+                    
+);
 }
 
 export default MovieCards;
