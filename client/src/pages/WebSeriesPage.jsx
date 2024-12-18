@@ -17,7 +17,7 @@ function WebSeriesPage() {
     releaseYear: '',
     popularity: ''
   });
-  const { tvShows, newWebSeries} = useTVShowsLink(networkIds);
+  const { tvShows, newWebSeries, loading} = useTVShowsLink(networkIds);
   return (
     <div>
       <Navbar />
@@ -28,8 +28,8 @@ function WebSeriesPage() {
       />
       
 <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} netId={networkIds}/>
-<MovieCards movieSent={tvShows} heading={"Top Rated"}/>
-<MovieCards movieSent={newWebSeries} heading={"New Releases"}/>
+<MovieCards movieSent={tvShows} heading={"Top Rated"} loading={loading}/>
+<MovieCards movieSent={newWebSeries} heading={"New Releases"} loading={loading}/>
 
       
     </div>

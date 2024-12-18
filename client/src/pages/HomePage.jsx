@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReviewPage from "./ReviewPage";
 function HomePage() {
-  const { movies, newReleaseMovies, topRatedMovies } = useMovieLink();
+  const { movies, newReleaseMovies, topRatedMovies,loading } = useMovieLink();
   const navigate = useNavigate();
 
   const handleMovieClick = (movie) => {
@@ -51,8 +51,8 @@ function HomePage() {
           ))}
         </Carousel>
       </div>
-      <MovieCards movieSent={newReleaseMovies} heading={"Trending Today"} />
-      <MovieCards movieSent={topRatedMovies} heading={"Top Rated"} />
+      <MovieCards movieSent={newReleaseMovies} heading={"Trending Today"} loading={loading} />
+      <MovieCards movieSent={topRatedMovies} heading={"Top Rated"} loading={loading}/>
 
       <ToastContainer/>
     </div>

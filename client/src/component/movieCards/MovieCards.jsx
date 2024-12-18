@@ -7,6 +7,7 @@ import { settings } from '../SettingSlider';
 import { useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
+import { FaBox } from 'react-icons/fa';
 function MovieCards({ movieSent, heading,loading }) {
     const sliderRef = useRef(null);
     const navigate = useNavigate(); 
@@ -17,17 +18,16 @@ function MovieCards({ movieSent, heading,loading }) {
     
     return (
         <>
-        {
-        loading
-        ?
-        <div className="cards">
-            <SkeletonTheme color="#202020" highlightColor="#444">
-                <Skeleton height={300} duration={2} />
-            </SkeletonTheme>
-        </div>
-        :
+    
         <div className="movieSection">
             <h2>{heading}</h2>
+            {loading ? (
+                    <div className="cards">
+                        <SkeletonTheme baseColor="#202020" highlightColor="#9e9a9a">
+                            <Skeleton height={300} duration={2} />
+                        </SkeletonTheme>
+                    </div>
+                ) : (
             <div className="carouselContainer1">
                 <button className="prevButton" onClick={() => sliderRef.current.slickPrev()}>
                     <SlArrowLeftCircle />
@@ -62,12 +62,9 @@ function MovieCards({ movieSent, heading,loading }) {
                     <SlArrowRightCircle />
                 </button>
             </div>
+                )}
         </div>
-          
-    
 
-
-                    }
 </>
                     
 );

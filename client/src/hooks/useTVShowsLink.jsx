@@ -8,6 +8,7 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
   const [newWebSeries, setNewWebSeries] = useState([]); // For storing newly released web series
   const [hindi, setHindi] = useState([]);
   const [punjabi, setPunjabi] = useState([]);
+  const [loading, setLoading] = useState(false);
   const Hindi = HindinetworkIds.join(",");
 // console.log("hin", Hindi);
   const apiKey = import.meta.env.VITE_TMDB_API;
@@ -16,6 +17,7 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
       const results = [];
 
       try {
+        setLoading(true)
         for (const id of networkIds) {
           const response = await axios.get(
             `https://api.themoviedb.org/3/discover/tv`,
@@ -37,12 +39,14 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
         ];
         console.log("unique", uniqueResults);
         setTVShows(uniqueResults); // Set fetched TV shows
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching TV shows:", error);
       }
 
       const results2 = [];
       try {
+        setLoading(true);
         for (const id of networkIds) {
           const response = await axios.get(
             `https://api.themoviedb.org/3/discover/tv`,
@@ -66,12 +70,14 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
           ...new Map(results2.map((item) => [item.id, item])).values(),
         ];
         setNewWebSeries(uniqueResults2); // Set fetched TV shows
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching TV shows:", error);
       }
 
       const HindiResult=[]
       try {
+        setLoading(true);
         for (const id of HindinetworkIds) {
         const response = await axios.get(
           `https://api.themoviedb.org/3/discover/tv`,
@@ -94,10 +100,12 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
           ...new Map(HindiResult.map((item) => [item.id, item])).values(),
         ];
         setHindi(HindiResults2); // Set fetched TV shows
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching TV shows:", error);
       }
       try {
+        setLoading(true);
         const response = await axios.get(
           `https://api.themoviedb.org/3/discover/tv`,
           {
@@ -113,6 +121,7 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
         );
 
         setPunjabi(response.data.results); // Set fetched TV shows
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching TV shows:", error);
       }
@@ -121,7 +130,7 @@ function useTVShowsLink(networkIds, languageHindi, languagePunjabi) {
     fetchTVShows();
   }, []);
 
-  return { tvShows, newWebSeries, hindi, punjabi };
+  return { tvShows, newWebSeries, hindi, punjabi,loading};
 }
 
 export default useTVShowsLink;

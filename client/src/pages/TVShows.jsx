@@ -17,7 +17,7 @@ function TVShows() {
     releaseYear: "",
     popularity: "",
   });
-  const { tvShows, newWebSeries,hindi,punjabi } = 
+  const { tvShows, newWebSeries,hindi,punjabi,loading } = 
   useTVShowsLink(networkIds,languageHindi,languagePunjabi);
  
   return (
@@ -31,10 +31,10 @@ function TVShows() {
       />
 
       <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} netId={networkIds} />
-      <MovieCards movieSent={tvShows} heading={"Top Rated"} />
-      <MovieCards movieSent={newWebSeries} heading={"New Releases"} />
-      <MovieCards movieSent={hindi} heading={"Hindi"} />
-      <MovieCards movieSent={punjabi} heading={"Punjabi"} />
+      <MovieCards movieSent={tvShows} heading={"Top Rated"} loading={loading}/>
+      <MovieCards movieSent={newWebSeries} heading={"New Releases"} loading={loading}/>
+      <MovieCards movieSent={hindi} heading={"Hindi"} loading={loading}/>
+      <MovieCards movieSent={punjabi} heading={"Punjabi"} loading={loading}/>
     </div>
   );
 }

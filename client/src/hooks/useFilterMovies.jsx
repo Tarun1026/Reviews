@@ -6,10 +6,12 @@ function useFilterMovies(filterOptions = {},endPoint,netId) {
     const [filteredShows, setFilteredShows] = useState([]); 
     const [showsData,setShowsData]=useState(false)
     const apiKey = import.meta.env.VITE_TMDB_API;
-  
+    const [loading, setLoading] = useState(false);
     
     const fetchMultiplePages = async () => {
+      
       try {
+        setLoading(true)
         let allShows = [];
         let voteAverageParams = {};
   
@@ -52,9 +54,11 @@ function useFilterMovies(filterOptions = {},endPoint,netId) {
         }
   
         setFilteredShows(uniqueResults);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching TV shows with filters:', error);
       }
+      
     };
   
     
@@ -69,7 +73,7 @@ function useFilterMovies(filterOptions = {},endPoint,netId) {
     
 
    
-    return { filteredShows,showsData};
+    return { filteredShows,showsData,loading};
 }
 
 export default useFilterMovies;

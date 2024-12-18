@@ -11,6 +11,7 @@ import MovieCards from '../component/movieCards/MovieCards';
 
 const MoviesPage = () => {
   const endPoint="movie"
+  // const sendUrl="popular"
   const { movies, upcomingMovies,loading } = useMovieLink();
   const [appliedFilters, setAppliedFilters] = useState({
     genre: '',
@@ -29,7 +30,7 @@ const MoviesPage = () => {
       <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint}/>
      
       <MovieCards movieSent={movies} heading={"New Releases"} loading={loading}/>
-      <MovieCards movieSent={upcomingMovies} heading={"Upcoming Movies"}/>
+      <MovieCards movieSent={upcomingMovies} heading={"Upcoming Movies"} loading={loading}/>
       
       
      
