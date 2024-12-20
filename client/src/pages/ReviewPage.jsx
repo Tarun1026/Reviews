@@ -140,7 +140,7 @@ const ReviewPage = () => {
     }
 
     try {
-      const result = await axios.post("/api/users/user-review", {
+      const result = await axios.post(`/api/users/user-review`, {
         reviewText,
         rating,
         spoiler,
@@ -399,7 +399,7 @@ const ReviewPage = () => {
                   movie={movie}
                 />
 
-                {movieReplies?.length > 0 && (
+                {movieReplies.length > 0 && (
                   <div className="existingReplies">
                     {movieReplies.map((reply) => (
                       <div key={reply._id} className="reply">
