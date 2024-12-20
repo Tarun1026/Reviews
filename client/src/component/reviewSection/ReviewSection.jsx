@@ -51,7 +51,7 @@ function ReviewSection({ review, database, movie }) {
 
   const handleSaveEdit = async (reviewId) => {
     try {
-      const result = await axios.post(`/api/users/edit-review`, {
+      const result = await axios.post(`${apiUrl}/api/users/edit-review`, {
         reviewId: reviewId,
         reviewText: editReviewText,
         rating: editRating,
@@ -86,7 +86,7 @@ function ReviewSection({ review, database, movie }) {
 
   const handleDeleteReview = async (reviewId) => {
     try {
-      const result = await axios.post(`/api/users/delete-review`, {
+      const result = await axios.post(`${apiUrl}/api/users/delete-review`, {
         reviewId: reviewId,
       });
       if (result.data.success) {
@@ -120,7 +120,7 @@ function ReviewSection({ review, database, movie }) {
 
   const handleReplySubmit = async (reviewId) => {
     try {
-      const result = await axios.post(`/api/users/add-reply`, {
+      const result = await axios.post(`${apiUrl}/api/users/add-reply`, {
         movieId: movie.id,
         reviewId: reviewId,
         reviewText: replyText,
@@ -151,7 +151,7 @@ function ReviewSection({ review, database, movie }) {
   const reviewLike = async (review) => {
     try {
 
-      await axios.post(`/api/users/review-like`, {
+      await axios.post(`${apiUrl}/api/users/review-like`, {
         reviewId: review._id,
         movieId: movie.id,
         movieTitle: movie.original_title || movie.name,
@@ -185,7 +185,7 @@ function ReviewSection({ review, database, movie }) {
     const fetchReplyLikeStatus = async () => {
       try {
         const result = await axios.get(
-          `/api/users/review-is-liked/${review._id}`
+          `${apiUrl}/api/users/review-is-liked/${review._id}`
         );
         setReplyLiked(result.data.liked);
         // console.log("rlike",result)
@@ -202,7 +202,7 @@ function ReviewSection({ review, database, movie }) {
     const fetchReplyLikeCount = async () => {
       try {
         const result = await axios.get(
-          `/api/users/review-liked-count/${review._id}`
+          `${apiUrl}/api/users/review-liked-count/${review._id}`
         );
         
         // console.log("rcount",result.data.data)

@@ -132,7 +132,7 @@ console.log('us',userDetails.isVerified)
 
       // Send the update to the backend only for the specific field
       const response = await axios.post(
-        `/api/users/update-${field}`,
+        `${apiUrl}/api/users/update-${field}`,
         payload
       );
 
@@ -161,6 +161,12 @@ console.log('us',userDetails.isVerified)
           autoClose: 3000,
         });
       }
+      else if (field=="email"){
+        toast.error("This Email already exist", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
       else{
         toast.error("Something Wrong", {
         position: "top-center",
@@ -185,7 +191,7 @@ console.log('us',userDetails.isVerified)
 
     try {
       const response = await axios.post(
-        `/api/users/update-profile-image`,
+        `${apiUrl}/api/users/update-profile-image`,
         formData
       ); // Send formData directly
 
@@ -216,7 +222,7 @@ console.log('us',userDetails.isVerified)
   const removeProfileImage=async()=>{
 
     try {
-      const res=await axios.post(`/api/users/remove-profile-image`)
+      const res=await axios.post(`${apiUrl}/api/users/remove-profile-image`)
       toast.success("Profile Image Removed Successfully", {
         position: "top-center",
         autoClose: 3000,
@@ -244,7 +250,7 @@ console.log('us',userDetails.isVerified)
     //   return
     // }
     try {
-      const response = await axios.post(`/api/users/send-verification-code`, {
+      const response = await axios.post(`${apiUrl}/api/users/send-verification-code`, {
         email: userData.email,
       });
   
@@ -279,7 +285,7 @@ console.log('us',userDetails.isVerified)
   const verifyEmail = async () => {
     console.log("vemail")
     try {
-      const response = await axios.post(`/api/users/verify-email`, {
+      const response = await axios.post(`${apiUrl}/api/users/verify-email`, {
         email: userData.email,
         code: verificationCode,
       });
@@ -410,30 +416,33 @@ console.log('us',userDetails.isVerified)
 </h3>
 
   
-  <div className="account-field">
-    {editMode.email ? (
+<div className="account-field">
+  {editMode.email ? (
+    <div>
       <input
         type="email"
         name="email"
         value={userData.email}
         onChange={handleInputChange}
       />
-    ) : (
-      <span>{userData.email}</span>
-    )}
-    <button
-      onClick={() =>
-        editMode.email ? handleSave("email") : handleEditClick("email")
-      }
-    >
-      {editMode.email ? "Save" : "Edit"}
-    </button>
-    {editMode.email && (
       <button className="send-code-btn" onClick={sendVerificationCode}>
         Send Verification Code
       </button>
-    )}
-  </div>
+    </div>
+  ) : (
+    <span>{userData.email}</span>
+  )}
+ <button
+  className={editMode.email ? "emailSave" : ""}
+  onClick={() =>
+    editMode.email ? handleSave("email") : handleEditClick("email")
+  }
+>
+  {editMode.email ? "Save" : "Edit"}
+</button>
+
+</div>
+
   {editMode.email && (
     <div className="verification-section">
       <input

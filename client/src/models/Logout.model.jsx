@@ -10,7 +10,7 @@ const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
 
   const handleLogout = async () => {
     await axios
-      .post(`/api/users/logOut`)
+      .post(`${apiUrl}/api/users/logOut`)
       .then((result) => {
         if (result.data.success) {
           toast.success(result.data.message, {

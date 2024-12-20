@@ -1,23 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { SlArrowLeftCircle, SlArrowRightCircle } from "react-icons/sl";
-import { settings } from "../SettingSlider";
-import Slider from "react-slick";
-import { useNavigate } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MovieCards from "../movieCards/MovieCards";
 import useFilterMovies from "../../hooks/useFilterMovies";
 function FilterCard({ setAppliedFilters,endPoint,netId }) {
     const {  filteredShows,showsData,loading} = useFilterMovies(setAppliedFilters,endPoint,netId);
-    
-    const sliderRef3 = useRef(null);
-    const navigate = useNavigate();
-    
-    console.log("Filtered Shows Length:", filteredShows.length);
   
-    const handleMovieClick = (movie) => {
-      navigate('/review', { state: { movie } });
-    };
+    console.log("Filtered Shows Length:", filteredShows.length);
   
   return (
     <>

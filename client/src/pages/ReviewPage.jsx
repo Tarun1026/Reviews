@@ -53,7 +53,7 @@ const ReviewPage = () => {
   const fetchMovieReviews = async () => {
     // console.log("chk",movieReplies)
     try {
-      const result = await axios.post(`/api/users/movie-reviews`, {
+      const result = await axios.post(`${apiUrl}/api/users/movie-reviews`, {
         movieId: movie.id,
       });
       setReviewCount(result.data.data.movieReviewCount);
@@ -72,7 +72,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchMovieLikes = async () => {
       try {
-        const res = await axios.post(`/api/users/movie-likes-count`, {
+        const res = await axios.post(`${apiUrl}/api/users/movie-likes-count`, {
           movieId: movie.id,
         });
         setLikeCount(res.data.data.likedCount || 0);
@@ -87,7 +87,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const result = await axios.get(`/api/users/movie-is-liked/${movie.id}`);
+        const result = await axios.get(`${apiUrl}/api/users/movie-is-liked/${movie.id}`);
         setHasLiked(result.data.liked);
       } catch (err) {
         console.log("Error fetching like status:", err);
@@ -110,7 +110,7 @@ const ReviewPage = () => {
 
   const handleLikeClick = async () => {
     try {
-      const result = await axios.post(`/api/users/movie-like`, {
+      const result = await axios.post(`${apiUrl}/api/users/movie-like`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
@@ -175,7 +175,7 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchWatchlistStatus = async () => {
       try {
-        const result = await axios.get(`/api/users/watch-list/${movie.id}`);
+        const result = await axios.get(`${apiUrl}/api/users/watch-list/${movie.id}`);
 
         setIsInWatchlist(result.data.movie);
       } catch (err) {
@@ -188,7 +188,7 @@ const ReviewPage = () => {
 
   const handleAddToWatchlist = async () => {
     try {
-      const result = await axios.post(`/api/users/add-to-watchlist`, {
+      const result = await axios.post(`${apiUrl}/api/users/add-to-watchlist`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
       });
@@ -236,7 +236,7 @@ const ReviewPage = () => {
 
   const movieReplys = async () => {
     try {
-      const rep = await axios.post(`/api/users/movie-reply`, {
+      const rep = await axios.post(`${apiUrl}/api/users/movie-reply`, {
         movieId: movie.id,
       });
       console.log("mr", rep.data.data.movieReplies);

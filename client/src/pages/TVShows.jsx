@@ -26,8 +26,7 @@ function TVShows() {
 
       <FilterOptions
         setAppliedFilters={setAppliedFilters}
-        genreMap={genreMap}
-        
+        genreMap={genreMap}  
       />
 
       <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint} netId={networkIds} />
