@@ -7,7 +7,6 @@ import { settings } from '../SettingSlider';
 import { useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css'
-import { FaBox } from 'react-icons/fa';
 function MovieCards({ movieSent, heading,loading }) {
     const sliderRef = useRef(null);
     const navigate = useNavigate(); 

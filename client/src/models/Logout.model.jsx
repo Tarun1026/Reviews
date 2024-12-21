@@ -4,13 +4,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
-
-  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  
   if (!isOpen) return null;
-
+  const apiUrl = import.meta.env.VITE_API_URL || '';
   const handleLogout = async () => {
     await axios
-      .post(`${apiUrl}/api/users/logOut`)
+      .post(`${apiUrl}/api/users/logOut`,{ withCredentials: true } )
       .then((result) => {
         if (result.data.success) {
           toast.success(result.data.message, {

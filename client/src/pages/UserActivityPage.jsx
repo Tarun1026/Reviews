@@ -37,7 +37,8 @@ const UserActivityPage = ({ userId }) => {
 
     const fetchMovieDetails = async (movieId) => {
         try {
-            const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=4b2313ca982860407b4ff3a8e3258ff7`);
+            const response = await axios.get
+            (`https://api.themoviedb.org/3/movie/${movieId}?api_key=4b2313ca982860407b4ff3a8e3258ff7`);
             return response.data; // Return movie data
         } catch (error) {
             console.error("Error fetching movie details:", error);

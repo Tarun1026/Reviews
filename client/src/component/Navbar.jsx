@@ -72,7 +72,7 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
 
   const fetchUserDetails = async () => {
     const userDetails = await getUserDetail();
-    console.log("home", userDetails);
+    // console.log("home", userDetails);
     // if (userDetails) {
     setUser(userDetails);
     //   localStorage.setItem('user', JSON.stringify(userDetails));

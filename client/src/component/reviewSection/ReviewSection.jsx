@@ -56,7 +56,7 @@ function ReviewSection({ review, database, movie }) {
         reviewText: editReviewText,
         rating: editRating,
         database: database,
-      });
+      },{ withCredentials: true } );
       if (result.data.success) {
         toast.success(result.data.message, {
           position: "top-center",
@@ -88,7 +88,7 @@ function ReviewSection({ review, database, movie }) {
     try {
       const result = await axios.post(`${apiUrl}/api/users/delete-review`, {
         reviewId: reviewId,
-      });
+      },{ withCredentials: true } );
       if (result.data.success) {
         toast.success(result.data.message, {
           position: "top-center",
@@ -125,7 +125,7 @@ function ReviewSection({ review, database, movie }) {
         reviewId: reviewId,
         reviewText: replyText,
         movieTitle: movie.title || movie.name,
-      });
+      },{ withCredentials: true } );
       if (result.data.success) {
         toast.success(result.data.message, {
           position: "top-center",
@@ -156,7 +156,7 @@ function ReviewSection({ review, database, movie }) {
         movieId: movie.id,
         movieTitle: movie.original_title || movie.name,
         reviewText: review.reviewText,
-      });
+      },{ withCredentials: true } );
 
       // Re-fetch the like status from the backend to ensure consistency
       const result = await axios.get(
@@ -185,7 +185,8 @@ function ReviewSection({ review, database, movie }) {
     const fetchReplyLikeStatus = async () => {
       try {
         const result = await axios.get(
-          `${apiUrl}/api/users/review-is-liked/${review._id}`
+          `${apiUrl}/api/users/review-is-liked/${review._id}`,
+          { withCredentials: true } 
         );
         setReplyLiked(result.data.liked);
         // console.log("rlike",result)
@@ -202,7 +203,8 @@ function ReviewSection({ review, database, movie }) {
     const fetchReplyLikeCount = async () => {
       try {
         const result = await axios.get(
-          `${apiUrl}/api/users/review-liked-count/${review._id}`
+          `${apiUrl}/api/users/review-liked-count/${review._id}`,
+          { withCredentials: true } 
         );
         
         // console.log("rcount",result.data.data)

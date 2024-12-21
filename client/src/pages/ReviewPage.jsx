@@ -55,7 +55,7 @@ const ReviewPage = () => {
     try {
       const result = await axios.post(`${apiUrl}/api/users/movie-reviews`, {
         movieId: movie.id,
-      });
+      },{ withCredentials: true });
       setReviewCount(result.data.data.movieReviewCount);
       console.log("Movies Result", result.data.data.currentMovieReview);
       console.log("spoiler", result.data.data.currentMovieReview);
@@ -74,7 +74,7 @@ const ReviewPage = () => {
       try {
         const res = await axios.post(`${apiUrl}/api/users/movie-likes-count`, {
           movieId: movie.id,
-        });
+        },{ withCredentials: true });
         setLikeCount(res.data.data.likedCount || 0);
       } catch (err) {
         console.log("Error fetching Movie Likes Count:", err);
@@ -87,7 +87,9 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const result = await axios.get(`${apiUrl}/api/users/movie-is-liked/${movie.id}`);
+        const result = await axios.get(`${apiUrl}/api/users/movie-is-liked/${movie.id}`,
+          { withCredentials: true }
+        );
         setHasLiked(result.data.liked);
       } catch (err) {
         console.log("Error fetching like status:", err);
@@ -113,7 +115,7 @@ const ReviewPage = () => {
       const result = await axios.post(`${apiUrl}/api/users/movie-like`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
-      });
+      },{ withCredentials: true });
       setHasLiked(result.data.message === "Video likes successfully");
       window.location.reload();
     } catch (err) {
@@ -146,7 +148,7 @@ const ReviewPage = () => {
         spoiler,
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
-      });
+      },{ withCredentials: true });
       if (result.data.success) {
         toast.success(result.data.message, {
           position: "top-center",
@@ -175,7 +177,9 @@ const ReviewPage = () => {
   useEffect(() => {
     const fetchWatchlistStatus = async () => {
       try {
-        const result = await axios.get(`${apiUrl}/api/users/watch-list/${movie.id}`);
+        const result = await axios.get(`${apiUrl}/api/users/watch-list/${movie.id}`,
+          { withCredentials: true }
+        );
 
         setIsInWatchlist(result.data.movie);
       } catch (err) {
@@ -191,7 +195,7 @@ const ReviewPage = () => {
       const result = await axios.post(`${apiUrl}/api/users/add-to-watchlist`, {
         movieId: movie.id,
         movieTitle: movie.title || movie.name,
-      });
+      },{ withCredentials: true });
 
       if (result.data.message == "Added to watchlist successfully") {
         setWatchlistSuccess(true);
@@ -238,7 +242,7 @@ const ReviewPage = () => {
     try {
       const rep = await axios.post(`${apiUrl}/api/users/movie-reply`, {
         movieId: movie.id,
-      });
+      },{ withCredentials: true });
       console.log("mr", rep.data.data.movieReplies);
       setMovieReplies(rep.data.data.movieReplies);
       console.log("fd", movieReplies);

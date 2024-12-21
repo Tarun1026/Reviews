@@ -133,7 +133,7 @@ console.log('us',userDetails.isVerified)
       // Send the update to the backend only for the specific field
       const response = await axios.post(
         `${apiUrl}/api/users/update-${field}`,
-        payload
+        payload,{ withCredentials: true }
       );
 
       if (response.status === 200) {
@@ -192,7 +192,7 @@ console.log('us',userDetails.isVerified)
     try {
       const response = await axios.post(
         `${apiUrl}/api/users/update-profile-image`,
-        formData
+        formData,{ withCredentials: true }
       ); // Send formData directly
 
       if (response.status === 200) {
@@ -222,7 +222,9 @@ console.log('us',userDetails.isVerified)
   const removeProfileImage=async()=>{
 
     try {
-      const res=await axios.post(`${apiUrl}/api/users/remove-profile-image`)
+      const res=await axios.post(`${apiUrl}/api/users/remove-profile-image`,
+        { withCredentials: true }
+      )
       toast.success("Profile Image Removed Successfully", {
         position: "top-center",
         autoClose: 3000,
@@ -242,17 +244,11 @@ console.log('us',userDetails.isVerified)
 
 
   const sendVerificationCode = async () => {
-    // if(userData.email!=email){
-    //   toast.error("Please Enter Same Email or Update it First", {
-    //     position: "top-center",
-    //     autoClose: 3000,
-    //   });
-    //   return
-    // }
+   
     try {
       const response = await axios.post(`${apiUrl}/api/users/send-verification-code`, {
         email: userData.email,
-      });
+      },{ withCredentials: true });
   
       if (response.status === 200) {
         toast.success("Verification code sent to your email", {
@@ -288,7 +284,7 @@ console.log('us',userDetails.isVerified)
       const response = await axios.post(`${apiUrl}/api/users/verify-email`, {
         email: userData.email,
         code: verificationCode,
-      });
+      },{ withCredentials: true } );
     console.log("res",response)
       if (response.status === 200) {
         setIsVerified(true);
@@ -297,12 +293,7 @@ console.log('us',userDetails.isVerified)
           autoClose: 3000,
         });
       } 
-      // else if(response.status === 201){
-      //   toast.error(response.data.data, {
-      //     position: "top-center",
-      //     autoClose: 3000,
-      //   });
-      // }
+      
     } catch (error) {
       if (error.response && error.response.status === 401) {
         toast.error("Invalid or Expired Code", {
