@@ -14,7 +14,9 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post(`${apiUrl}/api/users/login`, { email, password });
+      const result = await axios.post(`${apiUrl}/api/users/login`, { email, password },
+        { withCredentials: true } 
+      );
       console.log("log", result);
       if (result.data.success) { // Check success based on your API response
         if (result.data.success) {

@@ -56,7 +56,9 @@ const RegisterModel = ({ onSwitchToLogin }) => {
     };
   
     try {
-      const result = await axios.post(`${apiUrl}/api/users/register`, data);
+      const result = await axios.post(`${apiUrl}/api/users/register`, data,
+        { withCredentials: true } 
+      );
   
       if (result.data.success) {
         toast.success(result.data.message, {
