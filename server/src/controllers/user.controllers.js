@@ -62,7 +62,7 @@ if(!createUser){
 const options={
     httpOnly:true,
     secure:true,
-    domain:"reviews-coral.vercel.app",
+    sameSite: "none",
 }
 const loginUser=asyncHanlder(async(req,res)=>{
     const {email,password}=req.body
@@ -118,7 +118,7 @@ const logOutUser=asyncHanlder(async(req,res)=>{
     const options={
         httpOnly:true,
         secure:true,
-        domain:"reviews-coral.vercel.app",
+        sameSite: "none",
     }
 
     return res.
@@ -156,7 +156,7 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
         const options={
             httpOnly:true,
             secure:true,
-            domain:"reviews-coral.vercel.app",
+            sameSite: "none",
         }
     
         const{accessToken,newRefreshToken}=await generateAccessAndRefreshToken(user._id)
