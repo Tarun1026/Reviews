@@ -9,6 +9,7 @@ import { uploadOnCloudinary } from '../utils/Cloudinary.js';
 import mongoose from 'mongoose';
 import { WatchList } from '../models/Watchlist.model.js';
 import { Reply } from '../models/Reply.model.js';
+import { ReviewLike } from '../models/ReviewLike.model.js';
 // import ReviewSection from '../../../client/src/component/reviewSection/ReviewSection.jsx';
 const generateAccessAndRefreshToken=async(userId)=>{
     const user=await User.findById(userId)
@@ -316,18 +317,28 @@ const updateUserName=asyncHanlder(async(req,res)=>{
     const user=await User.findOne({findUser})
     // console.log("us",user)
     if(user){
-       throw new ApiError(401,"This UserName already exist")
-    }
+        throw new ApiError(401,"This UserName already exist")
+     }
+    
+   
     const setUser=await User.findById(req.user._id)
+    const oldUsername=setUser.username;
     setUser.username=payload.username
     await setUser.save({validateBeforeSave:false})
+    await Promise.all([
+        Reply.updateMany({ username: oldUsername }, { username: payload.username }),
+        Review.updateMany({ username: oldUsername }, { username: payload.username }),
+        Liked.updateMany({ username: oldUsername }, { username: payload.username }),
+        ReviewLike.updateMany({ username: oldUsername }, { username: payload.username }),
+        WatchList.updateMany({ username: oldUsername }, { username: payload.username }),
+    ]);
     return res
     .status(200)
     .json(
         new ApiResponse(
             200,
             setUser,
-            "data  update successfully"
+            "data update successfully"
         )
     )
 
@@ -547,8 +558,13 @@ const uploadProfileImage=asyncHanlder(async(req,res)=>{
         { $set: { profileImage: profileImg.url } }, // Set the new profileImage
         { multi: true } // Optional, 'multi' updates all matches, but `updateMany` does this by default
     );
+    const replyUpdate = await Reply.updateMany(
+        { username: userFind }, // Match all reviews with the same username
+        { $set: { profileImage: profileImg.url } }, // Set the new profileImage
+        { multi: true } // Optional, 'multi' updates all matches, but `updateMany` does this by default
+    );
 
-    if (reviewUpdate.nModified > 0) {
+    if (reviewUpdate.nModified > 0 || replyUpdate.nModified > 0) {
         console.log(`Updated ${reviewUpdate.nModified} reviews with new profile image`);
     }
 
