@@ -328,7 +328,7 @@ const updateUserName=asyncHanlder(async(req,res)=>{
     await Promise.all([
         Reply.updateMany({ username: oldUsername }, { username: payload.username }),
         Review.updateMany({ username: oldUsername }, { username: payload.username }),
-        Liked.updateMany({ username: oldUsername }, { username: payload.username }),
+        Liked.updateMany({ user_Name: oldUsername }, { user_Name: payload.username }),
         ReviewLike.updateMany({ username: oldUsername }, { username: payload.username }),
         WatchList.updateMany({ username: oldUsername }, { username: payload.username }),
     ]);

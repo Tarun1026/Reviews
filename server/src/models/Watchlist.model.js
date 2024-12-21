@@ -6,6 +6,7 @@ const watchListSchema=new Schema({
         username: {
             type: String,
             required: true,
+            lowercase:true
         },
    
     movieId:{
