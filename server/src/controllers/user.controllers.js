@@ -315,7 +315,7 @@ const updateUserName=asyncHanlder(async(req,res)=>{
     console.log("paylo",payload.username)
     const findUser=payload.username
     const user=await User.findOne({findUser})
-    // console.log("us",user)
+    console.log("us",user)
     if(user){
         throw new ApiError(401,"This UserName already exist")
      }
