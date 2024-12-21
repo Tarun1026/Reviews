@@ -54,11 +54,7 @@ console.log('us',userDetails.isVerified)
         });
         setCheckVerify(userDetails.isVerified);
       }
-      // if(userData.isVerified){
-      //   setCheckVerify(true)
-      //   console.log("check",checkVerify)
-      // }
-      
+     
     };
 
     fetchUserDetails();

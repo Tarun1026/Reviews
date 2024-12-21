@@ -17,7 +17,7 @@ const UserActivityPage = ({ userId }) => {
     useEffect(() => {
         const fetchUserActivity = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/api/users/get-user-activity`);
+                const response = await axios.get(`${apiUrl}/api/users/get-user-activity`,{ withCredentials: true });
                 console.log("act",response)
                 setActivityData(response.data.data);
                 // setWatchList(response.data.data.userWatchList)
