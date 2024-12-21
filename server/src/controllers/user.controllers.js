@@ -61,7 +61,8 @@ if(!createUser){
 })
 const options={
     httpOnly:true,
-    secure:true
+    secure:true,
+    domain:"https://reviews-coral.vercel.app",
 }
 const loginUser=asyncHanlder(async(req,res)=>{
     const {email,password}=req.body
@@ -116,7 +117,8 @@ const logOutUser=asyncHanlder(async(req,res)=>{
     )
     const options={
         httpOnly:true,
-        secure:true
+        secure:true,
+        domain:"https://reviews-coral.vercel.app",
     }
 
     return res.
@@ -153,7 +155,8 @@ const refreshAccessToken=asyncHanlder(async(req,res)=>{
     
         const options={
             httpOnly:true,
-            secure:true
+            secure:true,
+            domain:"https://reviews-coral.vercel.app",
         }
     
         const{accessToken,newRefreshToken}=await generateAccessAndRefreshToken(user._id)
@@ -217,12 +220,15 @@ const getUserDetails=asyncHanlder(async(req,res)=>{
     if (!req.user) {
         return res.status(404).json({ message: "User not found" });
       }
-    res.status(200)
+      else{
+        res.status(200)
     .json(
       new ApiResponse(
         200,req.user,"Current User Fetched"
       )
     )
+      }
+    
   })
 
 const getMovieReviews=asyncHanlder(async(req,res)=>{
