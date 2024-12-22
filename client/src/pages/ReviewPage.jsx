@@ -142,7 +142,7 @@ const ReviewPage = () => {
     }
 
     try {
-      const result = await axios.post(`/api/users/user-review`, {
+      const result = await axios.post(`${apiUrl}/api/users/user-review`, {
         reviewText,
         rating,
         spoiler,
