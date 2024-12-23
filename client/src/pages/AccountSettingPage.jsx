@@ -215,7 +215,7 @@ const AccountSettings = () => {
 
   const removeProfileImage = async () => {
     try {
-      const res = await axios.post(`${apiUrl}/api/users/remove-profile-image`, {
+      const res = await axios.post(`${apiUrl}/api/users/remove-profile-image`,{}, {
         withCredentials: true,
       });
       toast.success("Profile Image Removed Successfully", {

@@ -9,7 +9,7 @@ const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
   const apiUrl = import.meta.env.VITE_API_URL || '';
   const handleLogout = async () => {
     await axios
-      .post(`${apiUrl}/api/users/logOut`,{ withCredentials: true } )
+      .post(`${apiUrl}/api/users/logOut`,{},{ withCredentials: true } )
       .then((result) => {
         if (result.data.success) {
           toast.success(result.data.message, {
@@ -22,7 +22,13 @@ const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
         },2000)
         
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toastwarn("Logout Failed", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+        console.log(err)
+      });
   };
   return (
     <div className="logoutModalOverlay">
