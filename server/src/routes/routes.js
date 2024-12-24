@@ -20,7 +20,7 @@ import { getMovieReply, getMovieReviews, getUserDetails, loginUser,
 }
 
     from "../controllers/user.controllers.js";
-import { verificationCode, verifyEmail } from "../controllers/verify.controllers.js";
+import { resetPassword, verificationCode, verifyEmail } from "../controllers/verify.controllers.js";
 import verifyJWT from "../middleware/Auth.middleware.js";
 import {upload} from "../middleware/Multer.middleware.js"
 import { removeProfileImage } from "../controllers/profile.controller.js";
@@ -54,7 +54,10 @@ router.route('/add-reply').post(verifyJWT,reviewReply)
 router.route('/movie-reply').post(getMovieReply)
 router.route('/remove-profile-image').post(verifyJWT,removeProfileImage)
 router.route('/send-verification-code').post(verifyJWT,verificationCode)
+router.route('/forgot-password').post(verificationCode)
 router.route('/verify-email').post(verifyJWT,verifyEmail)
+router.route('/verify-code').post(verifyEmail)
+router.route('/reset-password').post(resetPassword)
 router.route('/review-like').post(verifyJWT,reviewLike)
 router.route('/review-is-liked/:reviewId').get(verifyJWT, reviewIsLiked);
 router.route('/review-liked-count/:reviewId').get(reviewLikeCount);

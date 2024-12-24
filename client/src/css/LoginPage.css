@@ -4,4 +4,23 @@
     align-items: center;
     height: 60vh;
     background-color: #fff;
+    
+  }
+
+  .forget{
+    display: flex;
+    justify-content: end;
+    font-size: small;
+    color: rgb(88, 86, 86);
+    margin-right: 10px;
+    margin-top: 5px;
+    
+  }
+  .forget button{
+    text-decoration: none;
+    background: transparent;
+    border: none;
+  }
+  .forget button:hover{
+    color: rgb(52, 159, 247);
   }

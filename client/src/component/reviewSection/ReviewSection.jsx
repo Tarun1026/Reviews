@@ -50,20 +50,7 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const handleSaveEdit = async (reviewId) => {
-    if(!user){
-      toast.warn("Please Login To Proceed", {
-        position: "top-center",
-        autoClose: 3000,
-      });
-    return ;
-    }
-    else if(!user.isVerified){
-      toast.warn("Please Verify Your Email First", {
-        position: "top-center",
-        autoClose: 3000,
-      });
-      return;
-    }
+    
     try {
       const result = await axios.post(`${apiUrl}/api/users/edit-review`, {
         reviewId: reviewId,
@@ -93,6 +80,20 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const handleEditClick = (review) => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     setEditingReviewId(review._id);
     setEditReviewText(review.reviewText);
     setEditRating(review.rating);
@@ -147,6 +148,14 @@ function ReviewSection({ review, database, movie }) {
       });
       return
     }
+
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     setShowReplySectionId(showReplySectionId === reviewId ? null : reviewId);
   };
 
@@ -160,6 +169,13 @@ function ReviewSection({ review, database, movie }) {
     }
     else if(!user.isVerified){
       toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+    else if(replyText==""){
+      toast.error("Reply should not be Blank", {
         position: "top-center",
         autoClose: 3000,
       });
@@ -220,12 +236,12 @@ function ReviewSection({ review, database, movie }) {
 
       // Re-fetch the like status from the backend to ensure consistency
       const result = await axios.get(
-        `${apiUrl}/api/users/review-is-liked/${review._id}`
+        `${apiUrl}/api/users/review-is-liked/${review._id}`,{ withCredentials: true } 
       );
       setReplyLiked(result.data.liked);
 
       const result2 = await axios.get(
-        `${apiUrl}/api/users/review-liked-count/${review._id}`
+        `${apiUrl}/api/users/review-liked-count/${review._id}`,{ withCredentials: true } 
       );
       
       // console.log("rcount",result.data.data.replyLikedCount)

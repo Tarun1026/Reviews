@@ -241,6 +241,7 @@ const AccountSettings = () => {
         `${apiUrl}/api/users/send-verification-code`,
         {
           email: userData.email,
+          subject:"Email Verification Code"
         },
         { withCredentials: true }
       );
