@@ -50,6 +50,20 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const handleSaveEdit = async (reviewId) => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const result = await axios.post(`${apiUrl}/api/users/edit-review`, {
         reviewId: reviewId,
@@ -85,6 +99,20 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const handleDeleteReview = async (reviewId) => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const result = await axios.post(`${apiUrl}/api/users/delete-review`, {
         reviewId: reviewId,
@@ -99,6 +127,10 @@ function ReviewSection({ review, database, movie }) {
         window.location.reload();
       }, 3000);
     } catch (err) {
+      toast.error("Something went wrong", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       console.log("Error deleting review:", err);
     }
   };
@@ -119,6 +151,20 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const handleReplySubmit = async (reviewId) => {
+   if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const result = await axios.post(`${apiUrl}/api/users/add-reply`, {
         movieId: movie.id,
@@ -149,6 +195,20 @@ function ReviewSection({ review, database, movie }) {
   };
 
   const reviewLike = async (review) => {
+     if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
 
       await axios.post(`${apiUrl}/api/users/review-like`, {
@@ -160,12 +220,12 @@ function ReviewSection({ review, database, movie }) {
 
       // Re-fetch the like status from the backend to ensure consistency
       const result = await axios.get(
-        `/api/users/review-is-liked/${review._id}`
+        `${apiUrl}/api/users/review-is-liked/${review._id}`
       );
       setReplyLiked(result.data.liked);
 
       const result2 = await axios.get(
-        `/api/users/review-liked-count/${review._id}`
+        `${apiUrl}/api/users/review-liked-count/${review._id}`
       );
       
       // console.log("rcount",result.data.data.replyLikedCount)

@@ -43,7 +43,7 @@ const ReviewPage = () => {
     try {
       // console.log("Calling getUserDetail...");
       const userDetails = await getUserDetail();
-      // console.log("userDetails fetched:", userDetails);
+      console.log("userDetails fetched:", userDetails);
       setUser(userDetails);
       
     } catch (error) {
@@ -111,6 +111,20 @@ const ReviewPage = () => {
   };
 
   const handleLikeClick = async () => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const result = await axios.post(`${apiUrl}/api/users/movie-like`, {
         movieId: movie.id,
@@ -121,7 +135,7 @@ const ReviewPage = () => {
     } catch (err) {
       console.log("Error sending like:", err);
       if (err.message == "Request failed with status code 400") {
-        toast.warn("Please Login To Proceed", {
+        toast.error("Something went wrong", {
           position: "top-center",
           autoClose: 3000,
         });
@@ -140,7 +154,20 @@ const ReviewPage = () => {
 
       return;
     }
-
+else if(!user){
+  toast.warn("Please Login To Proceed", {
+    position: "top-center",
+    autoClose: 3000,
+  });
+return ;
+}
+else if(!user.isVerified){
+  toast.warn("Please Verify Your Email First", {
+    position: "top-center",
+    autoClose: 3000,
+  });
+  return;
+}
     try {
       const result = await axios.post(`${apiUrl}/api/users/user-review`, {
         reviewText,
@@ -166,7 +193,7 @@ const ReviewPage = () => {
     } catch (err) {
       console.log(err);
       if (err.message == "Request failed with status code 400") {
-        toast.warn("Please Login To Proceed", {
+        toast.warn("Something went wrong", {
           position: "top-center",
           autoClose: 3000,
         });
@@ -191,6 +218,20 @@ const ReviewPage = () => {
   }, [movie.id]);
 
   const handleAddToWatchlist = async () => {
+    if(!user){
+      toast.warn("Please Login To Proceed", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    return ;
+    }
+    else if(!user.isVerified){
+      toast.warn("Please Verify Your Email First", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
     try {
       const result = await axios.post(`${apiUrl}/api/users/add-to-watchlist`, {
         movieId: movie.id,
