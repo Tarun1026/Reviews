@@ -57,7 +57,8 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
       const result = await axios.post(`${apiUrl}/api/users/forgot-password`, {
         email,
         subject: "Forget Password Code",
-      });
+      },
+    );
       if (result.data.success) {
         setIsVerificationSent(true);
         localStorage.setItem("isVerificationSent", "true");

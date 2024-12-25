@@ -49,7 +49,9 @@ function HomePage() {
           const name = `${user.given_name}${generateRandomString()}`;
           
           const userData = { email: user.email ,name};
-          const result = await axios.post(`${apiUrl}/api/users/auth-login`, userData);
+          const result = await axios.post(`${apiUrl}/api/users/auth-login`, userData
+            ,{ withCredentials: true }
+          );
 
           if (result.data.success) {
             if (localStorage.getItem('toast')=='true') {
