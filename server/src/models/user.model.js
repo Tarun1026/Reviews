@@ -17,7 +17,7 @@ const userSchema=new Schema({
     },
     password:{
         type:String,
-        required:true,
+        // required:true,
     },
     profileImage:{
         type:String
@@ -33,6 +33,10 @@ const userSchema=new Schema({
     verficationToken:{
         type:String,
         // default
+    },
+    authProvider:{
+      type:Boolean,
+      default:false  
     },
     verficationTokenExpiresAt:Date,
 },{timestamps:true})

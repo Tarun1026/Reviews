@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import googleIcon from '../assets/google.svg'; 
+import { useAuth0 } from "@auth0/auth0-react";
 
 function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const [email, setEmail] = useState("");
@@ -16,6 +18,8 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const apiUrl = import.meta.env.VITE_API_URL || "";
 
+  const { user,loginWithRedirect, isAuthenticated ,logout} = useAuth0();
+  console.log("user4",user)
   useEffect(() => {
     const verificationState = localStorage.getItem("isVerificationSent");
     if (verificationState === "true") {
@@ -107,7 +111,16 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
       console.error("Error:", err);
     }
   };
-
+  const handleAuth0Login = async () => {
+    try {
+      await loginWithRedirect(); 
+      localStorage.setItem('toast','true');
+    } catch (error) {
+      console.error("Login redirect error:", error);
+      // toast.error("Error redirecting to login.", { position: "top-center", autoClose: 3000 });
+    }
+  };
+  
   return (
     <div className="loginMainContainer">
       <div className="registerFormContainer">
@@ -199,11 +212,22 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
             </div>
           </>
         )}
-
+ <div className="registerWith">or Login with</div>
+        <div className="googleButton">
+          {isAuthenticated?(<button onClick={()=>logout()}>
+logout 
+</button>):("")
+          }
+        <button onClick={handleAuth0Login} className="googleButton">
+          <img src={googleIcon} alt="Google" className="googleIcon" 
+          />
+         </button>
+        </div>
         <div className="member">
           Don't have an account? <Link onClick={onSwitchToRegister}>Register</Link>
         </div>
       </div>
+    
       <ToastContainer />
     </div>
   );

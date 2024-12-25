@@ -13,6 +13,7 @@ import Navbar from "../component/Navbar";
 const AccountSettings = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [auth,setAuth]=useState(false)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
   const commonDomains = [
     "gmail.com",
@@ -47,7 +48,7 @@ const AccountSettings = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const userDetails = await getUserDetail();
-      console.log("us", userDetails.isVerified);
+      console.log("us", userDetails.authProvider);
       if (userDetails) {
         setUserData({
           username: userDetails.username,
@@ -55,8 +56,10 @@ const AccountSettings = () => {
           password: "********",
           profileImage: userDetails.profileImage,
           isVerified: userDetails?.isVerified,
+          auth:userDetails?.authProvider
         });
         setCheckVerify(userDetails.isVerified);
+        setAuth(userDetails.authProvider)
       }
     };
 
@@ -460,6 +463,32 @@ const AccountSettings = () => {
         <div className="account-section">
           <h3>Password</h3>
           <div className="account-field">
+          {/* {auth ? (
+  <div>
+    <h3>Set New Password</h3>
+    <form>
+      <label htmlFor="newPassword">New Password:</label>
+      <input
+        type="password"
+        id="newPassword"
+        name="newPassword"
+        value={passwordData.newPassword}
+        onChange={handlePasswordChange}
+      />
+
+      <label htmlFor="confirmPassword">Confirm Password:</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+         value={passwordData.confirmNewPassword}
+                  onChange={handlePasswordChange}
+      />
+
+      <button type="submit">Set Password</button>
+    </form>
+  </div>
+) :("")} */}
             {editMode.password ? (
               <div className="password-edit">
                 <input

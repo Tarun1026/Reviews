@@ -3,8 +3,10 @@ import "../css/LogoutModal.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import { useAuth0 } from "@auth0/auth0-react";
 const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
   
+  const { logout} = useAuth0();
   if (!isOpen) return null;
   const apiUrl = import.meta.env.VITE_API_URL || '';
   const handleLogout = async () => {
@@ -12,10 +14,15 @@ const LogoutModal = ({ isOpen, onClose, onLogoutConfirm }) => {
       .post(`${apiUrl}/api/users/logOut`,{},{ withCredentials: true } )
       .then((result) => {
         if (result.data.success) {
+          
           toast.success(result.data.message, {
             position: "top-center",
             autoClose: 3000,
+            onClose: () => {
+              window.location.reload(); // Reload page after toast closes
+            }
           });
+          logout()
         }
         setTimeout(()=>{
           onLogoutConfirm()

@@ -8,7 +8,6 @@ const getUserDetail = async () => {
     });
 
     if (response.status === 200) {
-      // console.log('User Details:', response.data.data); 
       return response.data.data; // This will be the user object
     }
   } catch (error) {

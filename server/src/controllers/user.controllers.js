@@ -353,6 +353,7 @@ const updateEmail=asyncHanlder(async(req,res)=>{
     }
     const setEmail=await User.findById(req.user._id)
     setEmail.email=payload.email
+    setEmail.isVerified=false;
     await setEmail.save({validateBeforeSave:false})
     return res
     .status(200)

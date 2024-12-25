@@ -9,16 +9,75 @@ import { Carousel } from "react-responsive-carousel";
 import MovieCards from "../component/movieCards/MovieCards";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ReviewPage from "./ReviewPage";
+import { useAuth0 } from "@auth0/auth0-react";
+import getUserDetail from '../hooks/GetUserDetails';
 function HomePage() {
-  const { movies, newReleaseMovies, topRatedMovies,loading } = useMovieLink();
+  const { user,loginWithRedirect, isAuthenticated ,logout} = useAuth0();
+  const { newReleaseMovies, topRatedMovies,loading } = useMovieLink();
+  const [user1, setUser] = useState(null);
+ 
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleMovieClick = (movie) => {
-    
     navigate("/review", { state: { movie } });
   };
+  
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const userDetails = await getUserDetail();
+      // console.log("Fetched user details:", userDetails);
+      setUser(userDetails);
+      
+    };
 
+    fetchUserDetails();
+  }, []); 
+
+  useEffect(() => {
+    const sendUserDataToBackend = async () => {
+      console.log("6",user)
+      // generateString()
+      if (isAuthenticated && user.email && !user1) {
+        try {
+
+          const generateRandomString = () => {
+            return Math.floor(100 + Math.random() * 900).toString(); // Ensures a 3-digit number
+          };
+  
+          // Concatenate name with the random string
+          const name = `${user.given_name}${generateRandomString()}`;
+          
+          const userData = { email: user.email ,name};
+          const result = await axios.post(`${apiUrl}/api/users/auth-login`, userData);
+
+          if (result.data.success) {
+            if (localStorage.getItem('toast')=='true') {
+              toast.success("Logged in successfully!", {
+                position: "top-center",
+                autoClose: 3000,
+                onClose: () => {
+                  localStorage.setItem('toast', 'false');
+                  window.location.reload(); // Reload page after toast closes
+                }
+              });
+             
+                // Set localStorage item to indicate that the toast has been shown
+            }
+            
+            window.location.reload();
+          }}catch (error) {
+          console.error("Backend request error:", error);
+          toast.error("Error sending user data to backend.", {
+            position: "top-center",
+            autoClose: 3000,
+          });
+        }
+      }
+    };
+
+    sendUserDataToBackend();
+  }, [isAuthenticated,user,user1]);
   return (
     <div className="homePageContainer">
       <Navbar/>

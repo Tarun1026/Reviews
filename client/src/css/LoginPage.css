@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    height: 80vh;
     background-color: #fff;
     
   }
@@ -23,4 +23,12 @@
   }
   .forget button:hover{
     color: rgb(52, 159, 247);
+  }
+  .googleButton{
+    text-decoration: none;
+    background: transparent;
+    border: none;
+  }
+  .registerWith{
+    font-size: medium;
   }
