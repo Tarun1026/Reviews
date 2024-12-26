@@ -1,7 +1,7 @@
 import { useState,useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePage from './pages/HomePage'
 import RegisterModel from './models/register.model';
 import MoviesPage from './pages/MoviesPage';
@@ -13,7 +13,7 @@ import WebSeriesPage from './pages/WebSeriesPage';
 import TVShows from './pages/TVShows';
 import UserActivityPage from './pages/UserActivityPage';
 
-
+// import getUserDetails from './pages/GetUserDetails';
 function App() {
   
   return (
@@ -24,7 +24,7 @@ function App() {
         <Route path="/register" element={<RegisterModel />} />
         <Route path="/movies" element={<MoviesPage />} />
         <Route path="/review" element={<ReviewPage />} />
-       <Route path='/profile' element={<Profile />}/>
+      
        <Route path="/user-account-setting" element={<AccountSettings/>} />      
         <Route path='/webseries' element={<WebSeriesPage/>} />
         <Route path='/tvShows' element={<TVShows/>} />
