@@ -6,7 +6,7 @@ import HomePage from './pages/HomePage'
 import RegisterModel from './models/register.model';
 import MoviesPage from './pages/MoviesPage';
 import ReviewPage from './pages/ReviewPage';
-import Profile from './pages/Profile';
+
 // import MovieList from './hooks/useIMDBLink';
 import AccountSettings from './pages/AccountSettingPage';
 import WebSeriesPage from './pages/WebSeriesPage';
