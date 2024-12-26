@@ -18,9 +18,14 @@ function WebSeriesPage() {
     popularity: ''
   });
   const { tvShows, newWebSeries, loading} = useTVShowsLink(networkIds);
+  
+  const [show,setShow]=useState(true);
+  const handleToggle=async()=>{
+    setShow(!show)
+  }
   return (
-    <div>
-      <Navbar />
+    <div onClick={handleToggle}>
+      <Navbar show={show}/>
 
       <FilterOptions 
       setAppliedFilters={setAppliedFilters} 

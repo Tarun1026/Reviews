@@ -15,7 +15,7 @@ function HomePage() {
   const { user,loginWithRedirect, isAuthenticated ,logout} = useAuth0();
   const { newReleaseMovies, topRatedMovies,loading } = useMovieLink();
   const [user1, setUser] = useState(null);
- 
+ const [show,setShow]=useState(true);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -48,7 +48,7 @@ function HomePage() {
           // Concatenate name with the random string
           const name = `${user.given_name}${generateRandomString()}`;
           
-          const userData = { email: user.email ,name};
+          const userData = { email: user.email ,name,picture:user.picture};
           const result = await axios.post(`${apiUrl}/api/users/auth-login`, userData
             ,{ withCredentials: true }
           );
@@ -57,17 +57,14 @@ function HomePage() {
             if (localStorage.getItem('toast')=='true') {
               toast.success("Logged in successfully!", {
                 position: "top-center",
-                autoClose: 3000,
-                onClose: () => {
-                  localStorage.setItem('toast', 'false');
-                  window.location.reload(); // Reload page after toast closes
-                }
+                autoClose: 3000,   
               });
-             
+              localStorage.setItem('toast', 'false');
+              window.location.reload();
                 // Set localStorage item to indicate that the toast has been shown
             }
             
-            window.location.reload();
+            //
           }}catch (error) {
           console.error("Backend request error:", error);
           toast.error("Error sending user data to backend.", {
@@ -80,9 +77,12 @@ function HomePage() {
 
     sendUserDataToBackend();
   }, [isAuthenticated,user,user1]);
+  const handleToggle=async()=>{
+    setShow(!show)
+  }
   return (
-    <div className="homePageContainer">
-      <Navbar/>
+    <div className="homePageContainer" onClick={handleToggle}>
+      <Navbar show={show}/>
 
       {/* Featured Movie Slider */}
 

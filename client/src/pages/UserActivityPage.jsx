@@ -77,11 +77,14 @@ const UserActivityPage = ({ userId }) => {
     if (error) {
         return <h2> {error.response.data.message}</h2>; // Display error message
     }
-
+    const [show,setShow]=useState(true);
+    const handleToggle=async()=>{
+        setShow(!show)
+      }
     return (
         <>
-        <Navbar/>
-        <div className="userActivityPage">
+        <Navbar show={show}/>
+        <div className="userActivityPage" onClick={handleToggle}>
             <h1>Your Activity</h1>
             <section className="activitySection">
                 {/* <h2>Liked Movies & Web Series</h2> */}

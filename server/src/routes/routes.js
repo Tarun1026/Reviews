@@ -25,7 +25,7 @@ import verifyJWT from "../middleware/Auth.middleware.js";
 import {upload} from "../middleware/Multer.middleware.js"
 import { removeProfileImage } from "../controllers/profile.controller.js";
 import { reviewIsLiked, reviewLike, reviewLikeCount } from "../controllers/commentLike.controllers.js";
-import { authLogin } from "../controllers/Auth0.controllers.js";
+import { authLogin, setPassword } from "../controllers/Auth0.controllers.js";
 const router=Router()
 
 router.route('/')
@@ -66,4 +66,5 @@ router.route('/review-liked-count/:reviewId').get(reviewLikeCount);
 //Auth0 route
 
 router.route('/auth-login').post(authLogin)
+router.route('/set-password').post(verifyJWT,setPassword)
 export default router

@@ -20,9 +20,13 @@ function TVShows() {
   const { tvShows, newWebSeries,hindi,punjabi,loading } = 
   useTVShowsLink(networkIds,languageHindi,languagePunjabi);
  
+  const [show,setShow]=useState(true);
+  const handleToggle=async()=>{
+    setShow(!show)
+  }
   return (
-    <div>
-      <Navbar />
+    <div onClick={handleToggle}>
+      <Navbar show={show}/>
 
       <FilterOptions
         setAppliedFilters={setAppliedFilters}

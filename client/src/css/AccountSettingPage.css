@@ -176,7 +176,10 @@ body{
   /* color: #333; */
   text-align: left; /* Align section headings to the left */
 }
-
+.spanPassword{
+  
+  margin-top: 10px;
+}
 /* Account Field Styling */
 .account-field {
   display: flex;
@@ -253,6 +256,19 @@ body{
 .emailSave{
   margin-bottom: 50px;
 }
+.confPassword{
+  margin-top: 5px;
+}
+.setPassword{
+  margin-top: 10px;
+  /* width: 0% */
+}
+.editModePassword{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 @media (max-width: 450px) {
   .account-field{
     font-size: 13px;

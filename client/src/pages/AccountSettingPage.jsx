@@ -13,7 +13,7 @@ import Navbar from "../component/Navbar";
 const AccountSettings = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
-  const [auth,setAuth]=useState(false)
+  const [auth, setAuth] = useState(false);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
   const commonDomains = [
     "gmail.com",
@@ -40,6 +40,7 @@ const AccountSettings = () => {
     confirmNewPassword: "",
   });
 
+  const [show,setShow]=useState(true);
   const [profileImage, setProfileImage] = useState(null);
   const [showDeleteBtn, setShowDeleteBtn] = useState(true);
   const [checkVerify, setCheckVerify] = useState(false);
@@ -56,10 +57,10 @@ const AccountSettings = () => {
           password: "********",
           profileImage: userDetails.profileImage,
           isVerified: userDetails?.isVerified,
-          auth:userDetails?.authProvider
+          auth: userDetails?.authProvider,
         });
         setCheckVerify(userDetails.isVerified);
-        setAuth(userDetails.authProvider)
+        setAuth(userDetails.authProvider);
       }
     };
 
@@ -83,6 +84,43 @@ const AccountSettings = () => {
     setShowDeleteBtn(false);
   };
 
+  const handleSetPassword=async()=>{
+    
+    if (passwordData.newPassword.length < 6) {
+      toast.warn("Password must be greater than  5 characters", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+    if (passwordData.newPassword !== passwordData.confirmNewPassword) {
+      toast.error("New password and Confirmation Password do not match", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+    
+    let payload = { password: passwordData.newPassword };
+    console.log("payload",payload)
+    try {
+      const result= await axios.post(`${apiUrl}/api/users/set-password`,payload,
+        { withCredentials: true })
+      console.log("result",result.data)
+      if (result.data.success){
+        toast.success(result.data.data, {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.log("Error Password Set",error)
+      toast.error("Error Creating Password", {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    }
+  }
   // Function to send updated details to backend for specific field
   const handleSave = async (field) => {
     try {
@@ -174,6 +212,7 @@ const AccountSettings = () => {
     }
   };
 
+  
   // Function to handle profile image upload
   const handleProfileImageUpload = async () => {
     if (!profileImage) {
@@ -218,9 +257,13 @@ const AccountSettings = () => {
 
   const removeProfileImage = async () => {
     try {
-      const res = await axios.post(`${apiUrl}/api/users/remove-profile-image`,{}, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${apiUrl}/api/users/remove-profile-image`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Profile Image Removed Successfully", {
         position: "top-center",
         autoClose: 3000,
@@ -244,7 +287,7 @@ const AccountSettings = () => {
         `${apiUrl}/api/users/send-verification-code`,
         {
           email: userData.email,
-          subject:"Email Verification Code"
+          subject: "Email Verification Code",
         },
         { withCredentials: true }
       );
@@ -276,7 +319,7 @@ const AccountSettings = () => {
   };
 
   const verifyEmail = async () => {
-    console.log("vemail");
+    
     try {
       const response = await axios.post(
         `${apiUrl}/api/users/verify-email`,
@@ -308,10 +351,14 @@ const AccountSettings = () => {
       }
     }
   };
+
+  const handleToggle=async()=>{
+    setShow(!show)
+  }
   return (
     <>
-    <Navbar />
-      <div className="account-settings">
+      <Navbar  show={show}/>
+      <div className="account-settings" onClick={handleToggle}>
         <h2 className="account-settings-title">Account Settings</h2>
         <h2 className="account-settings-title">Profile Image</h2>
         <div className="profile-section">
@@ -461,72 +508,80 @@ const AccountSettings = () => {
         </div>
 
         <div className="account-section">
-          <h3>Password</h3>
-          <div className="account-field">
-          {/* {auth ? (
-  <div>
-    <h3>Set New Password</h3>
-    <form>
-      <label htmlFor="newPassword">New Password:</label>
-      <input
-        type="password"
-        id="newPassword"
-        name="newPassword"
-        value={passwordData.newPassword}
-        onChange={handlePasswordChange}
-      />
+        {auth ? (<h3>Set Password</h3>):(<h3>Password</h3>)}
+  
+  <div className="account-field">
+    {auth ? (
+      <div>
+        {/* <h3>Set New Password</h3> */}
+        <form className="formSetPassword">
+          <h3>New Password:</h3>
+          <input
+              type="password"
+              name="newPassword"
+              placeholder="New Password"
+              value={passwordData.newPassword}
+              onChange={handlePasswordChange}
+            />
 
-      <label htmlFor="confirmPassword">Confirm Password:</label>
-      <input
-        type="password"
-        id="confirmPassword"
-        name="confirmPassword"
-         value={passwordData.confirmNewPassword}
-                  onChange={handlePasswordChange}
-      />
-
-      <button type="submit">Set Password</button>
-    </form>
-  </div>
-) :("")} */}
-            {editMode.password ? (
-              <div className="password-edit">
-                <input
-                  type="password"
-                  name="oldPassword"
-                  placeholder="Old Password"
-                  value={passwordData.oldPassword}
-                  onChange={handlePasswordChange}
-                />
-                <input
-                  type="password"
-                  name="newPassword"
-                  placeholder="New Password"
-                  value={passwordData.newPassword}
-                  onChange={handlePasswordChange}
-                />
-                <input
-                  type="password"
-                  name="confirmNewPassword"
-                  placeholder="Confirm New Password"
-                  value={passwordData.confirmNewPassword}
-                  onChange={handlePasswordChange}
-                />
-              </div>
-            ) : (
-              <span>{userData.password}</span>
-            )}
-            <button
-              onClick={() =>
-                editMode.password
-                  ? handleSave("password")
-                  : handleEditClick("password")
-              }
-            >
-              {editMode.password ? "Save" : "Edit"}
-            </button>
+          <h3 className="confPassword">Confirm Password:</h3>
+          <input
+              type="password"
+              name="confirmNewPassword"
+              placeholder="Confirm New Password"
+              value={passwordData.confirmNewPassword}
+              onChange={handlePasswordChange}
+            />
+        </form>
+        <button className="setPassword" onClick={handleSetPassword}>
+  Set Password
+</button>
+      </div>
+    ) : (
+      <div className="editModePassword">
+        {editMode.password ? (
+          <div className="password-edit">
+            <input
+              type="password"
+              name="oldPassword"
+              placeholder="Old Password"
+              value={passwordData.oldPassword}
+              onChange={handlePasswordChange}
+            />
+            <input
+              type="password"
+              name="newPassword"
+              placeholder="New Password"
+              value={passwordData.newPassword}
+              onChange={handlePasswordChange}
+            />
+            <input
+              type="password"
+              name="confirmNewPassword"
+              placeholder="Confirm New Password"
+              value={passwordData.confirmNewPassword}
+              onChange={handlePasswordChange}
+            />
           </div>
+        ) : (
+          <div className="spanPassword">{userData.password}</div>
+        )}
+        <div className="btnEdit">
+        <button
+          onClick={() =>
+            editMode.password
+              ? handleSave("password")
+              : handleEditClick("password")
+          }
+        >
+          {editMode.password ? "Save" : "Edit"}
+        </button>
         </div>
+      </div>
+    )}
+  </div>
+</div>
+
         <ToastContainer />
       </div>
     </>

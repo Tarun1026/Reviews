@@ -296,9 +296,15 @@ else if(!user.isVerified){
     movieReplys();
   }, []);
 
+  const [showEditMode,setShowEditMode]=useState(true)
+  const [show,setShow]=useState(true);
+  const handleToggle=async()=>{
+    setShow(!show)
+    setShowEditMode(!showEditMode)
+  }
   return (
-    <div>
-      <Navbar />
+    <div onClick={handleToggle}>
+      <Navbar show={show}/>
       <div className="reviewPageContainer">
         <div className="topSection">
           <div className="movie">
@@ -442,6 +448,7 @@ else if(!user.isVerified){
                   review={review}
                   database={"Review"}
                   movie={movie}
+                  showEdit={showEditMode}
                 />
 
                 {movieReplies.length > 0 && (

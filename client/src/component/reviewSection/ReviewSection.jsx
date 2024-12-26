@@ -14,7 +14,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "../../css/ReviewSection.css"
 import "react-toastify/dist/ReactToastify.css";
 
-function ReviewSection({ review, database, movie }) {
+function ReviewSection({ review, database, movie,showEdit }) {
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [editReviewText, setEditReviewText] = useState("");
   const [editRating, setEditRating] = useState(0);
@@ -139,7 +139,18 @@ function ReviewSection({ review, database, movie }) {
   const toggleOptions = (reviewId) => {
     setShowOptionsId(showOptionsId === reviewId ? null : reviewId); // Toggle options
   };
-
+ 
+  useEffect(()=>{
+    console.log("show",showOptionsId)
+    if(showEdit){
+      if (showOptionsId){
+        setShowOptionsId(null)
+      }
+    }
+    
+  },[showEdit])
+    
+  
   const toggleReplySection = (reviewId) => {
     if(!user){
       toast.warn("Please Login To Proceed", {
@@ -294,7 +305,7 @@ function ReviewSection({ review, database, movie }) {
   }, [review._id]);
 
   return (
-    <div>
+    <div >
       <div className="reviewContent">
         <div className="ratingCommentSection">
           {database === "Review" ? (

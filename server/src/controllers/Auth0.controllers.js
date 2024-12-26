@@ -49,7 +49,9 @@ const authLogin=asyncHanlder(async(req,res)=>{
             email:userData.email,
             password: "filmflix", 
             authProvider: true,
-            isVerified:true
+            isVerified:true,
+            profileImage:userData.picture,
+
           });
           if(!user){
             throw new ApiError("Error while creating user")
@@ -78,4 +80,22 @@ console.log("user",user)
     }
 })
 
-export {authLogin,options}
+const setPassword=asyncHanlder(async(req,res)=>{
+    const {password}=req.body;
+    console.log("password",password
+    )
+    const user= await User.findById(req.user._id)
+    if(!user){
+        throw new ApiError(401,"User not found")
+    }
+    user.password=password
+    user.authProvider=false
+    await user.save({validateBeforeSave:true})
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200,"Password Set Successfuly")
+    )
+})
+export {authLogin,options,setPassword}

@@ -11,7 +11,7 @@ import MovieCards from '../component/movieCards/MovieCards';
 
 const MoviesPage = () => {
   const endPoint="movie"
-  // const sendUrl="popular"
+  const [show,setShow]=useState(true);
   const { movies, upcomingMovies,loading } = useMovieLink();
   const [appliedFilters, setAppliedFilters] = useState({
     genre: '',
@@ -20,12 +20,14 @@ const MoviesPage = () => {
     popularity: ''
   });
 
-  
+  const handleToggle=async()=>{
+    setShow(!show)
+  }
 
   
   return (
-    <div className="newMoviesPageContainer">
-      <Navbar />
+    <div className="newMoviesPageContainer" onClick={handleToggle}>
+      <Navbar show={show}/>
       <FilterOptions setAppliedFilters={setAppliedFilters} genreMap={genreMovieMap} />
       <FilterCard setAppliedFilters={appliedFilters} endPoint={endPoint}/>
      

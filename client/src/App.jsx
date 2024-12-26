@@ -1,8 +1,7 @@
 import { useState,useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import HomePage from './pages/HomePage'
 import RegisterModel from './models/register.model';
 import MoviesPage from './pages/MoviesPage';
@@ -14,7 +13,7 @@ import WebSeriesPage from './pages/WebSeriesPage';
 import TVShows from './pages/TVShows';
 import UserActivityPage from './pages/UserActivityPage';
 
-// import getUserDetails from './pages/GetUserDetails';
+
 function App() {
   
   return (

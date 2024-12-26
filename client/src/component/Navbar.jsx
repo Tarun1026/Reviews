@@ -6,7 +6,7 @@ import Modal from "../models/model";
 import RegisterModel from "../models/register.model";
 import LoginModel from "../models/login.model";
 import { FaUserCircle } from "react-icons/fa";
-import FilmFlixImage from "../assets/Film.jpeg"
+import FilmFlixImage from "../assets/Film.jpeg";
 import { IoMdMenu } from "react-icons/io";
 import { Link } from "react-router-dom";
 import LogoutModal from "../models/Logout.model";
@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import image from "../assets/medium-cover.jpg";
 
-const Navbar = ({ onRegisterClick, onLogout }) => {
+const Navbar = ({ onRegisterClick, onLogout,show }) => {
   const [user, setUser] = useState(null);
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [sideBarVisible, setSideBarVisible] = useState(false);
@@ -28,7 +28,6 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const location = useLocation(); // Get the current route
   const [activeLink, setActiveLink] = useState("");
-
 
   useEffect(() => {
     if (isModalOpen) {
@@ -72,16 +71,13 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
 
   const fetchUserDetails = async () => {
     const userDetails = await getUserDetail();
-    // console.log("home", userDetails);
-    // if (userDetails) {
-    setUser(userDetails);
-    //   localStorage.setItem('user', JSON.stringify(userDetails));
-    // }
+    setUser(userDetails); 
   };
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
+    
   };
 
   const toggleSideBar = () => {
@@ -127,64 +123,75 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
   const handleMovieClick = (movie) => {
     navigate("/review", { state: { movie } });
   };
+  useEffect(()=>{
+    console.log("hello",show)
+    if(show){
+      setSearchTerm("");
+      if (dropdownVisible){
+        setDropdownVisible(false)
+       }
+      //  if (sideBarVisible){
+      //   setSideBarVisible(false)
+      //  }
+    }
+  },[show])
+  
+ 
   return (
     <>
-      <div className="sideBar">
-        <div className="navItemSide">
-          <Link
-            to="/"
-            
-          >
-            <img src={FilmFlixImage} className='image' alt="Home" />
+      <div className="sideBar" >
+        <div className="navItemSide" >
+          <Link to="/">
+            <img src={FilmFlixImage} className="image" alt="Home" />
           </Link>
           <div className="search-container">
-              <div className="search-element">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search Movie Title ..."
-                  ref={searchInputRef}
-                  value={searchTerm}
-                  onChange={handleSearchChange} // Trigger search on input change
-                />
+            <div className="search-element">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search Movie Title ..."
+                ref={searchInputRef}
+                value={searchTerm}
+                onChange={handleSearchChange} // Trigger search on input change
+              />
 
-                <div className="search-list">
-                  {searchTerm && movies.length === 0 && (
-                    <p>No results found.</p>
-                  )}
-                  {movies.length > 0 &&
-                    movies.map((movie) => (
-                      <div
-                        key={movie.id}
-                        className="search-list-item"
-                        onClick={() => {
-                          handleMovieClick(movie);
-                        }}
-                      >
-                        <div className="search-item-thumbnail">
-                          <img
-                            src={
-                              movie.poster_path
-                                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                                : image
-                            }
-                            alt={movie.name || movie.title}
-                          />
-                        </div>
-                        <div className="search-item-info">
-                          <h3 >{movie.name || movie.title}</h3>
-                          <p>{movie.release_date || movie.first_air_date}</p>
-                        </div>
+              <div className="search-list">
+                {searchTerm && movies.length === 0 && <p>No results found.</p>}
+                {movies.length > 0 &&
+                  movies.map((movie) => (
+                    <div
+                      key={movie.id}
+                      className="search-list-item"
+                      onClick={() => {
+                        handleMovieClick(movie);
+                      }}
+                    >
+                      <div className="search-item-thumbnail">
+                        <img
+                          src={
+                            movie.poster_path
+                              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                              : image
+                          }
+                          alt={movie.name || movie.title}
+                        />
                       </div>
-                    ))}
-                </div>
+                      <div className="search-item-info">
+                        <h3>{movie.name || movie.title}</h3>
+                        <p>{movie.release_date || movie.first_air_date}</p>
+                      </div>
+                    </div>
+                  ))}
               </div>
-             </div>
-          <div onClick={toggleSideBar} className="menu"><IoMdMenu size={25}/></div>
+            </div>
+          </div>
+          <div onClick={toggleSideBar} className="menu">
+            <IoMdMenu size={25} />
+          </div>
         </div>
-             {sideBarVisible && (
-             <div className="mobile">
-               <div className="navItem">
+        {sideBarVisible && (
+          <div className="mobile">
+            <div className="navItem">
               <Link
                 to="/movies"
                 className={`navItemLink ${
@@ -193,8 +200,8 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
               >
                 Movies
               </Link>
-             </div>
-             <div className="navItem">
+            </div>
+            <div className="navItem">
               <Link
                 to="/webseries"
                 className={`navItemLink ${
@@ -203,8 +210,8 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
               >
                 Web Series
               </Link>
-             </div>
-             <div className="navItem">
+            </div>
+            <div className="navItem">
               <Link
                 to="/tvShows"
                 className={`navItemLink ${
@@ -213,10 +220,9 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
               >
                 TV Shows
               </Link>
-             </div>
-             
+            </div>
 
-             <div className="navRight">
+            <div className="navRight">
               {user ? (
                 <div className="userSection" onClick={toggleDropdown}>
                   {user.profileImage ? (
@@ -280,10 +286,8 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
 
 
 
-
-
       {/* for laptop */}
-      <div className="navDiv">
+      <div className="navDiv" >
         <div className="navItem">
           <Link
             to="/"
@@ -404,7 +408,7 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
           )}
         </div>
 
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
           {isLogin ? (
             <LoginModel
               onSwitchToRegister={handleRegisterClick}
@@ -413,9 +417,9 @@ const Navbar = ({ onRegisterClick, onLogout }) => {
           ) : (
             <RegisterModel onSwitchToLogin={handleLoginClick} />
           )}
-        </Modal>
+         </Modal>
 
-        <LogoutModal
+         <LogoutModal
           isOpen={logoutModalOpen}
           onClose={closeLogoutModal}
           onLogoutConfirm={handleLogoutConfirm}

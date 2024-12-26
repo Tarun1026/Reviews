@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import googleIcon from '../assets/google.svg'; 
+import googleIcon from "../assets/google.svg";
 import { useAuth0 } from "@auth0/auth0-react";
 
 function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
@@ -18,8 +18,8 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const apiUrl = import.meta.env.VITE_API_URL || "";
 
-  const { user,loginWithRedirect, isAuthenticated ,logout} = useAuth0();
-  console.log("user4",user)
+  const { user, loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  console.log("user4", user);
   useEffect(() => {
     const verificationState = localStorage.getItem("isVerificationSent");
     if (verificationState === "true") {
@@ -27,7 +27,7 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
     }
   }, []);
 
-  const handleLogin = async (e) => {
+   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const result = await axios.post(
@@ -36,92 +36,129 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
         { withCredentials: true }
       );
       if (result.data.success) {
-        toast.success(result.data.message, { position: "top-center", autoClose: 3000 });
+        toast.success(result.data.message, {
+          position: "top-center",
+          autoClose: 3000,
+        });
         setTimeout(() => {
           onLoginSuccess();
           window.location.reload();
         }, 3000);
       }
     } catch (err) {
-      toast.error("Invalid Details", { position: "top-center", autoClose: 3000 });
+      toast.error("Invalid Details", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       console.error("Error:", err);
     }
   };
 
   const handleForgetPassword = async () => {
     if (!email) {
-      toast.error("Please enter your email address", { position: "top-center", autoClose: 3000 });
+      toast.error("Please enter your email address", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
     try {
       const result = await axios.post(`${apiUrl}/api/users/forgot-password`, {
         email,
         subject: "Forget Password Code",
-      },
-    );
+      },{ withCredentials: true });
       if (result.data.success) {
         setIsVerificationSent(true);
         localStorage.setItem("isVerificationSent", "true");
-        toast.success("Verification code sent to your email.", { position: "top-center", autoClose: 3000 });
+        toast.success("Verification code sent to your email.", {
+          position: "top-center",
+          autoClose: 3000,
+        });
       }
     } catch (err) {
-      toast.error("Error sending reset email", { position: "top-center", autoClose: 3000 });
+      toast.error("Error sending reset email", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       console.error("Error:", err);
     }
   };
 
   const handleVerifyCode = async () => {
     try {
-      const result = await axios.post(`${apiUrl}/api/users/verify-code`, { email, code: verificationCode });
+      const result = await axios.post(`${apiUrl}/api/users/verify-code`, {
+        email,
+        code: verificationCode,
+      },{ withCredentials: true });
       if (result.data.success) {
-        toast.success("Code verified successfully!", { position: "top-center", autoClose: 3000 });
+        toast.success("Code verified successfully!", {
+          position: "top-center",
+          autoClose: 3000,
+        });
         setIsVerificationSent(false);
         setIsCodeVerified(true);
         localStorage.removeItem("isVerificationSent");
       } else {
-        toast.error("Invalid verification code.", { position: "top-center", autoClose: 3000 });
+        toast.error("Invalid verification code.", {
+          position: "top-center",
+          autoClose: 3000,
+        });
       }
     } catch (err) {
-      toast.error("Error verifying code.", { position: "top-center", autoClose: 3000 });
+      toast.error("Error verifying code.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       console.error("Error:", err);
     }
   };
 
   const handleResetPassword = async () => {
-    if(newPassword.length<6){
-      toast.error("Passwords should be greater than 5 characters!", { position: "top-center", autoClose: 3000 });
+    if (newPassword.length < 6) {
+      toast.error("Passwords should be greater than 5 characters!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
-    }
-    else if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match!", { position: "top-center", autoClose: 3000 });
+    } else if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match!", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       return;
     }
     try {
       const result = await axios.post(`${apiUrl}/api/users/reset-password`, {
         email,
         password: newPassword,
-      });
+      },{ withCredentials: true });
       if (result.data.success) {
-        toast.success(result.data.data, { position: "top-center", autoClose: 3000 });
+        toast.success(result.data.data, {
+          position: "top-center",
+          autoClose: 3000,
+        });
         setTimeout(() => {
           setIsCodeVerified(false);
         }, 3000);
       }
     } catch (err) {
-      toast.error("Error resetting password.", { position: "top-center", autoClose: 3000 });
+      toast.error("Error resetting password.", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       console.error("Error:", err);
     }
   };
   const handleAuth0Login = async () => {
     try {
-      await loginWithRedirect(); 
-      localStorage.setItem('toast','true');
+      await loginWithRedirect();
+      localStorage.setItem("toast", "true");
     } catch (error) {
       console.error("Login redirect error:", error);
       // toast.error("Error redirecting to login.", { position: "top-center", autoClose: 3000 });
     }
   };
-  
+
   return (
     <div className="loginMainContainer">
       <div className="registerFormContainer">
@@ -157,7 +194,9 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
               <button onClick={handleForgetPassword}>Forget Password?</button>
             </div>
             <div>
-              <button className="btnRegister" onClick={handleLogin}>Login</button>
+              <button className="btnRegister" onClick={handleLogin}>
+                Login
+              </button>
             </div>
           </>
         )}
@@ -177,7 +216,9 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
               <label htmlFor="verificationCode">Enter Verification Code</label>
             </div>
             <div>
-              <button className="btnRegister" onClick={handleVerifyCode}>Verify Code</button>
+              <button className="btnRegister" onClick={handleVerifyCode}>
+                Verify Code
+              </button>
             </div>
           </>
         )}
@@ -209,26 +250,29 @@ function LoginModel({ onSwitchToRegister, onLoginSuccess }) {
               <label htmlFor="confirmPassword">Confirm Password</label>
             </div>
             <div>
-              <button className="btnRegister" onClick={handleResetPassword}>Reset Password</button>
+              <button className="btnRegister" onClick={handleResetPassword}>
+                Reset Password
+              </button>
             </div>
           </>
         )}
- <div className="registerWith">or Login with</div>
+        <div className="registerWith">or Login with</div>
         <div className="googleButton">
-          {isAuthenticated?(<button onClick={()=>logout()}>
-logout 
-</button>):("")
-          }
-        <button onClick={handleAuth0Login} className="googleButton">
-          <img src={googleIcon} alt="Google" className="googleIcon" 
-          />
-         </button>
+          {isAuthenticated ? (
+            <button onClick={() => logout()}>logout</button>
+          ) : (
+            ""
+          )}
+          <button onClick={handleAuth0Login} className="googleButton">
+            <img src={googleIcon} alt="Google" className="googleIcon" />
+          </button>
         </div>
         <div className="member">
-          Don't have an account? <Link onClick={onSwitchToRegister}>Register</Link>
+          Don't have an account?{" "}
+          <Link onClick={onSwitchToRegister}>Register</Link>
         </div>
       </div>
-    
+
       <ToastContainer />
     </div>
   );

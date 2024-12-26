@@ -371,6 +371,7 @@ const updatePassword=asyncHanlder(async(req,res)=>{
     const payload=req.body
     const oldPassword=payload.oldPassword
     const newPassword=payload.newPassword
+    // console.log("old",oldPassword)
     const user=await User.findById(req.user._id)
     if(!user){
         throw new ApiError(404,"User not found")
