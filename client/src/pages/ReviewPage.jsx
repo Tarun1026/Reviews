@@ -441,7 +441,7 @@ else if(!user.isVerified){
 
         <div className="existingReviews">
           <h2>Reviews</h2>
-          {movieReviews.length > 0 ? (
+          {movieReviews?.length > 0 ? (
             movieReviews.map((review) => (
               <div key={review._id} className="singleReview">
                 <ReviewSection
@@ -451,7 +451,7 @@ else if(!user.isVerified){
                   showEdit={showEditMode}
                 />
 
-                {movieReplies.length > 0 && (
+                {movieReplies?.length > 0 && (
                   <div className="existingReplies">
                     {movieReplies.map((reply) => (
                       <div key={reply._id} className="reply">
