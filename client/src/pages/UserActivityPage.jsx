@@ -14,6 +14,11 @@ const UserActivityPage = ({ userId }) => {
     const [watchList,setWatchList]=useState([])
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_URL;
+
+    const [show,setShow]=useState(true);
+    const handleToggle=async()=>{
+        setShow(!show)
+      }
     useEffect(() => {
         const fetchUserActivity = async () => {
             try {
@@ -77,10 +82,7 @@ const UserActivityPage = ({ userId }) => {
     if (error) {
         return <h2> {error.response.data.message}</h2>; // Display error message
     }
-    const [show,setShow]=useState(true);
-    const handleToggle=async()=>{
-        setShow(!show)
-      }
+    
     return (
         <>
         <Navbar show={show}/>
