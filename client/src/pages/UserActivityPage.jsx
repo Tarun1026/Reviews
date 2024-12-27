@@ -14,7 +14,7 @@ const UserActivityPage = ({ userId }) => {
     const [watchList,setWatchList]=useState([])
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_URL;
-
+    const apiKey = import.meta.env.VITE_TMDB_API;
     const [show,setShow]=useState(true);
     const handleToggle=async()=>{
         setShow(!show)
@@ -42,14 +42,23 @@ const UserActivityPage = ({ userId }) => {
 
     const fetchMovieDetails = async (movieId) => {
         try {
-            const response = await axios.get
-            (`https://api.themoviedb.org/3/movie/${movieId}?api_key=4b2313ca982860407b4ff3a8e3258ff7`);
-            return response.data; // Return movie data
+            const movieUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`;
+            const tvUrl = `https://api.themoviedb.org/3/tv/${movieId}?api_key=${apiKey}`;
+    
+            // Try fetching as a movie
+            const response = await axios.get(movieUrl).catch(async (movieError) => {
+                // console.warn("Not found as a movie, trying as a TV show.");
+                // If movie fetch fails, try fetching as a TV show
+                return await axios.get(tvUrl);
+            });
+    
+            return response.data; // Return movie or TV show data
         } catch (error) {
-            console.error("Error fetching movie details:", error);
-            throw error; // Propagate the error
+            console.error("Error fetching details:", error);
+            // throw new Error("Could not fetch details for the given ID.");
         }
     };
+    
 
     // Combine liked movies and web series
     const fetchLikedItems = async (data) => {
