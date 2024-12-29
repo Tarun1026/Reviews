@@ -49,7 +49,7 @@ const AccountSettings = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const userDetails = await getUserDetail();
-      console.log("us", userDetails.authProvider);
+      console.log("us", userDetails.isVerified);
       if (userDetails) {
         setUserData({
           username: userDetails.username,
@@ -471,12 +471,16 @@ const AccountSettings = () => {
                   value={userData.email}
                   onChange={handleInputChange}
                 />
-                <button
-                  className="send-code-btn"
-                  onClick={sendVerificationCode}
-                >
-                  Send Verification Code
-                </button>
+                 <button
+        className={checkVerify ? "send-code-btn2" : "send-code-btn"}
+        onClick={checkVerify ? null : sendVerificationCode}
+        disabled={checkVerify}
+      >
+        Send Verification Code
+      </button>
+                  
+                
+                
               </div>
             ) : (
               <span>{userData.email}</span>
@@ -492,19 +496,23 @@ const AccountSettings = () => {
           </div>
 
           {editMode.email && (
+            
             <div className="verification-section">
+              {!checkVerify &&
               <input
                 type="text"
                 placeholder="Enter 6-Digit Verfication Code"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value)}
               />
+}{!checkVerify &&
               <button className="verify-btn" onClick={verifyEmail}>
                 Verify
               </button>
+}
             </div>
           )}
-          {isVerified && <span className="verified-badge">Verified ✅</span>}
+          
         </div>
 
         <div className="account-section">
