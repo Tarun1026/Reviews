@@ -232,16 +232,16 @@ body{
   color: white;
   border: none;
   border-radius: 5px;
-  cursor: not-allowed; /* Indicates a disabled state */
+  cursor: not-allowed; 
   height: 40px;
-  opacity: 0.6; /* Makes it look disabled */
+  opacity: 0.6; /
 }
 
-/* Prevent hover effects for disabled buttons */
+
 .account-field button:disabled:hover {
-  background-color: #007bff; /* Keep the disabled background color */
+  background-color: #007bff; 
   box-shadow: none;
-  cursor: not-allowed; /* Keep the pointer as not-allowed */
+  cursor: not-allowed; 
 }
 
 .verify-btn:hover{

@@ -12,6 +12,8 @@ const RegisterModel = ({ onSwitchToLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
   const commonDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com"];
+
+  const apiUrl = import.meta.env.VITE_API_URL || "";
   const handleSubmit = async (e) => {
     e.preventDefault();
   
